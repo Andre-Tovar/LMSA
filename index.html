@@ -973,6 +973,31 @@
         </div>
       </section>
     </main>
+
+    <div class="game-tutorial" id="gameTutorial" hidden>
+      <svg class="game-tutorial__cutout-layer" id="gameTutorialCutoutLayer" aria-hidden="true" preserveAspectRatio="none">
+        <path class="game-tutorial__cutout-path" id="gameTutorialCutoutPath"></path>
+      </svg>
+      <button class="game-tutorial__skip" id="gameTutorialSkipButton" type="button">
+        Skip Tutorial
+      </button>
+      <section
+        class="game-tutorial__card"
+        id="gameTutorialCard"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="gameTutorialTitle"
+        aria-describedby="gameTutorialBody"
+        tabindex="-1"
+      >
+        <div class="game-tutorial__meta" id="gameTutorialMeta">
+          <p class="game-tutorial__eyebrow" id="gameTutorialEyebrow">Level 1 Tutorial</p>
+        </div>
+
+        <h2 id="gameTutorialTitle">Tutorial</h2>
+        <p class="game-tutorial__body" id="gameTutorialBody"></p>
+      </section>
+    </div>
   </div>
 
   <div class="global-confetti-host" id="globalConfettiHost" aria-hidden="true"></div>

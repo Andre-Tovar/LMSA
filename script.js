@@ -502,6 +502,107 @@ const FOUNDRY_LEVEL_PICKUP_NODE_CONFIGS = {
     "pickup-3": { anchorLeft: 28.3, anchorTop: 63.3 },
   },
 };
+const LEVEL_TUTORIALS = {
+  "Level 1 - Foundry Morning": [
+    {
+      id: "welcome",
+      eyebrow: "Level 1 Tutorial",
+      showMeta: true,
+      title: "Welcome To LMSA!",
+      body:
+        "We are happy to have hired such an excellent planner as yourself to coordinate our latest project: scheduling the morning bus. Here at LMSA, our workers get in at the crack of dawn, and they have been asking for a bus service to bring them in on time. Your goal is to choose the right buses, build legal routes, and return every worker to LMSA as efficiently as possible. Click anywhere to continue the guided walkthrough.",
+      advanceOn: "manual",
+      cardPlacement: "center",
+      targets: [],
+    },
+    {
+      id: "buy-bus",
+      title: "Buy Your First Bus",
+      body:
+        "Start by purchasing a bus from the Bus Rental. The Personal Lift is a great first pick for this sample route, but any bus will get you going.",
+      advanceOn: "purchase",
+      clearRegions: [
+        { selector: ".shop-panel" },
+      ],
+      targets: [
+        { selector: ".shop-panel", tone: "focus" },
+        { selector: ".shop-card", tone: "active" },
+      ],
+    },
+    {
+      id: "start-route",
+      title: "Begin At LMSA",
+      body:
+        "Your new bus is now parked at LMSA and selected automatically. Every route starts at the depot node, so click the glowing depot node at LMSA to place the first stop.",
+      hint: "Click the glowing depot node to continue.",
+      advanceOn: "route-node",
+      expectedRouteLabel: "factory",
+      clearRegions: [
+        { selector: ".map-panel" },
+      ],
+      targets: [
+        { selector: "#foundryFactoryStartNode", tone: "pulse" },
+      ],
+    },
+    {
+      id: "create-route",
+      title: "Create A Route In Sequence",
+      body:
+        "Creating a route means selecting nodes in immediate succession. Any node that glows is currently selectable, so keep clicking glowing neighbors to guide the bus toward its first pickup. Blue nodes add a bus stop to the route so the bus will stop and pick up passengers there, while glowing brown intersection nodes let you pass through and keep shaping the path.",
+      hint: "Keep building the route until you add a blue pickup node.",
+      advanceOn: "route-node",
+      expectedRouteNodeKind: "pickup",
+      clearRegions: [
+        { selector: ".map-panel" },
+      ],
+      targets: [],
+    },
+    {
+      id: "close-route",
+      title: "Finish The Route When You Are Ready",
+      body:
+        "Nice. Keep selecting adjacent glowing nodes to extend the route. Use brown intersection nodes when you want to pass through the network without stopping, and blue nodes whenever you want the bus to actually stop for passengers. When you are happy with the route, return to the depot node at LMSA to close it and dispatch the bus.",
+      hint: "Keep extending the route, then click the depot node to dispatch it.",
+      advanceOn: "route-node",
+      expectedRouteLabel: "factory",
+      expectedMinimumRouteNodeCount: 4,
+      clearRegions: [
+        { selector: ".map-panel" },
+      ],
+      targets: [],
+    },
+    {
+      id: "dispatch-route",
+      title: "Watch The Route Run",
+      body:
+        "The bus is now following the full route you just built. Once it finishes the trip and returns to LMSA, the tutorial will point you to submission.",
+      hint: "Hang tight while the route finishes running.",
+      advanceOn: "route-complete",
+      clearRegions: [
+        { selector: ".map-panel" },
+      ],
+      targets: [
+        { selector: ".map-panel", tone: "focus" },
+        { selector: ".map-stage--foundry", tone: "active" },
+      ],
+    },
+    {
+      id: "submit-solution",
+      title: "Submit When You Are Ready",
+      body:
+        "Once you are happy with your bus schedule, submit your solution to see how it measures up.",
+      hint: "Click anywhere outside the highlighted controls to close the tutorial, or press the highlighted Submit Solution button when you want to compare your schedule.",
+      advanceOn: "manual",
+      clearRegions: [
+        { selector: ".control-panel" },
+      ],
+      targets: [
+        { selector: ".control-panel", tone: "focus" },
+        { selector: "#submitSolutionButton", tone: "pulse" },
+      ],
+    },
+  ],
+};
 const FOUNDRY_OPTIMAL_SCHEDULE_REPLAY_SNAPSHOTS = {
   "Level 1 - Foundry Morning": {
     version: 1,
@@ -1160,6 +1261,11 @@ const LMSAApp = (() => {
     isVictoryOverlayVisible: false,
     toastTimeoutId: 0,
     isEditMode: false,
+    isLevelTutorialActive: false,
+    levelTutorialName: "",
+    levelTutorialStepIndex: -1,
+    levelTutorialHighlights: [],
+    levelTutorialRevealTimeoutId: 0,
   };
 
   const dom = {};
@@ -1169,6 +1275,7 @@ const LMSAApp = (() => {
   }
 
   function cacheDom() {
+    dom.appShell = document.querySelector(".app-shell");
     dom.screens = Array.from(document.querySelectorAll(".screen"));
     dom.gameScreen = document.getElementById("game");
     dom.resultsSubtitle = document.getElementById("resultsSubtitle");
@@ -1251,6 +1358,15 @@ const LMSAApp = (() => {
     dom.gameVictoryNextLevelButton = document.getElementById("gameVictoryNextLevelButton");
     dom.gameVictoryReplayButton = document.getElementById("gameVictoryReplayButton");
     dom.gameVictoryLevelSelectButton = document.getElementById("gameVictoryLevelSelectButton");
+    dom.gameTutorial = document.getElementById("gameTutorial");
+    dom.gameTutorialCutoutLayer = document.getElementById("gameTutorialCutoutLayer");
+    dom.gameTutorialCutoutPath = document.getElementById("gameTutorialCutoutPath");
+    dom.gameTutorialCard = document.getElementById("gameTutorialCard");
+    dom.gameTutorialMeta = document.getElementById("gameTutorialMeta");
+    dom.gameTutorialEyebrow = document.getElementById("gameTutorialEyebrow");
+    dom.gameTutorialTitle = document.getElementById("gameTutorialTitle");
+    dom.gameTutorialBody = document.getElementById("gameTutorialBody");
+    dom.gameTutorialSkipButton = document.getElementById("gameTutorialSkipButton");
   }
 
   function getLevelData(levelName) {
@@ -1282,6 +1398,575 @@ const LMSAApp = (() => {
     }
 
     listElement.innerHTML = items.map((item) => `<li>${escapeHtml(item)}</li>`).join("");
+  }
+
+  function getLevelTutorialSteps(levelName = state.levelTutorialName || state.currentLevel) {
+    return LEVEL_TUTORIALS[String(levelName || "")] || [];
+  }
+
+  function getActiveLevelTutorialStep() {
+    return getLevelTutorialSteps()[state.levelTutorialStepIndex] || null;
+  }
+
+  function isLevelTutorialActive() {
+    return state.isLevelTutorialActive && Boolean(getLevelTutorialSteps().length);
+  }
+
+  function getLevelTutorialOverlayBounds() {
+    const overlayRect = dom.gameTutorial?.getBoundingClientRect();
+
+    if (overlayRect?.width && overlayRect?.height) {
+      return overlayRect;
+    }
+
+    return {
+      left: 0,
+      top: 0,
+      width: window.innerWidth,
+      height: window.innerHeight,
+    };
+  }
+
+  function isTutorialTargetVisible(element) {
+    return Boolean(
+      element instanceof HTMLElement &&
+      !element.hidden &&
+      !element.closest("[hidden]") &&
+      element.getClientRects().length,
+    );
+  }
+
+  function resolveLevelTutorialElements(target) {
+    if (target?.routeLabel) {
+      return [getFoundryRouteNodeElement(target.routeLabel)];
+    }
+
+    if (target?.selector) {
+      return Array.from(document.querySelectorAll(target.selector));
+    }
+
+    if (typeof target === "string") {
+      return Array.from(document.querySelectorAll(target));
+    }
+
+    return [];
+  }
+
+  function resolveLevelTutorialTargets(step = getActiveLevelTutorialStep()) {
+    const tonePriority = {
+      active: 1,
+      pulse: 2,
+      focus: 3,
+    };
+    const targetToneByElement = new Map();
+
+    (Array.isArray(step?.targets) ? step.targets : []).forEach((target) => {
+      const tone = target?.tone || "active";
+
+      resolveLevelTutorialElements(target).filter(isTutorialTargetVisible).forEach((element) => {
+        const currentTone = targetToneByElement.get(element);
+
+        if (!currentTone || tonePriority[tone] > tonePriority[currentTone]) {
+          targetToneByElement.set(element, tone);
+        }
+      });
+    });
+
+    return Array.from(targetToneByElement.entries()).map(([element, tone]) => ({ element, tone }));
+  }
+
+  function clearLevelTutorialHighlights() {
+    state.levelTutorialHighlights.forEach(({ element }) => {
+      if (!(element instanceof HTMLElement)) {
+        return;
+      }
+
+      element.classList.remove(
+        "game-tutorial-target",
+        "game-tutorial-target--focus",
+        "game-tutorial-target--pulse",
+        "game-tutorial-target--stacked",
+      );
+    });
+
+    state.levelTutorialHighlights = [];
+  }
+
+  function applyLevelTutorialHighlights(step = getActiveLevelTutorialStep()) {
+    clearLevelTutorialHighlights();
+
+    const targetRecords = resolveLevelTutorialTargets(step);
+
+    targetRecords.forEach(({ element, tone }) => {
+      if (!(element instanceof HTMLElement)) {
+        return;
+      }
+
+      element.classList.add("game-tutorial-target");
+
+      if (window.getComputedStyle(element).position === "static") {
+        element.classList.add("game-tutorial-target--stacked");
+      }
+
+      if (tone === "focus") {
+        element.classList.add("game-tutorial-target--focus");
+      }
+
+      if (tone === "pulse") {
+        element.classList.add("game-tutorial-target--pulse");
+      }
+    });
+
+    state.levelTutorialHighlights = targetRecords;
+    return targetRecords;
+  }
+
+  function parseTutorialBorderRadius(value) {
+    const radiusValue = Number.parseFloat(String(value || "").split(" ")[0]);
+    return Number.isFinite(radiusValue) ? radiusValue : 0;
+  }
+
+  function getTutorialCutoutRadius(element, padding = 0) {
+    if (!(element instanceof HTMLElement)) {
+      return Math.max(Number(padding) || 0, 0);
+    }
+
+    const computedStyle = window.getComputedStyle(element);
+    const baseRadius = Math.max(
+      parseTutorialBorderRadius(computedStyle.borderTopLeftRadius),
+      parseTutorialBorderRadius(computedStyle.borderTopRightRadius),
+      parseTutorialBorderRadius(computedStyle.borderBottomRightRadius),
+      parseTutorialBorderRadius(computedStyle.borderBottomLeftRadius),
+    );
+
+    return Math.max(baseRadius + (Number(padding) || 0), 8);
+  }
+
+  function getTutorialRoundedRectPath(x, y, width, height, radius = 0) {
+    const safeWidth = Math.max(Number(width) || 0, 0);
+    const safeHeight = Math.max(Number(height) || 0, 0);
+    const safeRadius = clamp(Number(radius) || 0, 0, Math.min(safeWidth / 2, safeHeight / 2));
+
+    if (!safeWidth || !safeHeight) {
+      return "";
+    }
+
+    return [
+      `M ${x + safeRadius} ${y}`,
+      `H ${x + safeWidth - safeRadius}`,
+      `Q ${x + safeWidth} ${y} ${x + safeWidth} ${y + safeRadius}`,
+      `V ${y + safeHeight - safeRadius}`,
+      `Q ${x + safeWidth} ${y + safeHeight} ${x + safeWidth - safeRadius} ${y + safeHeight}`,
+      `H ${x + safeRadius}`,
+      `Q ${x} ${y + safeHeight} ${x} ${y + safeHeight - safeRadius}`,
+      `V ${y + safeRadius}`,
+      `Q ${x} ${y} ${x + safeRadius} ${y}`,
+      "Z",
+    ].join(" ");
+  }
+
+  function resolveLevelTutorialCutoutRegions(step = getActiveLevelTutorialStep()) {
+    const overlayRect = getLevelTutorialOverlayBounds();
+
+    if (!overlayRect?.width || !overlayRect?.height) {
+      return [];
+    }
+
+    const regionSpecs = Array.isArray(step?.clearRegions) && step.clearRegions.length
+      ? step.clearRegions
+      : (Array.isArray(step?.targets) ? step.targets.filter((target) => target?.tone === "focus") : []);
+
+    const cutoutRegions = [];
+
+    regionSpecs.forEach((regionSpec) => {
+      const padding = Math.max(Number(regionSpec?.padding) || 0, 0);
+
+      resolveLevelTutorialElements(regionSpec).filter(isTutorialTargetVisible).forEach((element) => {
+        const elementRect = element.getBoundingClientRect();
+        const relativeLeft = elementRect.left - overlayRect.left;
+        const relativeTop = elementRect.top - overlayRect.top;
+        const x = clamp(relativeLeft - padding, 0, overlayRect.width);
+        const y = clamp(relativeTop - padding, 0, overlayRect.height);
+        const right = clamp(relativeLeft + elementRect.width + padding, 0, overlayRect.width);
+        const bottom = clamp(relativeTop + elementRect.height + padding, 0, overlayRect.height);
+        const width = Math.max(right - x, 0);
+        const height = Math.max(bottom - y, 0);
+
+        if (!width || !height) {
+          return;
+        }
+
+        cutoutRegions.push({
+          x,
+          y,
+          width,
+          height,
+          radius: Math.max(Number(regionSpec?.radius) || 0, getTutorialCutoutRadius(element, padding)),
+        });
+      });
+    });
+
+    return cutoutRegions;
+  }
+
+  function renderLevelTutorialCutoutOverlay(step = getActiveLevelTutorialStep()) {
+    const cutoutLayer = dom.gameTutorialCutoutLayer;
+    const cutoutPath = dom.gameTutorialCutoutPath;
+    const overlayRect = getLevelTutorialOverlayBounds();
+
+    if (!cutoutLayer || !cutoutPath || !overlayRect?.width || !overlayRect?.height) {
+      return;
+    }
+
+    const outerPath = getTutorialRoundedRectPath(0, 0, overlayRect.width, overlayRect.height, 0);
+    const cutoutPaths = resolveLevelTutorialCutoutRegions(step)
+      .map((region) => getTutorialRoundedRectPath(region.x, region.y, region.width, region.height, region.radius))
+      .filter(Boolean)
+      .join(" ");
+
+    cutoutLayer.setAttribute("viewBox", `0 0 ${overlayRect.width} ${overlayRect.height}`);
+    cutoutPath.setAttribute("d", `${outerPath} ${cutoutPaths}`.trim());
+    cutoutPath.setAttribute("fill-rule", "evenodd");
+  }
+
+  function getLevelTutorialRegionUnion(regions = []) {
+    if (!Array.isArray(regions) || !regions.length) {
+      return null;
+    }
+
+    const initialRegion = regions[0];
+    const unionBounds = regions.reduce((bounds, region) => ({
+      left: Math.min(bounds.left, region.x),
+      top: Math.min(bounds.top, region.y),
+      right: Math.max(bounds.right, region.x + region.width),
+      bottom: Math.max(bounds.bottom, region.y + region.height),
+    }), {
+      left: initialRegion.x,
+      top: initialRegion.y,
+      right: initialRegion.x + initialRegion.width,
+      bottom: initialRegion.y + initialRegion.height,
+    });
+
+    return {
+      left: unionBounds.left,
+      top: unionBounds.top,
+      right: unionBounds.right,
+      bottom: unionBounds.bottom,
+      width: Math.max(unionBounds.right - unionBounds.left, 0),
+      height: Math.max(unionBounds.bottom - unionBounds.top, 0),
+      centerX: (unionBounds.left + unionBounds.right) / 2,
+      centerY: (unionBounds.top + unionBounds.bottom) / 2,
+    };
+  }
+
+  function getLevelTutorialAnchorRegion(step = getActiveLevelTutorialStep(), targetRecords = []) {
+    const cutoutRegion = getLevelTutorialRegionUnion(resolveLevelTutorialCutoutRegions(step));
+
+    if (cutoutRegion) {
+      return cutoutRegion;
+    }
+
+    const primaryTarget = targetRecords.find((target) => target.tone === "pulse")
+      || targetRecords.find((target) => target.tone === "focus")
+      || targetRecords[0]
+      || null;
+
+    if (!(primaryTarget?.element instanceof HTMLElement)) {
+      return null;
+    }
+
+    const overlayRect = getLevelTutorialOverlayBounds();
+    const targetRect = primaryTarget.element.getBoundingClientRect();
+    const left = clamp(targetRect.left - overlayRect.left, 0, overlayRect.width);
+    const top = clamp(targetRect.top - overlayRect.top, 0, overlayRect.height);
+    const right = clamp(targetRect.right - overlayRect.left, 0, overlayRect.width);
+    const bottom = clamp(targetRect.bottom - overlayRect.top, 0, overlayRect.height);
+
+    return {
+      left,
+      top,
+      right,
+      bottom,
+      width: Math.max(right - left, 0),
+      height: Math.max(bottom - top, 0),
+      centerX: (left + right) / 2,
+      centerY: (top + bottom) / 2,
+    };
+  }
+
+  function clearLevelTutorialCardPosition() {
+    if (!dom.gameTutorialCard) {
+      return;
+    }
+
+    dom.gameTutorialCard.style.top = "";
+    dom.gameTutorialCard.style.right = "";
+    dom.gameTutorialCard.style.bottom = "";
+    dom.gameTutorialCard.style.left = "";
+    dom.gameTutorialCard.style.transform = "";
+  }
+
+  function positionLevelTutorialCard(step = getActiveLevelTutorialStep(), targetRecords = []) {
+    if (!dom.gameTutorial || !dom.gameTutorialCard) {
+      return;
+    }
+
+    clearLevelTutorialCardPosition();
+
+    if (step?.cardPlacement) {
+      dom.gameTutorial.dataset.placement = step.cardPlacement;
+      return;
+    }
+
+    const overlayRect = getLevelTutorialOverlayBounds();
+    const anchorRegion = getLevelTutorialAnchorRegion(step, targetRecords);
+    const cardRect = dom.gameTutorialCard.getBoundingClientRect();
+    const margin = 16;
+    const gap = 16;
+    const cardWidth = Math.min(cardRect.width || 416, Math.max(overlayRect.width - (margin * 2), 0));
+    const cardHeight = Math.min(cardRect.height || 220, Math.max(overlayRect.height - (margin * 2), 0));
+
+    if (!anchorRegion || !cardWidth || !cardHeight) {
+      dom.gameTutorial.dataset.placement = "top-right";
+      return;
+    }
+
+    const availableSpace = {
+      right: overlayRect.width - anchorRegion.right - gap - margin,
+      left: anchorRegion.left - gap - margin,
+      bottom: overlayRect.height - anchorRegion.bottom - gap - margin,
+      top: anchorRegion.top - gap - margin,
+    };
+    const orderedSides = anchorRegion.width >= anchorRegion.height
+      ? (anchorRegion.centerX <= overlayRect.width / 2
+        ? ["right", "left", "bottom", "top"]
+        : ["left", "right", "bottom", "top"])
+      : (anchorRegion.centerY <= overlayRect.height / 2
+        ? ["bottom", "top", "right", "left"]
+        : ["top", "bottom", "right", "left"]);
+    const preferredSide = orderedSides.find((side) => {
+      const neededSpace = side === "left" || side === "right" ? cardWidth : cardHeight;
+      return availableSpace[side] >= neededSpace;
+    }) || orderedSides
+      .slice()
+      .sort((leftSide, rightSide) => availableSpace[rightSide] - availableSpace[leftSide])[0];
+
+    let left = margin;
+    let top = margin;
+
+    if (preferredSide === "right") {
+      left = Math.min(anchorRegion.right + gap, overlayRect.width - cardWidth - margin);
+      top = clamp(anchorRegion.top, margin, overlayRect.height - cardHeight - margin);
+    } else if (preferredSide === "left") {
+      left = Math.max(anchorRegion.left - gap - cardWidth, margin);
+      top = clamp(anchorRegion.top, margin, overlayRect.height - cardHeight - margin);
+    } else if (preferredSide === "bottom") {
+      left = clamp(anchorRegion.centerX - (cardWidth / 2), margin, overlayRect.width - cardWidth - margin);
+      top = Math.min(anchorRegion.bottom + gap, overlayRect.height - cardHeight - margin);
+    } else {
+      left = clamp(anchorRegion.centerX - (cardWidth / 2), margin, overlayRect.width - cardWidth - margin);
+      top = Math.max(anchorRegion.top - gap - cardHeight, margin);
+    }
+
+    dom.gameTutorial.dataset.placement = "floating";
+    dom.gameTutorialCard.style.top = `${top}px`;
+    dom.gameTutorialCard.style.left = `${left}px`;
+    dom.gameTutorialCard.style.right = "auto";
+    dom.gameTutorialCard.style.bottom = "auto";
+    dom.gameTutorialCard.style.transform = "none";
+  }
+
+  function renderActiveLevelTutorialStep() {
+    if (!isLevelTutorialActive() || !dom.gameTutorial) {
+      return;
+    }
+
+    const steps = getLevelTutorialSteps();
+    const step = getActiveLevelTutorialStep();
+
+    if (!step) {
+      return;
+    }
+
+    dom.gameTutorial.hidden = false;
+    const showTutorialMeta = Boolean(step.showMeta);
+    dom.gameTutorialMeta.hidden = !showTutorialMeta;
+
+    if (showTutorialMeta) {
+      dom.gameTutorialEyebrow.textContent = String(step.eyebrow || "Level 1 Tutorial");
+    }
+
+    dom.gameTutorialTitle.textContent = step.title;
+    dom.gameTutorialBody.textContent = [step.body, step.hint].filter(Boolean).join("\n\n");
+    dom.gameTutorial.classList.toggle("game-tutorial--manual", step.advanceOn === "manual");
+
+    window.requestAnimationFrame(() => {
+      dom.gameTutorialCard?.focus({ preventScroll: true });
+      const targetRecords = applyLevelTutorialHighlights(step);
+      renderLevelTutorialCutoutOverlay(step);
+      positionLevelTutorialCard(step, targetRecords);
+    });
+  }
+
+  function stopLevelTutorial(options = {}) {
+    const { keepStepIndex = false } = options;
+
+    if (state.levelTutorialRevealTimeoutId) {
+      window.clearTimeout(state.levelTutorialRevealTimeoutId);
+      state.levelTutorialRevealTimeoutId = 0;
+    }
+
+    clearLevelTutorialHighlights();
+    document.body.classList.remove("game-tutorial-active");
+
+    if (dom.gameTutorial) {
+      dom.gameTutorial.classList.remove("game-tutorial--visible");
+      dom.gameTutorial.hidden = true;
+      dom.gameTutorial.classList.remove("game-tutorial--manual");
+      delete dom.gameTutorial.dataset.placement;
+    }
+
+    clearLevelTutorialCardPosition();
+    dom.gameTutorialCutoutPath?.removeAttribute("d");
+
+    state.isLevelTutorialActive = false;
+    state.levelTutorialName = "";
+
+    if (!keepStepIndex) {
+      state.levelTutorialStepIndex = -1;
+    }
+  }
+
+  function setLevelTutorialStep(index) {
+    const steps = getLevelTutorialSteps();
+
+    if (!steps.length) {
+      stopLevelTutorial();
+      return;
+    }
+
+    if (index >= steps.length) {
+      stopLevelTutorial();
+      return;
+    }
+
+    state.levelTutorialStepIndex = Math.max(index, 0);
+    renderActiveLevelTutorialStep();
+  }
+
+  function advanceLevelTutorial() {
+    if (!isLevelTutorialActive()) {
+      return;
+    }
+
+    setLevelTutorialStep(state.levelTutorialStepIndex + 1);
+  }
+
+  function startLevelTutorial(levelName = state.currentLevel) {
+    const steps = getLevelTutorialSteps(levelName);
+
+    stopLevelTutorial();
+
+    if (!steps.length || !dom.gameTutorial || state.currentScreen !== "game") {
+      return;
+    }
+
+    state.isLevelTutorialActive = true;
+    state.levelTutorialName = String(levelName || state.currentLevel || "");
+    state.levelTutorialStepIndex = 0;
+    document.body.classList.add("game-tutorial-active");
+    renderActiveLevelTutorialStep();
+
+    state.levelTutorialRevealTimeoutId = window.setTimeout(() => {
+      state.levelTutorialRevealTimeoutId = 0;
+      dom.gameTutorial?.classList.add("game-tutorial--visible");
+    }, 2000);
+  }
+
+  function syncLevelTutorialAfterPurchase() {
+    const step = getActiveLevelTutorialStep();
+
+    if (!isLevelTutorialActive() || step?.advanceOn !== "purchase") {
+      return;
+    }
+
+    advanceLevelTutorial();
+  }
+
+  function doesLevelTutorialRouteNodeMatch(step, routeLabel) {
+    const safeRouteLabel = String(routeLabel || "");
+
+    if (!safeRouteLabel) {
+      return false;
+    }
+
+    if (step?.expectedRouteLabel && String(step.expectedRouteLabel) !== safeRouteLabel) {
+      return false;
+    }
+
+    const minimumRouteNodeCount = Math.max(Number(step?.expectedMinimumRouteNodeCount) || 0, 0);
+    const currentRouteNodeCount = getFleetBusRouteNodeLabels(getSelectedFleetBus()).length;
+
+    if (minimumRouteNodeCount && currentRouteNodeCount < minimumRouteNodeCount) {
+      return false;
+    }
+
+    const expectedRouteNodeKind = String(step?.expectedRouteNodeKind || "");
+
+    if (!expectedRouteNodeKind) {
+      return true;
+    }
+
+    switch (expectedRouteNodeKind) {
+      case "factory":
+        return isFactoryFoundryRouteLabel(safeRouteLabel);
+      case "pickup":
+        return isFoundryPickupRouteLabel(safeRouteLabel);
+      case "intersection":
+        return isFoundryIntersectionRouteLabel(safeRouteLabel);
+      case "brown":
+        return isFoundryBrownRouteLabel(safeRouteLabel);
+      case "non-factory":
+        return !isFactoryFoundryRouteLabel(safeRouteLabel);
+      default:
+        return false;
+    }
+  }
+
+  function syncLevelTutorialAfterRouteNode(routeLabel) {
+    const step = getActiveLevelTutorialStep();
+
+    if (!isLevelTutorialActive() || step?.advanceOn !== "route-node") {
+      return;
+    }
+
+    if (!doesLevelTutorialRouteNodeMatch(step, routeLabel)) {
+      return;
+    }
+
+    advanceLevelTutorial();
+  }
+
+  function syncLevelTutorialAfterRouteCompletion() {
+    const step = getActiveLevelTutorialStep();
+
+    if (!isLevelTutorialActive() || step?.advanceOn !== "route-complete") {
+      return;
+    }
+
+    advanceLevelTutorial();
+  }
+
+  function syncLevelTutorialAfterSubmit() {
+    if (!isLevelTutorialActive()) {
+      return;
+    }
+
+    const step = getActiveLevelTutorialStep();
+
+    if (step?.id === "submit-solution") {
+      stopLevelTutorial();
+    }
   }
 
   function renderFeaturedLevel() {
@@ -3205,6 +3890,7 @@ const LMSAApp = (() => {
 
     if (screenId !== "game") {
       hideVictoryOverlay();
+      stopLevelTutorial();
     }
 
     if (screenId === "game") {
@@ -3238,6 +3924,7 @@ const LMSAApp = (() => {
     const level = getLevelData(levelName);
     stopFoundrySolutionReplay();
     hideVictoryOverlay();
+    stopLevelTutorial();
     state.currentLevel = level.name;
     state.purchasedFleet = [];
     state.selectedFleetBusId = "";
@@ -3305,11 +3992,17 @@ const LMSAApp = (() => {
 
     setCurrentLevel(level.name);
     showScreen("game");
+    window.requestAnimationFrame(() => {
+      startLevelTutorial(level.name);
+    });
   }
 
   function restartCurrentLevel() {
     setCurrentLevel(state.currentLevel);
     showScreen("game");
+    window.requestAnimationFrame(() => {
+      startLevelTutorial(state.currentLevel);
+    });
   }
 
   function highlightPanel(panelId) {
@@ -6037,6 +6730,7 @@ const LMSAApp = (() => {
     updateSelectedBusStat();
     updateFoundryDeleteCanState();
     saveFoundryScheduleReplaySnapshot();
+    syncLevelTutorialAfterRouteCompletion();
   }
 
   function animateFoundryBusRoute(bus) {
@@ -6198,6 +6892,7 @@ const LMSAApp = (() => {
     updateSelectedBusStat();
     updateFoundryDeleteCanState();
     saveFoundryScheduleReplaySnapshot();
+    syncLevelTutorialAfterPurchase();
   }
 
   function selectFleetBus(busId) {
@@ -6528,6 +7223,7 @@ const LMSAApp = (() => {
     syncSelectedFoundryNodeLabel();
     renderFoundryRoads();
     updateSelectedBusStat();
+    syncLevelTutorialAfterRouteNode(nextLabel);
 
     if (isFoundryRouteClosed(selectedBus)) {
       animateFoundryBusRoute(selectedBus);
@@ -7541,6 +8237,7 @@ const LMSAApp = (() => {
         return;
       }
 
+      syncLevelTutorialAfterSubmit();
       saveFoundryScheduleReplaySnapshot();
       saveFoundryScheduleReplaySnapshot(FOUNDRY_SUBMITTED_SCHEDULE_REPLAY_STORAGE_KEY);
       launchFoundryFactoryConfetti();
@@ -7609,6 +8306,54 @@ const LMSAApp = (() => {
     });
   }
 
+  function bindLevelTutorialControls() {
+    dom.gameTutorialSkipButton?.addEventListener("click", (event) => {
+      event.stopPropagation();
+      stopLevelTutorial();
+    });
+
+    dom.gameTutorial?.addEventListener("click", () => {
+      if (!isLevelTutorialActive()) {
+        return;
+      }
+
+      const activeStep = getActiveLevelTutorialStep();
+
+      if (activeStep?.advanceOn === "manual") {
+        advanceLevelTutorial();
+      }
+    });
+
+    window.addEventListener("resize", () => {
+      if (isLevelTutorialActive()) {
+        renderActiveLevelTutorialStep();
+      }
+    });
+
+    window.addEventListener("keydown", (event) => {
+      if (!isLevelTutorialActive()) {
+        return;
+      }
+
+      const target = event.target;
+
+      if (
+        target instanceof HTMLElement &&
+        (target.isContentEditable ||
+          target.tagName === "INPUT" ||
+          target.tagName === "TEXTAREA" ||
+          target.tagName === "SELECT")
+      ) {
+        return;
+      }
+
+      if (event.key === "Escape") {
+        event.preventDefault();
+        stopLevelTutorial();
+      }
+    });
+  }
+
   function bindSettings() {
     const settingsForm = document.getElementById("settingsForm");
     const resetSettingsButton = document.getElementById("resetSettingsButton");
@@ -7639,6 +8384,7 @@ const LMSAApp = (() => {
     bindFoundryTestingShortcut();
     bindGameActions();
     bindPlaceholderButtons();
+    bindLevelTutorialControls();
     bindSettings();
     initializeGuideReplayDemo();
     initializeFoundryNodes();

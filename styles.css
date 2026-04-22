@@ -332,6 +332,230 @@ body.viewing-game {
   overflow: hidden;
 }
 
+.game-tutorial {
+  position: fixed;
+  inset: 0;
+  z-index: 90;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 1860ms ease;
+  will-change: opacity;
+}
+
+.game-tutorial.game-tutorial--manual {
+  pointer-events: auto;
+}
+
+.game-tutorial.game-tutorial--visible {
+  opacity: 1;
+}
+
+.game-tutorial[hidden] {
+  display: none;
+}
+
+.game-tutorial__cutout-layer {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.game-tutorial.game-tutorial--manual .game-tutorial__cutout-layer {
+  pointer-events: auto;
+}
+
+.game-tutorial__cutout-path {
+  fill: rgba(30, 20, 16, 0.58);
+  pointer-events: visiblePainted;
+}
+
+.game-tutorial__skip {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  z-index: 93;
+  padding: 0.72rem 1.12rem;
+  border: 1px solid rgba(244, 212, 118, 0.34);
+  border-radius: 999px;
+  background: #fffdf9;
+  color: #6b231d;
+  font-size: 0.96rem;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  cursor: pointer;
+  pointer-events: auto;
+  box-shadow:
+    0 14px 28px rgba(37, 24, 18, 0.2),
+    0 0 0 1px rgba(255, 247, 232, 0.08);
+  transition:
+    transform 0.16s ease,
+    box-shadow 0.16s ease,
+    background-color 0.16s ease;
+}
+
+.game-tutorial__skip:hover,
+.game-tutorial__skip:focus-visible {
+  transform: translateY(-1px);
+  background: #fff7e8;
+  box-shadow:
+    0 16px 32px rgba(37, 24, 18, 0.24),
+    0 0 0 3px rgba(244, 212, 118, 0.18);
+}
+
+.game-tutorial__card {
+  position: absolute;
+  z-index: 92;
+  isolation: isolate;
+  overflow: hidden;
+  width: min(26rem, calc(100% - 1.5rem));
+  padding: 1.1rem 1.1rem 1rem;
+  border-radius: 20px;
+  border: 1px solid rgba(107, 35, 29, 0.16);
+  background: #fff7e8;
+  color: #34231b;
+  box-shadow:
+    0 24px 52px rgba(37, 24, 18, 0.18),
+    0 0 0 1px rgba(255, 255, 255, 0.55);
+  pointer-events: auto;
+  transition: opacity 1860ms ease;
+}
+
+.game-tutorial__card::after {
+  content: "";
+  position: absolute;
+  inset: 1px;
+  border-radius: 19px;
+  border: 1px solid rgba(241, 223, 186, 0.9);
+  pointer-events: none;
+}
+
+.game-tutorial[data-placement="top-left"] .game-tutorial__card {
+  top: 1rem;
+  left: 1rem;
+}
+
+.game-tutorial[data-placement="center"] .game-tutorial__card {
+  top: 50%;
+  left: 50%;
+  width: min(31rem, calc(100% - 1.5rem));
+  transform: translate(-50%, -50%);
+}
+
+.game-tutorial[data-placement="top-right"] .game-tutorial__card {
+  top: 1rem;
+  right: 1rem;
+}
+
+.game-tutorial[data-placement="bottom-left"] .game-tutorial__card {
+  left: 1rem;
+  bottom: 1rem;
+}
+
+.game-tutorial[data-placement="bottom-right"] .game-tutorial__card {
+  right: 1rem;
+  bottom: 1rem;
+}
+
+.game-tutorial__meta {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 0.75rem;
+  margin-bottom: 0.65rem;
+}
+
+.game-tutorial__meta[hidden] {
+  display: none;
+}
+
+.game-tutorial__eyebrow {
+  margin: 0;
+  color: #8c6421;
+  font-size: 0.74rem;
+  font-weight: 800;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.game-tutorial__card h2 {
+  margin: 0 0 0.55rem;
+  font-size: 1.28rem;
+  line-height: 1.15;
+  color: #4d1713;
+  letter-spacing: 0.01em;
+}
+
+.game-tutorial__body {
+  margin: 0;
+  line-height: 1.58;
+  color: #534034;
+  white-space: pre-line;
+}
+
+.game-tutorial-target {
+  z-index: 72 !important;
+  pointer-events: auto;
+}
+
+.game-tutorial-target--stacked {
+  position: relative;
+}
+
+.game-tutorial-target--pulse {
+  animation: game-tutorial-target-pulse 1.45s ease-in-out infinite;
+}
+
+.shop-panel [data-buy-bus].game-tutorial-target--pulse {
+  border-color: rgba(244, 212, 118, 0.56);
+  animation: game-tutorial-buy-button-pulse 1.45s ease-in-out infinite;
+}
+
+.game-tutorial-target.map-node,
+.game-tutorial-target.map-pickup-node,
+.game-tutorial-target.map-roundabout__node,
+.game-tutorial-target.map-fleet-yard__bus {
+  filter: saturate(1.18) brightness(1.1);
+}
+
+@keyframes game-tutorial-target-pulse {
+  0%,
+  100% {
+    box-shadow:
+      0 0 0 2px rgba(255, 247, 236, 0.96),
+      0 0 0 8px rgba(244, 212, 118, 0.24),
+      0 16px 28px rgba(16, 32, 45, 0.28);
+  }
+
+  50% {
+    box-shadow:
+      0 0 0 3px rgba(255, 249, 240, 1),
+      0 0 0 13px rgba(244, 212, 118, 0.4),
+      0 0 22px rgba(244, 212, 118, 0.32),
+      0 22px 38px rgba(16, 32, 45, 0.32);
+  }
+}
+
+@keyframes game-tutorial-buy-button-pulse {
+  0%,
+  100% {
+    box-shadow:
+      0 14px 24px rgba(16, 32, 45, 0.22),
+      0 0 0 4px rgba(244, 212, 118, 0.26),
+      0 0 0 8px rgba(244, 212, 118, 0.12);
+  }
+
+  50% {
+    box-shadow:
+      0 16px 28px rgba(16, 32, 45, 0.24),
+      0 0 0 5px rgba(244, 212, 118, 0.42),
+      0 0 0 11px rgba(244, 212, 118, 0.2),
+      0 0 22px rgba(244, 212, 118, 0.28);
+  }
+}
+
 .panel {
   background: var(--surface);
   backdrop-filter: blur(18px);
