@@ -57,6 +57,7 @@
         >
           About
         </button>
+        <!--
         <button
           class="button button--ghost button--small"
           type="button"
@@ -66,6 +67,7 @@
         >
           How to Play
         </button>
+        -->
       </nav>
     </header>
 
@@ -117,6 +119,7 @@
                 </article>
               </div>
 
+              <!--
               <div class="play-demo__actions">
                 <button
                   class="button button--ghost"
@@ -126,6 +129,7 @@
                   Open Full How To Play
                 </button>
               </div>
+              -->
             </section>
           </div>
 
@@ -182,7 +186,7 @@
         </div>
       </section>
 
-      <!-- How to play -->
+      <!-- How to play page disabled; the Level 1 tutorial now teaches the core flow.
       <section class="screen" id="howto" data-screen-title="How To Play" data-top-section="How To Play">
         <div class="guide-layout">
           <section class="panel guide-main">
@@ -269,7 +273,6 @@
               </ul>
             </section>
 
-            <!--
             <section class="panel guide-card">
               <h3 class="guide-card__title--centered">Small Example</h3>
               <div class="guide-replay-demo">
@@ -293,7 +296,6 @@
                 </div>
               </div>
             </section>
-            -->
 
             <section class="panel guide-card">
               <h3 class="guide-card__title--centered">Goal</h3>
@@ -306,6 +308,7 @@
           </aside>
         </div>
       </section>
+      -->
 
       <!-- Main menu -->
       <section class="screen" id="menu" data-screen-title="Route Hub" data-top-section="Home">
@@ -897,76 +900,122 @@
       <section class="screen" id="about" data-screen-title="About" data-top-section="About">
         <div class="about-layout">
           <section class="panel info-card about-main" id="aboutCard">
-            <p class="eyebrow">Grounded Overview</p>
+            <p class="eyebrow">Project Overview</p>
             <h2>About RouteCraft</h2>
             <p class="about-main__lede">
-              RouteCraft is a route-planning game built around Logistical Models for Scheduling Architects (LMSA),
-              a manufacturing firm that needs its employees collected from roads around the district and returned
-              to the LMSA depot.
+              RouteCraft turns classic routing and scheduling ideas into a small planning game: buy buses, build
+              legal pickup routes, and return every LMSA employee to the plant without wasting the morning.
             </p>
             <p>
-              Each level asks you to build a complete morning pickup plan. You choose which buses to activate,
-              draw legal routes across the fixed road network, and decide whether it is cheaper to reuse a bus or
-              put another one into service.
+              The scoring is intentionally simple. A plan is not only judged by whether it works, but by whether
+              you chose an efficient fleet and avoided leaving employees waiting out on the network for too long.
             </p>
-            <p class="about-formula">Total Cost = Activated Bus Cost + Opportunity Cost</p>
+            <p class="about-formula">Total Cost = Bus Rental Cost + Opportunity Cost</p>
 
             <div class="about-bands">
               <article class="score-band">
-                <strong>Objective</strong>
+                <strong>Bus Rental Cost</strong>
                 <span>
-                  Every activated bus adds its shop cost once. Every employee who is still away from LMSA adds
-                  $25 per hour until they are returned.
+                  Every bus you activate adds its rental price once. Bigger buses carry more people, but they also
+                  make the solution more expensive.
                 </span>
               </article>
 
               <article class="score-band">
-                <strong>Tradeoff</strong>
+                <strong>Opportunity Cost</strong>
                 <span>
-                  Reusing a bus saves activation cost, but waiting too long to bring employees back increases
-                  opportunity cost.
+                  Every employee who has not returned to LMSA adds $30 per hour. Waiting can save bus rentals,
+                  but slow service has a cost too.
                 </span>
               </article>
 
               <article class="score-band">
-                <strong>Submission</strong>
+                <strong>The Tradeoff</strong>
                 <span>
-                  A plan cannot be submitted until all demand is cleared and every route follows the rules of the
-                  level.
+                  The game asks you to balance fleet size against time: reuse buses when it helps, but do not let
+                  cheap planning become late planning.
                 </span>
               </article>
             </div>
           </section>
 
           <aside class="about-side">
-            <article class="panel info-card about-card" id="howItWorksCard">
-              <h3>What You Control</h3>
-              <ul class="about-list">
-                <li>Choose which buses to activate from the shop.</li>
-                <li>Build one route at a time across the fixed road network.</li>
-                <li>Send the same bus back out if reuse is cheaper than activating another vehicle.</li>
-              </ul>
+            <article class="panel info-card about-card about-card--visual" id="howItWorksCard">
+              <h3>Inspiration</h3>
+              <div class="inspiration-visuals" aria-label="Operations research inspirations for RouteCraft">
+                <figure class="or-mini-card or-mini-card--mespprc" aria-label="MESPPRC: route paths with resource limits">
+                  <svg class="or-mini-card__diagram" viewBox="0 0 120 76" role="img" aria-hidden="true">
+                    <path class="or-diagram__path or-diagram__path--main" d="M14 55 C28 20, 47 21, 58 43 S91 62, 106 28"></path>
+                    <path class="or-diagram__path or-diagram__path--ghost" d="M14 55 C31 66, 43 61, 52 50"></path>
+                    <circle class="or-diagram__depot" cx="14" cy="55" r="7"></circle>
+                    <circle class="or-diagram__node" cx="38" cy="25" r="5"></circle>
+                    <circle class="or-diagram__node" cx="58" cy="43" r="5"></circle>
+                    <circle class="or-diagram__node" cx="83" cy="58" r="5"></circle>
+                    <circle class="or-diagram__node" cx="106" cy="28" r="5"></circle>
+                    <rect class="or-diagram__resource" x="67" y="9" width="36" height="6" rx="3"></rect>
+                    <rect class="or-diagram__resource-fill" x="67" y="9" width="24" height="6" rx="3"></rect>
+                    <rect class="or-diagram__resource" x="67" y="20" width="36" height="6" rx="3"></rect>
+                    <rect class="or-diagram__resource-fill or-diagram__resource-fill--soft" x="67" y="20" width="15" height="6" rx="3"></rect>
+                  </svg>
+                  <figcaption>MESPPRC</figcaption>
+                </figure>
+
+                <figure class="or-mini-card or-mini-card--tsp" aria-label="TSP: one loop through every stop">
+                  <svg class="or-mini-card__diagram" viewBox="0 0 120 76" role="img" aria-hidden="true">
+                    <path class="or-diagram__path or-diagram__path--loop" d="M24 48 L40 18 L75 16 L98 43 L72 62 L38 61 Z"></path>
+                    <circle class="or-diagram__node" cx="24" cy="48" r="5"></circle>
+                    <circle class="or-diagram__node" cx="40" cy="18" r="5"></circle>
+                    <circle class="or-diagram__node" cx="75" cy="16" r="5"></circle>
+                    <circle class="or-diagram__node" cx="98" cy="43" r="5"></circle>
+                    <circle class="or-diagram__node" cx="72" cy="62" r="5"></circle>
+                    <circle class="or-diagram__depot" cx="38" cy="61" r="7"></circle>
+                    <path class="or-diagram__arrow" d="M61 17 L68 14 L66 22"></path>
+                  </svg>
+                  <figcaption>TSP</figcaption>
+                </figure>
+
+                <figure class="or-mini-card or-mini-card--lrsp" aria-label="LRSP: choose a location, route buses, and schedule trips">
+                  <svg class="or-mini-card__diagram" viewBox="0 0 120 76" role="img" aria-hidden="true">
+                    <rect class="or-diagram__facility" x="14" y="36" width="18" height="18" rx="4"></rect>
+                    <rect class="or-diagram__facility or-diagram__facility--chosen" x="52" y="18" width="20" height="20" rx="5"></rect>
+                    <rect class="or-diagram__facility" x="88" y="39" width="18" height="18" rx="4"></rect>
+                    <path class="or-diagram__path or-diagram__path--main" d="M62 38 C49 52, 31 52, 23 45"></path>
+                    <path class="or-diagram__path or-diagram__path--main" d="M70 33 C82 28, 94 33, 97 43"></path>
+                    <circle class="or-diagram__node" cx="22" cy="64" r="4"></circle>
+                    <circle class="or-diagram__node" cx="42" cy="58" r="4"></circle>
+                    <circle class="or-diagram__node" cx="84" cy="62" r="4"></circle>
+                    <circle class="or-diagram__node" cx="104" cy="55" r="4"></circle>
+                    <circle class="or-diagram__clock" cx="26" cy="18" r="10"></circle>
+                    <path class="or-diagram__hand" d="M26 18 L26 12 M26 18 L31 20"></path>
+                  </svg>
+                  <figcaption>LRSP</figcaption>
+                </figure>
+              </div>
             </article>
 
-            <article class="panel info-card about-card" id="creditsCard">
-              <h3>What A Legal Plan Requires</h3>
-              <ul class="about-list">
-                <li>Every employee must be picked up and returned to LMSA.</li>
-                <li>Every route must start and end at LMSA.</li>
-                <li>Bus capacity, route time, and duty time limits must all be respected.</li>
-                <li>The no immediate U-turn rule still applies while building routes.</li>
-              </ul>
-            </article>
-
-            <article class="panel info-card about-card" id="creditsCardSecondary">
-              <h3>What Good Play Looks Like</h3>
+            <article class="panel info-card about-card about-card--visual" id="creditsCard">
+              <h3>Easter Eggs</h3>
+              <div class="easter-logo" aria-label="LMSA reverses into an ASML-inspired mark">
+                <span class="easter-logo__letter easter-logo__letter--l">L</span>
+                <span class="easter-logo__letter easter-logo__letter--m">M</span>
+                <span class="easter-logo__letter easter-logo__letter--s">S</span>
+                <span class="easter-logo__letter easter-logo__letter--a">A</span>
+                <span class="easter-logo__stripe easter-logo__stripe--top" aria-hidden="true"></span>
+                <span class="easter-logo__stripe easter-logo__stripe--bottom" aria-hidden="true"></span>
+              </div>
               <p>
-                Strong solutions do not just clear the map. They return employees earlier, avoid wasteful detours,
-                and reuse the right buses often enough to keep activation cost under control.
+                LMSA began as a fictional company name, then quietly reversed into ASML as a little nod to the
+                semiconductor world hiding behind the factory theme.
               </p>
+            </article>
+
+            <article class="panel info-card about-card about-card--thanks" id="creditsCardSecondary">
+              <h3>Thank You</h3>
               <p>
-                In practice, that usually means batching nearby demand, limiting empty travel, and avoiding extra
-                vehicles unless the time savings clearly justify the added cost.
+                Thank you to Professor Ralphs and Lehigh University for the guidance and encouragement. I loved
+                working on all of the operations research problems that inspired this project, and am extremely
+                happy to have been able to bring this idea to life. I hope future students in or considering ISE may
+                enjoy :)
               </p>
             </article>
           </aside>
@@ -976,6 +1025,7 @@
 
     <div class="game-tutorial" id="gameTutorial" hidden>
       <svg class="game-tutorial__cutout-layer" id="gameTutorialCutoutLayer" aria-hidden="true" preserveAspectRatio="none">
+        <path class="game-tutorial__cutout-path game-tutorial__cutout-path--previous" id="gameTutorialPreviousCutoutPath"></path>
         <path class="game-tutorial__cutout-path" id="gameTutorialCutoutPath"></path>
       </svg>
       <button class="game-tutorial__skip" id="gameTutorialSkipButton" type="button">
@@ -987,7 +1037,7 @@
         role="dialog"
         aria-modal="true"
         aria-labelledby="gameTutorialTitle"
-        aria-describedby="gameTutorialBody"
+        aria-describedby="gameTutorialBody gameTutorialCta"
         tabindex="-1"
       >
         <div class="game-tutorial__meta" id="gameTutorialMeta">
@@ -996,6 +1046,7 @@
 
         <h2 id="gameTutorialTitle">Tutorial</h2>
         <p class="game-tutorial__body" id="gameTutorialBody"></p>
+        <footer class="game-tutorial__cta" id="gameTutorialCta"></footer>
       </section>
     </div>
   </div>

@@ -369,7 +369,14 @@ body.viewing-game {
 
 .game-tutorial__cutout-path {
   fill: rgba(30, 20, 16, 0.58);
+  opacity: 1;
   pointer-events: visiblePainted;
+  transition: opacity 2000ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.game-tutorial__cutout-path--previous {
+  opacity: 0;
+  pointer-events: none;
 }
 
 .game-tutorial__skip {
@@ -420,7 +427,7 @@ body.viewing-game {
     0 24px 52px rgba(37, 24, 18, 0.18),
     0 0 0 1px rgba(255, 255, 255, 0.55);
   pointer-events: auto;
-  transition: opacity 1860ms ease;
+  transition: opacity 360ms ease;
 }
 
 .game-tutorial__card::after {
@@ -429,6 +436,11 @@ body.viewing-game {
   inset: 1px;
   border-radius: 19px;
   border: 1px solid rgba(241, 223, 186, 0.9);
+  pointer-events: none;
+}
+
+.game-tutorial__card--fading {
+  opacity: 0;
   pointer-events: none;
 }
 
@@ -493,6 +505,22 @@ body.viewing-game {
   line-height: 1.58;
   color: #534034;
   white-space: pre-line;
+}
+
+.game-tutorial__cta {
+  margin: 0.95rem 0 0;
+  padding-top: 0.78rem;
+  border-top: 1px solid rgba(107, 35, 29, 0.14);
+  color: #6b231d;
+  font-size: 0.88rem;
+  font-weight: 900;
+  line-height: 1.35;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.game-tutorial__cta[hidden] {
+  display: none;
 }
 
 .game-tutorial-target {
@@ -4620,6 +4648,262 @@ body.foundry-edit-mode .foundry-edit-sandlot {
   margin-top: 0.45rem;
 }
 
+.about-card--visual {
+  display: grid;
+  gap: 0.75rem;
+  align-content: center;
+}
+
+.inspiration-visuals {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.55rem;
+}
+
+.or-mini-card {
+  display: grid;
+  gap: 0.38rem;
+  justify-items: center;
+  margin: 0;
+  padding: 0.5rem;
+  border: 1px solid rgba(107, 35, 29, 0.12);
+  border-radius: 16px;
+  background:
+    radial-gradient(circle at 22% 8%, rgba(244, 212, 118, 0.22), transparent 42%),
+    linear-gradient(180deg, rgba(255, 251, 246, 0.94), rgba(244, 234, 217, 0.9));
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.7);
+}
+
+.or-mini-card__diagram {
+  width: 100%;
+  max-width: 8.5rem;
+  height: auto;
+  overflow: visible;
+}
+
+.or-mini-card figcaption {
+  color: var(--accent-dark);
+  font-size: clamp(0.62rem, 1.2dvh, 0.75rem);
+  font-weight: 900;
+  letter-spacing: 0.08em;
+  line-height: 1;
+}
+
+.or-diagram__path {
+  fill: none;
+  stroke: rgba(107, 35, 29, 0.72);
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 4.2;
+}
+
+.or-diagram__path--main {
+  stroke: #6b231d;
+}
+
+.or-diagram__path--ghost {
+  stroke: rgba(107, 35, 29, 0.2);
+  stroke-dasharray: 6 5;
+}
+
+.or-diagram__path--loop {
+  stroke: #6b231d;
+  stroke-width: 3.7;
+}
+
+.or-diagram__depot,
+.or-diagram__node,
+.or-diagram__facility,
+.or-diagram__clock {
+  stroke: rgba(255, 250, 242, 0.96);
+  stroke-width: 3;
+}
+
+.or-diagram__depot {
+  fill: #d07c26;
+}
+
+.or-diagram__node {
+  fill: #7d5a24;
+}
+
+.or-diagram__facility {
+  fill: rgba(125, 90, 36, 0.28);
+}
+
+.or-diagram__facility--chosen {
+  fill: #d07c26;
+}
+
+.or-diagram__resource {
+  fill: rgba(107, 35, 29, 0.12);
+}
+
+.or-diagram__resource-fill {
+  fill: #6b231d;
+}
+
+.or-diagram__resource-fill--soft {
+  fill: #d07c26;
+}
+
+.or-diagram__arrow,
+.or-diagram__hand {
+  fill: none;
+  stroke: #d07c26;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 3;
+}
+
+.or-diagram__clock {
+  fill: rgba(255, 249, 240, 0.88);
+  stroke: rgba(107, 35, 29, 0.22);
+}
+
+.easter-logo {
+  position: relative;
+  width: min(100%, 18rem);
+  height: clamp(5.7rem, 12dvh, 7.4rem);
+  margin: 0 auto;
+  overflow: hidden;
+  border: 1px solid rgba(107, 35, 29, 0.12);
+  border-radius: 22px;
+  background:
+    radial-gradient(circle at 18% 22%, rgba(244, 212, 118, 0.28), transparent 38%),
+    linear-gradient(135deg, rgba(255, 252, 247, 0.98), rgba(240, 230, 211, 0.94));
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.76),
+    0 14px 24px rgba(78, 43, 24, 0.08);
+}
+
+.easter-logo::before {
+  content: "reverses into";
+  position: absolute;
+  left: 50%;
+  bottom: 0.58rem;
+  transform: translateX(-50%);
+  color: rgba(107, 35, 29, 0.52);
+  font-size: clamp(0.54rem, 1.05dvh, 0.68rem);
+  font-weight: 800;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  animation: easter-logo-caption 5.4s cubic-bezier(0.22, 1, 0.36, 1) infinite alternate;
+}
+
+.easter-logo__letter {
+  --start-x: 0rem;
+  --end-x: 0rem;
+  position: absolute;
+  top: 43%;
+  left: 50%;
+  z-index: 2;
+  min-width: 1.45em;
+  color: var(--accent-dark);
+  font-family: "Trebuchet MS", "Segoe UI", sans-serif;
+  font-size: clamp(1.9rem, 5.8dvh, 3.2rem);
+  font-weight: 900;
+  line-height: 1;
+  text-align: center;
+  text-shadow: 0 8px 18px rgba(78, 43, 24, 0.14);
+  transform: translate(var(--start-x), -50%);
+  transform-origin: center;
+  animation: easter-letter-reverse 5.4s cubic-bezier(0.22, 1, 0.36, 1) infinite alternate;
+}
+
+.easter-logo__letter--l {
+  --start-x: -4.6rem;
+  --end-x: 4.6rem;
+}
+
+.easter-logo__letter--m {
+  --start-x: -1.55rem;
+  --end-x: 1.55rem;
+}
+
+.easter-logo__letter--s {
+  --start-x: 1.55rem;
+  --end-x: -1.55rem;
+}
+
+.easter-logo__letter--a {
+  --start-x: 4.6rem;
+  --end-x: -4.6rem;
+}
+
+.easter-logo__stripe {
+  position: absolute;
+  left: 50%;
+  z-index: 1;
+  display: block;
+  width: 11.2rem;
+  height: 0.32rem;
+  border-radius: 999px;
+  background: linear-gradient(90deg, transparent 0 9%, #005daa 9% 32%, transparent 32% 39%, #005daa 39% 65%, transparent 65% 72%, #005daa 72% 100%);
+  opacity: 0;
+  transform: translateX(-50%) scaleX(0.72);
+  transform-origin: center;
+  animation: easter-logo-stripe 5.4s cubic-bezier(0.22, 1, 0.36, 1) infinite alternate;
+}
+
+.easter-logo__stripe--top {
+  top: 1rem;
+}
+
+.easter-logo__stripe--bottom {
+  bottom: 1.2rem;
+}
+
+.about-card--thanks p {
+  line-height: 1.58;
+}
+
+@keyframes easter-letter-reverse {
+  0%,
+  28% {
+    color: var(--accent-dark);
+    letter-spacing: 0.02em;
+    text-shadow: 0 8px 18px rgba(78, 43, 24, 0.14);
+    transform: translate(var(--start-x), -50%) skewX(0deg);
+  }
+
+  72%,
+  100% {
+    color: #005daa;
+    letter-spacing: -0.03em;
+    text-shadow:
+      0 0 0 rgba(0, 93, 170, 0),
+      0 8px 18px rgba(0, 93, 170, 0.16);
+    transform: translate(var(--end-x), -50%) skewX(-8deg) scaleX(0.96);
+  }
+}
+
+@keyframes easter-logo-stripe {
+  0%,
+  42% {
+    opacity: 0;
+    transform: translateX(-50%) scaleX(0.72);
+  }
+
+  72%,
+  100% {
+    opacity: 0.92;
+    transform: translateX(-50%) scaleX(1);
+  }
+}
+
+@keyframes easter-logo-caption {
+  0%,
+  42% {
+    color: rgba(107, 35, 29, 0.52);
+  }
+
+  72%,
+  100% {
+    color: rgba(0, 93, 170, 0.62);
+  }
+}
+
 .results-grid {
   grid-template-columns: repeat(2, minmax(0, 1fr));
 }
@@ -4784,6 +5068,1587 @@ body.foundry-edit-mode .foundry-edit-sandlot {
     var(--shadow-lg);
 }
 
+/* Height-aware desktop layout */
+@media (min-width: 721px) {
+  html,
+  body {
+    height: 100%;
+  }
+
+  body {
+    overflow: hidden;
+  }
+
+  .app-shell {
+    height: calc(100vh - 1.2rem);
+    height: calc(100dvh - 1.2rem);
+    min-height: 0;
+    margin: 0.6rem auto;
+    overflow: hidden;
+  }
+
+  .screen-stack,
+  .screen--active {
+    min-height: 0;
+    overflow: hidden;
+  }
+
+  .screen--active {
+    height: 100%;
+  }
+
+  #landing.screen--active,
+  #levels.screen--active,
+  #about.screen--active {
+    display: grid;
+    grid-template-rows: minmax(0, 1fr);
+  }
+
+  #menu.screen--active,
+  #results.screen--active,
+  #settings.screen--active {
+    display: grid;
+    grid-template-rows: auto minmax(0, 1fr);
+  }
+
+  .hero,
+  .menu-grid,
+  .level-grid,
+  .results-layout,
+  .settings-layout,
+  .about-layout {
+    height: 100%;
+    min-height: 0;
+  }
+
+  .menu-grid,
+  .level-grid,
+  .results-grid,
+  .results-side,
+  .settings-form,
+  .settings-note,
+  .about-main,
+  .about-side,
+  .about-card,
+  .results-summary {
+    min-height: 0;
+    overflow: hidden;
+  }
+
+  .menu-grid,
+  .level-grid {
+    align-content: center;
+    grid-auto-rows: auto;
+  }
+
+  .menu-card,
+  .level-card,
+  .result-card,
+  .info-card {
+    min-height: 0;
+    overflow: hidden;
+  }
+
+  .results-layout,
+  .settings-layout,
+  .about-layout {
+    align-items: center;
+  }
+
+  .results-side {
+    align-content: center;
+    grid-template-rows: repeat(2, auto);
+  }
+
+  .about-side {
+    align-content: center;
+    grid-template-rows: repeat(3, auto);
+  }
+
+  .about-main {
+    align-content: center;
+  }
+
+  .menu-grid,
+  .level-grid,
+  .results-grid,
+  .results-side,
+  .settings-layout,
+  .about-layout,
+  .about-side,
+  .about-bands {
+    gap: clamp(0.75rem, 1.65dvh, 1.25rem);
+  }
+
+  .menu-card {
+    gap: clamp(0.5rem, 1.05dvh, 0.8rem);
+    padding: clamp(1rem, 2dvh, 1.45rem);
+  }
+
+  .menu-card__icon {
+    width: clamp(44px, 5.8dvh, 58px);
+    height: clamp(44px, 5.8dvh, 58px);
+    border-radius: clamp(12px, 1.8dvh, 18px);
+    font-size: clamp(0.82rem, 1.7dvh, 1rem);
+  }
+
+  .menu-card h3,
+  .level-card h3,
+  .result-card h3,
+  .info-card h3,
+  .settings-note h3 {
+    font-size: clamp(1.05rem, 2.35dvh, 1.45rem);
+    line-height: 1.15;
+  }
+
+  .menu-card p,
+  .level-card p,
+  .info-card p,
+  .settings-note p,
+  .results-summary p,
+  .about-list,
+  .objective-list {
+    font-size: clamp(0.9rem, 1.85dvh, 1.08rem);
+    line-height: 1.62;
+  }
+
+  .level-card {
+    gap: clamp(0.8rem, 1.8dvh, 1.25rem);
+    padding: clamp(1rem, 2.4dvh, 1.65rem);
+  }
+
+  .level-card h3 + p {
+    margin-top: -0.15rem;
+  }
+
+  .level-card__meta {
+    gap: clamp(0.62rem, 1.35dvh, 0.95rem);
+    margin-top: -0.15rem;
+  }
+
+  .level-card__meta .meta-box,
+  .meta-box {
+    padding: clamp(0.68rem, 1.7dvh, 1.05rem);
+    border-radius: clamp(12px, 1.8dvh, 16px);
+  }
+
+  .meta-box span,
+  .result-card span,
+  .stat-pill span {
+    margin-bottom: clamp(0.18rem, 0.55dvh, 0.38rem);
+    font-size: clamp(0.64rem, 1.35dvh, 0.78rem);
+  }
+
+  .meta-box strong,
+  .result-card strong {
+    font-size: clamp(1.08rem, 2.65dvh, 1.65rem);
+  }
+
+  .level-card .button,
+  .menu-card .button {
+    min-height: clamp(2.72rem, 6.2dvh, 4rem);
+    font-size: clamp(0.9rem, 1.9dvh, 1.08rem);
+  }
+
+  .result-card,
+  .settings-form,
+  .settings-note,
+  .results-summary,
+  .info-card {
+    padding: clamp(0.95rem, 2.15dvh, 1.5rem);
+  }
+
+  .settings-form,
+  .toggle-list,
+  .score-breakdown,
+  .about-main,
+  .about-side {
+    gap: clamp(0.65rem, 1.45dvh, 1.05rem);
+  }
+
+  .field-group {
+    gap: clamp(0.35rem, 0.85dvh, 0.6rem);
+  }
+
+  .field-group select,
+  .settings-static {
+    padding: clamp(0.66rem, 1.65dvh, 1rem);
+    font-size: clamp(0.9rem, 1.7dvh, 1.06rem);
+  }
+
+  .setting-toggle {
+    padding: clamp(0.72rem, 1.7dvh, 1.08rem);
+  }
+
+  .setting-toggle__copy small {
+    font-size: clamp(0.78rem, 1.5dvh, 0.92rem);
+  }
+
+  .about-main {
+    padding: clamp(1.05rem, 2.35dvh, 1.65rem);
+  }
+
+  .about-main h2 {
+    font-size: clamp(1.9rem, 5.6dvh, 3.05rem);
+  }
+
+  .about-main__lede,
+  .about-main p:not(.about-formula) {
+    font-size: clamp(0.94rem, 2dvh, 1.12rem);
+    line-height: 1.68;
+  }
+
+  .about-formula {
+    padding: clamp(0.72rem, 1.85dvh, 1.08rem);
+    font-size: clamp(0.88rem, 1.9dvh, 1.1rem);
+  }
+
+  .score-band {
+    padding: clamp(0.68rem, 1.65dvh, 1rem);
+  }
+
+  .score-band strong {
+    font-size: clamp(0.92rem, 1.9dvh, 1.1rem);
+  }
+
+  .score-band span {
+    font-size: clamp(0.82rem, 1.65dvh, 0.98rem);
+    line-height: 1.5;
+  }
+
+  body.viewing-game .shop-card {
+    gap: clamp(0.34rem, 0.9dvh, 0.6rem);
+    padding: clamp(0.52rem, 1.25dvh, 0.82rem);
+  }
+
+  body.viewing-game .shop-card__visual,
+  body.viewing-game .shop-card--lift .shop-card__visual,
+  body.viewing-game .shop-card--shuttle .shop-card__visual,
+  body.viewing-game .shop-card--coach .shop-card__visual {
+    min-height: clamp(54px, 8dvh, 82px);
+    padding-top: clamp(0.78rem, 1.7dvh, 1.2rem);
+  }
+
+  body.viewing-game .shop-card__title strong {
+    font-size: clamp(0.88rem, 1.85dvh, 1.08rem);
+  }
+
+  body.viewing-game .shop-card__price {
+    font-size: clamp(0.98rem, 2.25dvh, 1.28rem);
+  }
+
+  body.viewing-game .shop-card__pill {
+    padding: clamp(0.12rem, 0.38dvh, 0.2rem) clamp(0.32rem, 0.75dvh, 0.52rem);
+    font-size: clamp(0.56rem, 1.15dvh, 0.7rem);
+  }
+
+  body.viewing-game .shop-panel .button {
+    min-height: clamp(2.2rem, 4.8dvh, 3.2rem);
+    padding: clamp(0.46rem, 1.1dvh, 0.72rem) clamp(0.55rem, 1.25dvh, 0.85rem);
+    font-size: clamp(0.72rem, 1.55dvh, 0.9rem);
+  }
+
+  body.viewing-game .control-panel__section--routes {
+    flex: 0 0 auto;
+    justify-content: flex-start;
+  }
+
+  body.viewing-game .control-panel .control-list,
+  body.viewing-game .control-panel .button-column {
+    gap: clamp(0.42rem, 1dvh, 0.72rem);
+  }
+
+  body.viewing-game .control-panel .control-list .button,
+  body.viewing-game .control-panel .button-column .button {
+    min-height: clamp(2.55rem, 6.1dvh, 4rem);
+    padding: clamp(0.5rem, 1.2dvh, 0.82rem);
+    font-size: clamp(0.78rem, 1.65dvh, 0.96rem);
+  }
+
+  body.viewing-game .opportunity-panel {
+    flex: 1 1 auto;
+    justify-content: stretch;
+  }
+
+  body.viewing-game .opportunity-card {
+    align-content: center;
+    height: 100%;
+    min-height: 0;
+    gap: clamp(0.28rem, 1dvh, 0.6rem);
+    padding: clamp(0.65rem, 1.65dvh, 1.1rem);
+  }
+
+  body.viewing-game .worker-icon {
+    width: clamp(110px, 18dvh, 176px);
+    height: clamp(86px, 17dvh, 150px);
+  }
+
+  body.viewing-game .worker-icon__image {
+    width: clamp(134px, 20dvh, 200px);
+  }
+
+  body.viewing-game .opportunity-card__value {
+    font-size: clamp(1.85rem, 5.1dvh, 2.75rem);
+  }
+
+  body.viewing-game .opportunity-card__value span {
+    font-size: clamp(0.78rem, 2dvh, 1.05rem);
+  }
+
+  body.viewing-game .opportunity-card__note {
+    font-size: clamp(0.68rem, 1.55dvh, 0.88rem);
+    line-height: 1.35;
+    white-space: normal;
+  }
+
+  body.viewing-game .top-bar {
+    gap: clamp(0.42rem, 1.05dvh, 0.78rem);
+    padding: clamp(0.48rem, 1.2dvh, 0.88rem);
+  }
+
+  body.viewing-game .stat-pill {
+    min-height: clamp(4rem, 9dvh, 5.75rem);
+    padding: clamp(0.44rem, 1.2dvh, 0.74rem) clamp(0.5rem, 1.35dvh, 0.9rem);
+  }
+
+  body.viewing-game .stat-pill strong {
+    font-size: clamp(0.9rem, 2.2dvh, 1.3rem);
+  }
+
+  body.viewing-game .stat-pill__detail {
+    font-size: clamp(0.56rem, 1.3dvh, 0.74rem);
+  }
+
+  body.viewing-game .shop-panel,
+  body.viewing-game .control-panel,
+  body.viewing-game .map-panel {
+    min-height: 0;
+    overflow: hidden;
+  }
+}
+
+@media (min-width: 721px) and (max-height: 820px) {
+  .app-shell {
+    gap: 0.55rem;
+    height: calc(100vh - 0.9rem);
+    height: calc(100dvh - 0.9rem);
+    margin: 0.45rem auto;
+  }
+
+  .site-header {
+    gap: 0.65rem;
+    padding: 0.72rem 0.9rem;
+  }
+
+  .site-brand h1 {
+    font-size: clamp(1.45rem, 2.6vw, 1.9rem);
+  }
+
+  .eyebrow {
+    margin-bottom: 0.22rem;
+    font-size: 0.66rem;
+  }
+
+  .header-current__label {
+    font-size: clamp(1.1rem, 2.1vw, 1.45rem);
+  }
+
+  .button {
+    padding: 0.65rem 0.9rem;
+    border-radius: 12px;
+  }
+
+  .button--small {
+    padding: 0.52rem 0.75rem;
+  }
+
+  .screen-header {
+    gap: 0.65rem;
+    margin-bottom: 0.65rem;
+  }
+
+  .screen-header h2 {
+    margin: 0.05rem 0 0.18rem;
+    font-size: clamp(1.55rem, 3.2vw, 2rem);
+  }
+
+  .screen-header p {
+    display: -webkit-box;
+    overflow: hidden;
+    font-size: 0.92rem;
+    line-height: 1.45;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+  }
+
+  .hero {
+    gap: 0.8rem;
+    min-height: 0;
+    padding: 0.9rem;
+  }
+
+  .hero__copy h2 {
+    margin-bottom: 0.65rem;
+    font-size: clamp(1.9rem, 4.2vw, 3.3rem);
+  }
+
+  .hero__lede {
+    display: -webkit-box;
+    overflow: hidden;
+    margin-bottom: 0.85rem;
+    font-size: 0.95rem;
+    line-height: 1.55;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3;
+  }
+
+  .play-demo {
+    margin-top: 0.75rem;
+    padding: 0.8rem 0.85rem 0.95rem;
+  }
+
+  .play-demo__copy {
+    margin-bottom: 0.55rem;
+  }
+
+  .play-demo__copy h3 {
+    font-size: 1rem;
+    line-height: 1.2;
+  }
+
+  .play-demo__rail {
+    gap: 0.45rem;
+    padding-top: 1.25rem;
+  }
+
+  .play-demo__line {
+    top: 1.95rem;
+  }
+
+  .play-demo__bus {
+    width: 70px;
+    height: 28px;
+  }
+
+  .play-demo__decal {
+    width: 39px;
+    padding: 3px 2px;
+  }
+
+  .play-demo__decal-top {
+    font-size: 0.36rem;
+  }
+
+  .play-step {
+    gap: 0.3rem;
+    padding-top: 0.75rem;
+  }
+
+  .play-step__dot {
+    height: 14px;
+  }
+
+  .play-step strong {
+    font-size: 0.8rem;
+    line-height: 1.15;
+  }
+
+  .panel--dark {
+    padding: 1rem;
+  }
+
+  .hero__visual-top h3 {
+    margin: 0.1rem 0 0.45rem;
+    font-size: 1.3rem;
+  }
+
+  .hero__visual-copy {
+    display: -webkit-box;
+    overflow: hidden;
+    font-size: 0.93rem;
+    line-height: 1.45;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 5;
+  }
+
+  .hero-metrics {
+    gap: 0.55rem;
+    margin-top: 0.7rem;
+  }
+
+  .metric-block {
+    padding: 0.55rem 0.7rem;
+  }
+
+  .metric-block span {
+    margin-bottom: 0.2rem;
+    font-size: 0.64rem;
+  }
+
+  .metric-block strong {
+    font-size: 1.15rem;
+  }
+
+  .featured-list__title {
+    margin: 0.75rem 0 0.25rem;
+  }
+
+  .featured-list {
+    gap: 0.2rem;
+    font-size: 0.9rem;
+    line-height: 1.4;
+  }
+
+  .hero__visual-actions {
+    gap: 0.55rem;
+    margin-top: 0.75rem;
+  }
+
+  .menu-grid,
+  .level-grid,
+  .results-grid,
+  .results-side,
+  .about-side,
+  .score-breakdown {
+    gap: 0.75rem;
+  }
+
+  .menu-card {
+    gap: 0.45rem;
+    padding: 0.9rem;
+  }
+
+  .menu-card__icon {
+    width: 42px;
+    height: 42px;
+    border-radius: 12px;
+  }
+
+  .menu-card p,
+  .level-card h3 + p,
+  .settings-note p,
+  .results-summary p,
+  .about-card p,
+  .about-main p:not(.about-formula),
+  .score-band span {
+    display: -webkit-box;
+    overflow: hidden;
+    line-height: 1.45;
+    -webkit-box-orient: vertical;
+  }
+
+  .menu-card p,
+  .settings-note p,
+  .results-summary p,
+  .about-card p {
+    -webkit-line-clamp: 3;
+  }
+
+  .level-card h3 + p,
+  .about-main p:not(.about-formula),
+  .score-band span {
+    -webkit-line-clamp: 2;
+  }
+
+  .level-card {
+    gap: 0.65rem;
+    padding: 0.75rem 0.85rem 0.85rem;
+  }
+
+  .level-card__meta {
+    gap: 0.5rem;
+    margin-top: -0.2rem;
+  }
+
+  .level-card__meta .meta-box,
+  .meta-box {
+    padding: 0.55rem 0.7rem;
+  }
+
+  .level-tag,
+  .pill,
+  .status-pill {
+    padding: 0.26rem 0.55rem;
+    font-size: 0.72rem;
+  }
+
+  .result-card,
+  .settings-form,
+  .settings-note,
+  .results-summary,
+  .info-card {
+    padding: 0.9rem;
+  }
+
+  .result-card strong {
+    font-size: 1.55rem;
+  }
+
+  .objective-list,
+  .about-list,
+  .map-note,
+  .info-copy,
+  .side-note {
+    line-height: 1.45;
+  }
+
+  .settings-form {
+    gap: 0.75rem;
+  }
+
+  .field-group {
+    gap: 0.4rem;
+  }
+
+  .field-group select,
+  .settings-static {
+    padding: 0.7rem 0.8rem;
+  }
+
+  .toggle-list {
+    gap: 0.55rem;
+  }
+
+  .setting-toggle {
+    padding: 0.75rem;
+  }
+
+  .about-main {
+    gap: 0.75rem;
+    padding: 0.95rem;
+  }
+
+  .about-main h2 {
+    font-size: clamp(1.55rem, 3vw, 2rem);
+  }
+
+  .about-formula {
+    padding: 0.72rem 0.8rem;
+  }
+
+  .about-bands {
+    gap: 0.55rem;
+  }
+
+  .score-band {
+    padding: 0.6rem 0.7rem;
+  }
+
+  .about-list li + li {
+    margin-top: 0.28rem;
+  }
+
+  body.viewing-game .app-shell {
+    width: calc(100% - 0.85rem);
+    height: calc(100vh - 0.35rem);
+    height: calc(100dvh - 0.35rem);
+    gap: 0.45rem;
+    margin: 0.35rem auto 0;
+  }
+
+  body.viewing-game .site-header {
+    gap: 0.5rem;
+    padding: 0.38rem 0.75rem;
+  }
+
+  body.viewing-game .header-current__label {
+    font-size: clamp(0.92rem, 1.5vw, 1.18rem);
+  }
+
+  body.viewing-game #game .game-layout {
+    gap: 0.5rem;
+    grid-template-columns: 20fr 60fr 20fr;
+  }
+
+  body.viewing-game .shop-panel,
+  body.viewing-game .control-panel,
+  body.viewing-game .map-panel {
+    padding: 0.5rem;
+    border-radius: 14px;
+  }
+
+  .shop-list--fleet {
+    gap: 0.5rem;
+  }
+
+  .shop-card {
+    gap: 0.35rem;
+    padding: 0.5rem;
+    border-radius: 12px;
+  }
+
+  .shop-card__visual,
+  .shop-card--lift .shop-card__visual,
+  .shop-card--shuttle .shop-card__visual,
+  .shop-card--coach .shop-card__visual {
+    min-height: 50px;
+    padding-top: 0.85rem;
+  }
+
+  .shop-card__visual .shop-vehicle {
+    transform: scale(0.78);
+    transform-origin: center bottom;
+  }
+
+  .shop-card__pill {
+    padding: 0.12rem 0.32rem;
+    font-size: 0.58rem;
+  }
+
+  .shop-card__title {
+    gap: 0.45rem;
+  }
+
+  .shop-card__title strong {
+    font-size: 0.86rem;
+  }
+
+  .shop-card__price {
+    font-size: 0.96rem;
+  }
+
+  .shop-panel .button {
+    min-height: 2.08rem;
+    padding: 0.44rem 0.5rem;
+    border-radius: 10px;
+    font-size: 0.72rem;
+  }
+
+  .control-panel > .section-heading,
+  .section-heading {
+    margin-bottom: 0.45rem;
+  }
+
+  .section-heading h3 {
+    font-size: 0.9rem;
+  }
+
+  .control-panel__section {
+    padding: 0.55rem;
+    border-radius: 12px;
+  }
+
+  .control-panel__section + .control-panel__section {
+    margin-top: 0.45rem;
+    padding-top: 0.55rem;
+  }
+
+  .control-panel .control-list,
+  .control-panel .button-column {
+    gap: 0.45rem;
+  }
+
+  .control-panel .control-list .button,
+  .control-panel .button-column .button {
+    min-height: 2.18rem;
+    padding: 0.45rem 0.55rem;
+    border-radius: 11px;
+    font-size: 0.78rem;
+  }
+
+  .opportunity-panel {
+    flex: 0 1 auto;
+    margin-top: 0.45rem;
+  }
+
+  .opportunity-card {
+    min-height: 0;
+    gap: 0.25rem;
+    padding: 0.5rem 0.55rem;
+  }
+
+  .worker-icon {
+    width: 98px;
+    height: 72px;
+    margin: 0;
+  }
+
+  .worker-icon__image {
+    width: 120px;
+    transform: translateY(-4px);
+  }
+
+  .opportunity-card__value {
+    font-size: 1.6rem;
+  }
+
+  .opportunity-card__value span {
+    font-size: 0.78rem;
+  }
+
+  .opportunity-card__note {
+    font-size: 0.68rem;
+    line-height: 1.3;
+    white-space: normal;
+  }
+
+  .map-panel {
+    gap: 0.45rem;
+  }
+
+  .map-panel__header h3 {
+    font-size: 0.9rem;
+  }
+
+  .map-legend {
+    top: 0.55rem;
+    right: 0.6rem;
+    gap: 0.2rem;
+    padding: 0.28rem 0.45rem;
+    font-size: 0.66rem;
+  }
+
+  .map-legend__item {
+    grid-template-columns: 22px 10px auto;
+    gap: 0.25rem;
+  }
+
+  .map-legend__line {
+    width: 22px;
+  }
+
+  .map-legend__node {
+    width: 11px;
+    height: 11px;
+  }
+
+  .map-stage--foundry {
+    --map-status-overlay-clearance: 6rem;
+  }
+
+  .top-bar {
+    left: 0.55rem;
+    right: 0.55rem;
+    bottom: 0.55rem;
+    gap: 0.45rem;
+    padding: 0.5rem 0.55rem;
+    border-radius: 16px;
+  }
+
+  .stat-pill {
+    min-height: 3.95rem;
+    padding: 0.42rem 0.5rem;
+    border-radius: 13px;
+  }
+
+  .stat-pill span {
+    margin-bottom: 0.2rem;
+    font-size: 0.52rem;
+    letter-spacing: 0.1em;
+  }
+
+  .stat-pill strong {
+    font-size: clamp(0.85rem, 0.8vw, 1.05rem);
+    line-height: 1;
+  }
+
+  .stat-pill__detail {
+    padding-top: 0.18rem;
+    font-size: 0.58rem;
+    line-height: 1.08;
+  }
+
+  .map-delete-can {
+    right: 9px;
+    bottom: calc(var(--map-status-overlay-clearance, 6rem) + 0.35rem);
+    width: 56px;
+    height: 56px;
+    border-radius: 18px;
+  }
+
+  .map-delete-can__image {
+    width: 44px;
+  }
+
+  .game-victory-overlay {
+    overflow: hidden;
+    padding: 0.65rem;
+  }
+
+  .game-victory-card {
+    --game-victory-metrics-left-width: 9.4rem;
+    --game-victory-metrics-middle-width: 6.3rem;
+    --game-victory-metrics-right-width: 8.8rem;
+    --game-victory-row-gap: 0.45rem;
+    width: min(29rem, calc(100% - 0.5rem));
+    max-height: 100%;
+    overflow: hidden;
+    padding: 0.9rem 0.75rem 0.75rem;
+    border-radius: 22px;
+  }
+
+  .game-victory-card h2 {
+    font-size: clamp(1.2rem, 2vw, 1.55rem);
+  }
+
+  .game-victory__heading {
+    margin-bottom: 0.3rem;
+  }
+
+  .game-victory__stars {
+    gap: 0.4rem;
+    margin: 0.85rem 0 0.8rem;
+  }
+
+  .game-victory__star {
+    width: 60px;
+    height: 60px;
+    border-radius: 18px;
+    font-size: 2.1rem;
+  }
+
+  .game-victory__star:nth-child(2) {
+    width: 70px;
+    height: 70px;
+    font-size: 2.45rem;
+    transform: translateY(-4px);
+  }
+
+  .game-victory__scoreline {
+    padding: 0.42rem 0.45rem 0.28rem;
+    border-radius: 16px;
+  }
+
+  .game-victory__track {
+    height: 70px;
+  }
+
+  .game-victory__track::before,
+  .game-victory__track-fill,
+  .game-victory__marker,
+  .game-victory__player {
+    top: 30px;
+  }
+
+  .game-victory__tick {
+    height: 14px;
+  }
+
+  .game-victory__marker-label {
+    font-size: 0.56rem;
+  }
+
+  .game-victory__marker strong,
+  .game-victory__player-value {
+    font-size: 0.76rem;
+  }
+
+  .game-victory__metrics {
+    margin-top: 0.65rem;
+  }
+
+  .game-victory__metric,
+  .game-victory__metric--costs,
+  .game-victory__metric--gap {
+    padding: 0.6rem 0.65rem;
+  }
+
+  .game-victory__replay-stack {
+    gap: 0.45rem;
+  }
+
+  .game-victory__replay-stack .game-victory__top-button {
+    min-height: 2.45rem;
+    padding: 0.36rem 0.42rem;
+    border-radius: 15px;
+    font-size: 0.62rem;
+  }
+
+  .game-victory__cost-breakdown {
+    gap: 0.32rem;
+  }
+
+  .game-victory__cost-row dt {
+    font-size: 0.66rem;
+  }
+
+  .game-victory__cost-row dd {
+    font-size: 0.86rem;
+  }
+
+  .game-victory__cost-row--total {
+    padding-top: 0.34rem;
+  }
+
+  .game-victory__actions {
+    gap: 0.38rem;
+    margin-top: 0.52rem;
+  }
+
+  .game-victory__actions .button {
+    min-height: 2.25rem;
+    padding: 0.55rem 0.6rem;
+    font-size: 0.82rem;
+  }
+}
+
+@media (min-width: 721px) and (max-height: 700px) {
+  .app-shell {
+    gap: 0.42rem;
+    height: calc(100vh - 0.7rem);
+    height: calc(100dvh - 0.7rem);
+    margin: 0.35rem auto;
+  }
+
+  .site-header {
+    padding: 0.52rem 0.75rem;
+  }
+
+  .site-brand h1 {
+    font-size: clamp(1.3rem, 2.2vw, 1.65rem);
+  }
+
+  .header-actions {
+    gap: 0.45rem;
+  }
+
+  .button,
+  .button--small {
+    padding: 0.5rem 0.7rem;
+    font-size: 0.84rem;
+  }
+
+  .screen-header {
+    margin-bottom: 0.45rem;
+  }
+
+  .screen-header h2 {
+    font-size: clamp(1.35rem, 2.7vw, 1.7rem);
+  }
+
+  .hero {
+    gap: 0.65rem;
+    padding: 0.7rem;
+  }
+
+  .hero__copy {
+    justify-content: flex-start;
+  }
+
+  .hero__copy h2 {
+    margin-bottom: 0.45rem;
+    font-size: clamp(1.65rem, 3.5vw, 2.65rem);
+  }
+
+  .hero__lede {
+    margin-bottom: 0.5rem;
+    font-size: 0.86rem;
+    line-height: 1.38;
+    -webkit-line-clamp: 2;
+  }
+
+  .play-demo {
+    margin-top: 0.45rem;
+    padding: 0.65rem;
+  }
+
+  .play-demo__copy h3 {
+    font-size: 0.9rem;
+  }
+
+  .play-demo__rail {
+    gap: 0.25rem;
+    padding-top: 1.05rem;
+  }
+
+  .play-demo__line {
+    top: 1.72rem;
+  }
+
+  .play-demo__bus {
+    transform: translateX(-50%) scale(0.82);
+    transform-origin: center;
+  }
+
+  .play-step {
+    gap: 0.2rem;
+    padding-top: 0.55rem;
+  }
+
+  .play-step__dot {
+    height: 10px;
+  }
+
+  .play-step strong {
+    font-size: 0.7rem;
+  }
+
+  .panel--dark {
+    padding: 0.75rem;
+  }
+
+  .hero__visual-top h3 {
+    margin-bottom: 0.32rem;
+    font-size: 1.12rem;
+  }
+
+  .hero__visual-copy {
+    font-size: 0.82rem;
+    line-height: 1.32;
+    -webkit-line-clamp: 4;
+  }
+
+  .hero-metrics {
+    margin-top: 0.45rem;
+  }
+
+  .metric-block {
+    padding: 0.42rem 0.55rem;
+  }
+
+  .metric-block strong {
+    font-size: 0.98rem;
+  }
+
+  .featured-list {
+    gap: 0.12rem;
+    font-size: 0.78rem;
+    line-height: 1.28;
+  }
+
+  .hero__visual-actions {
+    margin-top: 0.5rem;
+  }
+
+  .menu-grid,
+  .level-grid,
+  .results-grid,
+  .results-side,
+  .about-side,
+  .score-breakdown {
+    gap: 0.55rem;
+  }
+
+  .menu-card,
+  .level-card,
+  .result-card,
+  .settings-form,
+  .settings-note,
+  .results-summary,
+  .info-card {
+    padding: 0.72rem;
+  }
+
+  .menu-card {
+    gap: 0.35rem;
+  }
+
+  .menu-card__icon {
+    width: 34px;
+    height: 34px;
+    border-radius: 10px;
+    font-size: 0.72rem;
+  }
+
+  .menu-card p,
+  .level-card h3 + p,
+  .settings-note p,
+  .results-summary p,
+  .about-card p,
+  .about-main p:not(.about-formula),
+  .score-band span {
+    line-height: 1.32;
+    -webkit-line-clamp: 2;
+  }
+
+  .level-card {
+    gap: 0.45rem;
+  }
+
+  .level-tag,
+  .pill,
+  .status-pill {
+    padding: 0.2rem 0.45rem;
+    font-size: 0.66rem;
+  }
+
+  .level-card__meta .meta-box,
+  .meta-box {
+    padding: 0.42rem 0.5rem;
+  }
+
+  .meta-box span,
+  .result-card span,
+  .stat-pill span {
+    margin-bottom: 0.18rem;
+  }
+
+  .meta-box strong,
+  .result-card strong {
+    font-size: 1.08rem;
+  }
+
+  .result-card strong {
+    font-size: 1.35rem;
+  }
+
+  .objective-list,
+  .about-list {
+    font-size: 0.86rem;
+    line-height: 1.34;
+  }
+
+  .about-main {
+    gap: 0.45rem;
+    padding: 0.72rem;
+  }
+
+  .about-main h2 {
+    font-size: clamp(1.35rem, 2.6vw, 1.65rem);
+  }
+
+  .about-formula {
+    padding: 0.55rem 0.65rem;
+    font-size: 0.85rem;
+  }
+
+  .about-bands {
+    gap: 0.42rem;
+  }
+
+  .score-band {
+    padding: 0.5rem 0.55rem;
+  }
+
+  .about-list li + li {
+    margin-top: 0.18rem;
+  }
+
+  .field-group select,
+  .settings-static {
+    padding: 0.55rem 0.65rem;
+  }
+
+  .setting-toggle {
+    padding: 0.58rem 0.65rem;
+  }
+
+  .switch {
+    width: 46px;
+    height: 26px;
+  }
+
+  .switch::after {
+    width: 18px;
+    height: 18px;
+  }
+
+  .setting-toggle input:checked + .switch::after {
+    transform: translateX(20px);
+  }
+
+  body.viewing-game .app-shell {
+    width: calc(100% - 0.55rem);
+    height: calc(100vh - 0.25rem);
+    height: calc(100dvh - 0.25rem);
+    gap: 0.32rem;
+    margin: 0.25rem auto 0;
+  }
+
+  body.viewing-game .site-header {
+    padding: 0.28rem 0.55rem;
+  }
+
+  body.viewing-game #game .game-layout {
+    gap: 0.38rem;
+    grid-template-columns: 18fr 64fr 18fr;
+  }
+
+  body.viewing-game .shop-panel,
+  body.viewing-game .control-panel,
+  body.viewing-game .map-panel {
+    padding: 0.38rem;
+  }
+
+  .shop-list--fleet {
+    gap: 0.34rem;
+  }
+
+  .shop-card {
+    gap: 0.25rem;
+    padding: 0.38rem;
+  }
+
+  .shop-card__visual,
+  .shop-card--lift .shop-card__visual,
+  .shop-card--shuttle .shop-card__visual,
+  .shop-card--coach .shop-card__visual {
+    min-height: 42px;
+    padding-top: 0.62rem;
+  }
+
+  .shop-card__visual .shop-vehicle {
+    transform: scale(0.66);
+  }
+
+  .shop-card__pill {
+    max-width: 65%;
+    overflow: hidden;
+    padding: 0.1rem 0.25rem;
+    font-size: 0.5rem;
+    text-overflow: ellipsis;
+  }
+
+  .shop-card__title strong {
+    font-size: 0.76rem;
+  }
+
+  .shop-card__price {
+    font-size: 0.82rem;
+  }
+
+  .shop-panel .button {
+    min-height: 1.85rem;
+    padding: 0.34rem 0.38rem;
+    font-size: 0.65rem;
+  }
+
+  .control-panel > .section-heading,
+  .section-heading {
+    margin-bottom: 0.3rem;
+  }
+
+  .control-panel__section {
+    padding: 0.42rem;
+  }
+
+  .control-panel__section + .control-panel__section {
+    margin-top: 0.32rem;
+    padding-top: 0.42rem;
+  }
+
+  .control-panel .control-list,
+  .control-panel .button-column {
+    gap: 0.3rem;
+  }
+
+  .control-panel .control-list .button,
+  .control-panel .button-column .button {
+    min-height: 1.9rem;
+    padding: 0.35rem 0.42rem;
+    font-size: 0.7rem;
+  }
+
+  .opportunity-panel {
+    margin-top: 0.32rem;
+  }
+
+  .opportunity-card {
+    gap: 0.18rem;
+    padding: 0.42rem;
+  }
+
+  .worker-icon {
+    width: 78px;
+    height: 52px;
+  }
+
+  .worker-icon__image {
+    width: 96px;
+  }
+
+  .opportunity-card__value {
+    font-size: 1.35rem;
+  }
+
+  .opportunity-card__note {
+    font-size: 0.62rem;
+  }
+
+  .map-stage--foundry {
+    --map-status-overlay-clearance: 5.05rem;
+  }
+
+  .top-bar {
+    left: 0.4rem;
+    right: 0.4rem;
+    bottom: 0.4rem;
+    gap: 0.32rem;
+    padding: 0.35rem;
+  }
+
+  .stat-pill {
+    min-height: 3.2rem;
+    padding: 0.34rem 0.38rem;
+  }
+
+  .stat-pill span {
+    font-size: 0.45rem;
+    letter-spacing: 0.08em;
+  }
+
+  .stat-pill strong {
+    font-size: clamp(0.72rem, 0.72vw, 0.9rem);
+  }
+
+  .stat-pill__detail {
+    font-size: 0.5rem;
+  }
+
+  .map-delete-can {
+    right: 7px;
+    bottom: calc(var(--map-status-overlay-clearance, 5.05rem) + 0.25rem);
+    width: 46px;
+    height: 46px;
+    border-radius: 15px;
+  }
+
+  .map-delete-can__image {
+    width: 36px;
+  }
+
+  .game-victory-card {
+    --game-victory-metrics-left-width: 8.4rem;
+    --game-victory-metrics-middle-width: 5.6rem;
+    --game-victory-metrics-right-width: 8rem;
+    --game-victory-row-gap: 0.34rem;
+    width: min(26rem, calc(100% - 0.4rem));
+    padding: 0.62rem;
+    border-radius: 18px;
+  }
+
+  .game-victory-card h2 {
+    font-size: clamp(1.02rem, 1.7vw, 1.25rem);
+  }
+
+  .game-victory__heading {
+    margin-bottom: 0.18rem;
+  }
+
+  .game-victory__stars {
+    gap: 0.28rem;
+    margin: 0.45rem 0 0.48rem;
+  }
+
+  .game-victory__star {
+    width: 48px;
+    height: 48px;
+    border-radius: 14px;
+    font-size: 1.7rem;
+  }
+
+  .game-victory__star:nth-child(2) {
+    width: 56px;
+    height: 56px;
+    font-size: 2rem;
+    transform: translateY(-3px);
+  }
+
+  .game-victory__scoreline {
+    padding: 0.3rem 0.34rem 0.2rem;
+  }
+
+  .game-victory__track {
+    height: 54px;
+  }
+
+  .game-victory__track::before,
+  .game-victory__track-fill,
+  .game-victory__marker,
+  .game-victory__player {
+    top: 24px;
+  }
+
+  .game-victory__marker-label {
+    font-size: 0.48rem;
+  }
+
+  .game-victory__marker strong,
+  .game-victory__player-value {
+    font-size: 0.66rem;
+  }
+
+  .game-victory__player-value {
+    padding: 0.18rem 0.42rem;
+  }
+
+  .game-victory__player-dot {
+    width: 14px;
+    height: 14px;
+    border-width: 3px;
+  }
+
+  .game-victory__metrics {
+    margin-top: 0.42rem;
+  }
+
+  .game-victory__metric,
+  .game-victory__metric--costs,
+  .game-victory__metric--gap {
+    padding: 0.42rem 0.48rem;
+  }
+
+  .game-victory__replay-stack {
+    gap: 0.32rem;
+  }
+
+  .game-victory__replay-stack .game-victory__top-button {
+    min-height: 2.02rem;
+    padding: 0.28rem 0.34rem;
+    font-size: 0.54rem;
+  }
+
+  .game-victory__cost-breakdown {
+    gap: 0.22rem;
+  }
+
+  .game-victory__cost-row {
+    gap: 0.35rem;
+  }
+
+  .game-victory__cost-row dt {
+    font-size: 0.58rem;
+  }
+
+  .game-victory__cost-row dd,
+  .game-victory__cost-row--total dd {
+    font-size: 0.74rem;
+  }
+
+  .game-victory__actions {
+    gap: 0.28rem;
+    margin-top: 0.38rem;
+  }
+
+  .game-victory__actions .button {
+    min-height: 1.92rem;
+    padding: 0.42rem 0.45rem;
+    font-size: 0.7rem;
+  }
+}
+
+@media (min-width: 721px) and (max-height: 620px) {
+  .hero__lede {
+    display: none;
+  }
+
+  .featured-list li:nth-child(n + 4) {
+    display: none;
+  }
+
+  .about-main p:not(.about-formula),
+  .about-card p,
+  .about-list,
+  .objective-list {
+    -webkit-line-clamp: 1;
+  }
+
+  .about-list,
+  .objective-list {
+    max-height: 2.7rem;
+    overflow: hidden;
+  }
+
+  .worker-icon,
+  .shop-card__visual {
+    display: none;
+  }
+
+  .shop-list--fleet .shop-card {
+    justify-content: center;
+  }
+}
+
 @media (max-width: 1120px) {
   .hero,
   .results-layout,
@@ -4812,6 +6677,37 @@ body.foundry-edit-mode .foundry-edit-sandlot {
 
   .top-bar {
     grid-template-columns: repeat(5, 1fr);
+  }
+}
+
+@media (min-width: 721px) and (max-width: 1120px) {
+  .hero {
+    grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr);
+  }
+
+  .menu-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
+  .level-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .results-layout,
+  .settings-layout {
+    grid-template-columns: minmax(0, 1.08fr) minmax(0, 0.92fr);
+  }
+
+  .about-layout {
+    grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr);
+  }
+
+  .info-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .about-bands {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 }
 
@@ -4865,8 +6761,32 @@ body.foundry-edit-mode .foundry-edit-sandlot {
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .game-tutorial__cutout-path {
+    transition: none;
+  }
+
+  .game-tutorial__card {
+    transition: none;
+  }
+
   .game-victory__delayed-reveal {
     transition: none;
+  }
+
+  .easter-logo__letter,
+  .easter-logo__stripe,
+  .easter-logo::before {
+    animation: none;
+  }
+
+  .easter-logo__letter {
+    color: #005daa;
+    transform: translate(var(--end-x), -50%) skewX(-8deg) scaleX(0.96);
+  }
+
+  .easter-logo__stripe {
+    opacity: 0.92;
+    transform: translateX(-50%) scaleX(1);
   }
 }
 
@@ -4887,6 +6807,10 @@ body.foundry-edit-mode .foundry-edit-sandlot {
   }
 
   .about-bands {
+    grid-template-columns: 1fr;
+  }
+
+  .inspiration-visuals {
     grid-template-columns: 1fr;
   }
 

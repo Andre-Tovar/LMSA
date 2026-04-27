@@ -11,6 +11,8 @@ const VICTORY_SCALE_BUDGET_PERCENT = 66;
 const VICTORY_SCALE_LEFT_BUDGET_MULTIPLIER = 2;
 const VICTORY_SCORE_ANIMATION_DURATION_MS = 1900;
 const ONE_STAR_THRESHOLD_MULTIPLIER = 1.4;
+const LEVEL_TUTORIAL_CUTOUT_TRANSITION_MS = 2000;
+const LEVEL_TUTORIAL_CARD_TRANSITION_MS = 360;
 const GAME_CONSOLE_REF_SELECTORS = [
   "#game .top-bar",
   "#game .top-bar > .stat-pill",
@@ -510,7 +512,8 @@ const LEVEL_TUTORIALS = {
       showMeta: true,
       title: "Welcome To LMSA!",
       body:
-        "We are happy to have hired such an excellent planner as yourself to coordinate our latest project: scheduling the morning bus. Here at LMSA, our workers get in at the crack of dawn, and they have been asking for a bus service to bring them in on time. Your goal is to choose the right buses, build legal routes, and return every worker to LMSA as efficiently as possible. Click anywhere to continue the guided walkthrough.",
+        "We are happy to have hired such an excellent planner as yourself to coordinate our latest project: scheduling the morning bus. Here at LMSA, our workers get in at the crack of dawn, and they have been asking for a bus service to bring them in on time. Your goal is to choose the right buses, build legal routes, and return every worker to LMSA as efficiently as possible.",
+      cta: "Click anywhere to continue",
       advanceOn: "manual",
       cardPlacement: "center",
       targets: [],
@@ -520,6 +523,7 @@ const LEVEL_TUTORIALS = {
       title: "Buy Your First Bus",
       body:
         "Start by purchasing a bus from the Bus Rental. The Personal Lift is a great first pick for this sample route, but any bus will get you going.",
+      cta: "Buy any bus to continue",
       advanceOn: "purchase",
       clearRegions: [
         { selector: ".shop-panel" },
@@ -535,6 +539,7 @@ const LEVEL_TUTORIALS = {
       body:
         "Your new bus is now parked at LMSA and selected automatically. Every route starts at the depot node, so click the glowing depot node at LMSA to place the first stop.",
       hint: "Click the glowing depot node to continue.",
+      cta: "Click the glowing depot node",
       advanceOn: "route-node",
       expectedRouteLabel: "factory",
       clearRegions: [
@@ -546,30 +551,53 @@ const LEVEL_TUTORIALS = {
     },
     {
       id: "create-route",
-      title: "Create A Route In Sequence",
+      title: "Create A Route",
       body:
-        "Creating a route means selecting nodes in immediate succession. Any node that glows is currently selectable, so keep clicking glowing neighbors to guide the bus toward its first pickup. Blue nodes add a bus stop to the route so the bus will stop and pick up passengers there, while glowing brown intersection nodes let you pass through and keep shaping the path.",
-      hint: "Keep building the route until you add a blue pickup node.",
-      advanceOn: "route-node",
-      expectedRouteNodeKind: "pickup",
+        "The glowing nodes are the places your bus can go next. A route is built one click at a time, so every node you choose gets added to the bus path in order. Only connected neighbors can be selected, and the bus cannot make an immediate U-turn back to the node it just left. Use the glowing brown intersection nodes to steer the bus through the road network.",
+      hint: "Follow the glowing nodes until a blue bus stop becomes available.",
+      cta: "Choose a glowing neighbor",
+      advanceOn: "blue-reachable",
       clearRegions: [
         { selector: ".map-panel" },
       ],
-      targets: [],
+      targets: [
+        { selector: ".map-panel", tone: "focus" },
+        { selector: ".map-node--reachable, .map-roundabout__node--reachable", tone: "pulse" },
+      ],
     },
     {
-      id: "close-route",
-      title: "Finish The Route When You Are Ready",
+      id: "pickup-employees",
+      title: "Pickup LMSA Employees",
       body:
-        "Nice. Keep selecting adjacent glowing nodes to extend the route. Use brown intersection nodes when you want to pass through the network without stopping, and blue nodes whenever you want the bus to actually stop for passengers. When you are happy with the route, return to the depot node at LMSA to close it and dispatch the bus.",
-      hint: "Keep extending the route, then click the depot node to dispatch it.",
-      advanceOn: "route-node",
-      expectedRouteLabel: "factory",
-      expectedMinimumRouteNodeCount: 4,
+        "Blue nodes are bus stops with LMSA employees waiting. If you select a blue node, the bus stops there and picks up as many employees as it can carry. If you select the brown node at the far end of that same road instead, the bus drives past the stop and nobody boards. Your goal is to bring every employee back to the plant, so pick them up whenever you can.",
+      hint: "Select the blue bus stops to pick up the waiting employees.",
+      cta: "Select blue stops when possible",
+      advanceOn: "all-draft-demand-served",
       clearRegions: [
         { selector: ".map-panel" },
       ],
-      targets: [],
+      targets: [
+        { selector: ".map-panel", tone: "focus" },
+        { selector: ".map-pickup-node.map-node--reachable, .map-node--blue.map-node--reachable", tone: "pulse" },
+      ],
+    },
+    {
+      id: "dropoff-employees",
+      title: "Dropoff Employees at the Plant",
+      body:
+        "Great, everyone for this route is on the bus. Now the route needs to end back at the LMSA plant. Keep following glowing connected nodes until the depot node at the plant is selectable, then click it to close the route and send the bus home.",
+      hint: "Return to the depot node at the plant to finish the route.",
+      cta: "Bring the bus back to LMSA",
+      advanceOn: "route-node",
+      expectedRouteLabel: "factory",
+      expectedMinimumRouteNodeCount: 2,
+      clearRegions: [
+        { selector: ".map-panel" },
+      ],
+      targets: [
+        { selector: ".map-panel", tone: "focus" },
+        { selector: ".map-node--reachable, .map-roundabout__node--reachable", tone: "pulse" },
+      ],
     },
     {
       id: "dispatch-route",
@@ -577,6 +605,7 @@ const LEVEL_TUTORIALS = {
       body:
         "The bus is now following the full route you just built. Once it finishes the trip and returns to LMSA, the tutorial will point you to submission.",
       hint: "Hang tight while the route finishes running.",
+      cta: "Wait for the route to finish",
       advanceOn: "route-complete",
       clearRegions: [
         { selector: ".map-panel" },
@@ -592,6 +621,7 @@ const LEVEL_TUTORIALS = {
       body:
         "Once you are happy with your bus schedule, submit your solution to see how it measures up.",
       hint: "Click anywhere outside the highlighted controls to close the tutorial, or press the highlighted Submit Solution button when you want to compare your schedule.",
+      cta: "Click Submit Solution or click anywhere to finish",
       advanceOn: "manual",
       clearRegions: [
         { selector: ".control-panel" },
@@ -1266,6 +1296,10 @@ const LMSAApp = (() => {
     levelTutorialStepIndex: -1,
     levelTutorialHighlights: [],
     levelTutorialRevealTimeoutId: 0,
+    levelTutorialCutoutPathData: "",
+    levelTutorialCutoutTransitionTimeoutId: 0,
+    levelTutorialCardTransitionTimeoutId: 0,
+    levelTutorialRenderedStepIndex: -1,
   };
 
   const dom = {};
@@ -1360,12 +1394,14 @@ const LMSAApp = (() => {
     dom.gameVictoryLevelSelectButton = document.getElementById("gameVictoryLevelSelectButton");
     dom.gameTutorial = document.getElementById("gameTutorial");
     dom.gameTutorialCutoutLayer = document.getElementById("gameTutorialCutoutLayer");
+    dom.gameTutorialPreviousCutoutPath = document.getElementById("gameTutorialPreviousCutoutPath");
     dom.gameTutorialCutoutPath = document.getElementById("gameTutorialCutoutPath");
     dom.gameTutorialCard = document.getElementById("gameTutorialCard");
     dom.gameTutorialMeta = document.getElementById("gameTutorialMeta");
     dom.gameTutorialEyebrow = document.getElementById("gameTutorialEyebrow");
     dom.gameTutorialTitle = document.getElementById("gameTutorialTitle");
     dom.gameTutorialBody = document.getElementById("gameTutorialBody");
+    dom.gameTutorialCta = document.getElementById("gameTutorialCta");
     dom.gameTutorialSkipButton = document.getElementById("gameTutorialSkipButton");
   }
 
@@ -1609,13 +1645,11 @@ const LMSAApp = (() => {
     return cutoutRegions;
   }
 
-  function renderLevelTutorialCutoutOverlay(step = getActiveLevelTutorialStep()) {
-    const cutoutLayer = dom.gameTutorialCutoutLayer;
-    const cutoutPath = dom.gameTutorialCutoutPath;
+  function buildLevelTutorialCutoutPathData(step = getActiveLevelTutorialStep()) {
     const overlayRect = getLevelTutorialOverlayBounds();
 
-    if (!cutoutLayer || !cutoutPath || !overlayRect?.width || !overlayRect?.height) {
-      return;
+    if (!overlayRect?.width || !overlayRect?.height) {
+      return null;
     }
 
     const outerPath = getTutorialRoundedRectPath(0, 0, overlayRect.width, overlayRect.height, 0);
@@ -1624,9 +1658,95 @@ const LMSAApp = (() => {
       .filter(Boolean)
       .join(" ");
 
-    cutoutLayer.setAttribute("viewBox", `0 0 ${overlayRect.width} ${overlayRect.height}`);
-    cutoutPath.setAttribute("d", `${outerPath} ${cutoutPaths}`.trim());
-    cutoutPath.setAttribute("fill-rule", "evenodd");
+    return {
+      viewBox: `0 0 ${overlayRect.width} ${overlayRect.height}`,
+      pathData: `${outerPath} ${cutoutPaths}`.trim(),
+    };
+  }
+
+  function setLevelTutorialCutoutPath(path, pathData) {
+    if (!path || !pathData) {
+      return;
+    }
+
+    path.setAttribute("d", pathData);
+    path.setAttribute("fill-rule", "evenodd");
+  }
+
+  function clearLevelTutorialCutoutTransition() {
+    if (state.levelTutorialCutoutTransitionTimeoutId) {
+      window.clearTimeout(state.levelTutorialCutoutTransitionTimeoutId);
+      state.levelTutorialCutoutTransitionTimeoutId = 0;
+    }
+
+    if (dom.gameTutorialPreviousCutoutPath) {
+      dom.gameTutorialPreviousCutoutPath.style.opacity = "0";
+      dom.gameTutorialPreviousCutoutPath.removeAttribute("d");
+    }
+
+    if (dom.gameTutorialCutoutPath) {
+      dom.gameTutorialCutoutPath.style.transition = "";
+    }
+  }
+
+  function renderLevelTutorialCutoutOverlay(step = getActiveLevelTutorialStep(), options = {}) {
+    const cutoutLayer = dom.gameTutorialCutoutLayer;
+    const cutoutPath = dom.gameTutorialCutoutPath;
+    const previousCutoutPath = dom.gameTutorialPreviousCutoutPath;
+    const cutout = buildLevelTutorialCutoutPathData(step);
+
+    if (!cutoutLayer || !cutoutPath || !cutout?.pathData) {
+      return;
+    }
+
+    const previousPathData = state.levelTutorialCutoutPathData;
+    const shouldAnimateCutout = options.animate !== false
+      && previousCutoutPath
+      && previousPathData
+      && previousPathData !== cutout.pathData
+      && dom.gameTutorial?.classList.contains("game-tutorial--visible");
+
+    clearLevelTutorialCutoutTransition();
+    cutoutLayer.setAttribute("viewBox", cutout.viewBox);
+
+    if (options.animate === false) {
+      cutoutPath.style.transition = "none";
+    }
+
+    cutoutPath.style.opacity = "1";
+
+    if (shouldAnimateCutout) {
+      setLevelTutorialCutoutPath(previousCutoutPath, previousPathData);
+      previousCutoutPath.style.opacity = "1";
+      cutoutPath.style.transition = "none";
+      cutoutPath.style.opacity = "0";
+      setLevelTutorialCutoutPath(cutoutPath, cutout.pathData);
+      cutoutPath.getBoundingClientRect();
+
+      window.requestAnimationFrame(() => {
+        cutoutPath.style.transition = "";
+        cutoutPath.style.opacity = "1";
+        previousCutoutPath.style.opacity = "0";
+      });
+
+      state.levelTutorialCutoutTransitionTimeoutId = window.setTimeout(() => {
+        state.levelTutorialCutoutTransitionTimeoutId = 0;
+        previousCutoutPath.removeAttribute("d");
+      }, LEVEL_TUTORIAL_CUTOUT_TRANSITION_MS + 80);
+    } else {
+      previousCutoutPath?.removeAttribute("d");
+      setLevelTutorialCutoutPath(cutoutPath, cutout.pathData);
+    }
+
+    state.levelTutorialCutoutPathData = cutout.pathData;
+
+    if (options.animate === false) {
+      cutoutPath.getBoundingClientRect();
+
+      window.requestAnimationFrame(() => {
+        cutoutPath.style.transition = "";
+      });
+    }
   }
 
   function getLevelTutorialRegionUnion(regions = []) {
@@ -1776,19 +1896,32 @@ const LMSAApp = (() => {
     dom.gameTutorialCard.style.transform = "none";
   }
 
-  function renderActiveLevelTutorialStep() {
-    if (!isLevelTutorialActive() || !dom.gameTutorial) {
-      return;
+  function clearLevelTutorialCardTransition(options = {}) {
+    if (state.levelTutorialCardTransitionTimeoutId) {
+      window.clearTimeout(state.levelTutorialCardTransitionTimeoutId);
+      state.levelTutorialCardTransitionTimeoutId = 0;
     }
 
-    const steps = getLevelTutorialSteps();
-    const step = getActiveLevelTutorialStep();
-
-    if (!step) {
-      return;
+    if (options.disableTransition && dom.gameTutorialCard) {
+      dom.gameTutorialCard.style.transition = "none";
     }
 
-    dom.gameTutorial.hidden = false;
+    if (options.resetOpacity !== false) {
+      dom.gameTutorialCard?.classList.remove("game-tutorial__card--fading");
+    }
+
+    if (options.disableTransition && dom.gameTutorialCard) {
+      dom.gameTutorialCard.getBoundingClientRect();
+
+      window.requestAnimationFrame(() => {
+        if (dom.gameTutorialCard) {
+          dom.gameTutorialCard.style.transition = "";
+        }
+      });
+    }
+  }
+
+  function renderLevelTutorialStepContent(step) {
     const showTutorialMeta = Boolean(step.showMeta);
     dom.gameTutorialMeta.hidden = !showTutorialMeta;
 
@@ -1797,15 +1930,84 @@ const LMSAApp = (() => {
     }
 
     dom.gameTutorialTitle.textContent = step.title;
-    dom.gameTutorialBody.textContent = [step.body, step.hint].filter(Boolean).join("\n\n");
+    dom.gameTutorialBody.textContent = step.body || "";
+
+    if (dom.gameTutorialCta) {
+      const ctaText = String(step.cta || step.hint || "").trim();
+      dom.gameTutorialCta.textContent = ctaText;
+      dom.gameTutorialCta.hidden = !ctaText;
+    }
+
     dom.gameTutorial.classList.toggle("game-tutorial--manual", step.advanceOn === "manual");
+  }
+
+  function renderLevelTutorialStepLayout(step, options = {}) {
+    const expectedStepIndex = Number.isInteger(options.stepIndex)
+      ? options.stepIndex
+      : state.levelTutorialStepIndex;
 
     window.requestAnimationFrame(() => {
+      if (!isLevelTutorialActive() || state.levelTutorialStepIndex !== expectedStepIndex) {
+        return;
+      }
+
       dom.gameTutorialCard?.focus({ preventScroll: true });
       const targetRecords = applyLevelTutorialHighlights(step);
-      renderLevelTutorialCutoutOverlay(step);
+      renderLevelTutorialCutoutOverlay(step, { animate: options.animateCutout !== false });
       positionLevelTutorialCard(step, targetRecords);
     });
+  }
+
+  function shouldFadeLevelTutorialCard(nextStepIndex) {
+    return Boolean(
+      dom.gameTutorial?.classList.contains("game-tutorial--visible") &&
+      dom.gameTutorialCard &&
+      state.levelTutorialRenderedStepIndex >= 0 &&
+      state.levelTutorialRenderedStepIndex !== nextStepIndex &&
+      !window.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches,
+    );
+  }
+
+  function renderActiveLevelTutorialStep(options = {}) {
+    if (!isLevelTutorialActive() || !dom.gameTutorial) {
+      return;
+    }
+
+    const step = getActiveLevelTutorialStep();
+    const stepIndex = state.levelTutorialStepIndex;
+
+    if (!step) {
+      return;
+    }
+
+    dom.gameTutorial.hidden = false;
+
+    if (options.forceImmediate || !shouldFadeLevelTutorialCard(stepIndex)) {
+      clearLevelTutorialCardTransition({ disableTransition: Boolean(options.forceImmediate) });
+      renderLevelTutorialStepContent(step);
+      state.levelTutorialRenderedStepIndex = stepIndex;
+      renderLevelTutorialStepLayout(step, { ...options, stepIndex });
+      return;
+    }
+
+    clearLevelTutorialCardTransition({ resetOpacity: false });
+    dom.gameTutorialCard.classList.add("game-tutorial__card--fading");
+
+    state.levelTutorialCardTransitionTimeoutId = window.setTimeout(() => {
+      state.levelTutorialCardTransitionTimeoutId = 0;
+
+      if (!isLevelTutorialActive() || state.levelTutorialStepIndex !== stepIndex) {
+        return;
+      }
+
+      renderLevelTutorialStepContent(step);
+      state.levelTutorialRenderedStepIndex = stepIndex;
+      renderLevelTutorialStepLayout(step, { stepIndex });
+
+      window.requestAnimationFrame(() => {
+        dom.gameTutorialCard?.classList.remove("game-tutorial__card--fading");
+      });
+    }, LEVEL_TUTORIAL_CARD_TRANSITION_MS);
   }
 
   function stopLevelTutorial(options = {}) {
@@ -1817,6 +2019,8 @@ const LMSAApp = (() => {
     }
 
     clearLevelTutorialHighlights();
+    clearLevelTutorialCutoutTransition();
+    clearLevelTutorialCardTransition();
     document.body.classList.remove("game-tutorial-active");
 
     if (dom.gameTutorial) {
@@ -1828,16 +2032,19 @@ const LMSAApp = (() => {
 
     clearLevelTutorialCardPosition();
     dom.gameTutorialCutoutPath?.removeAttribute("d");
+    dom.gameTutorialPreviousCutoutPath?.removeAttribute("d");
 
     state.isLevelTutorialActive = false;
     state.levelTutorialName = "";
+    state.levelTutorialCutoutPathData = "";
+    state.levelTutorialRenderedStepIndex = -1;
 
     if (!keepStepIndex) {
       state.levelTutorialStepIndex = -1;
     }
   }
 
-  function setLevelTutorialStep(index) {
+  function setLevelTutorialStep(index, options = {}) {
     const steps = getLevelTutorialSteps();
 
     if (!steps.length) {
@@ -1846,12 +2053,18 @@ const LMSAApp = (() => {
     }
 
     if (index >= steps.length) {
+      if (options.clampToRange) {
+        state.levelTutorialStepIndex = steps.length - 1;
+        renderActiveLevelTutorialStep(options);
+        return;
+      }
+
       stopLevelTutorial();
       return;
     }
 
     state.levelTutorialStepIndex = Math.max(index, 0);
-    renderActiveLevelTutorialStep();
+    renderActiveLevelTutorialStep(options);
   }
 
   function advanceLevelTutorial() {
@@ -1891,6 +2104,17 @@ const LMSAApp = (() => {
     }
 
     advanceLevelTutorial();
+  }
+
+  function hasReachableFoundryDemandNode(bus = getSelectedFleetBus()) {
+    return getReachableFoundryRouteLabels(bus).some((label) => isFoundryDemandRouteLabel(label));
+  }
+
+  function getFoundryDraftRemainingDemandCount() {
+    return Object.values(state.foundryStopDemand || {}).reduce(
+      (sum, count) => sum + Math.max(Number(count) || 0, 0),
+      0,
+    );
   }
 
   function doesLevelTutorialRouteNodeMatch(step, routeLabel) {
@@ -1936,15 +2160,29 @@ const LMSAApp = (() => {
   function syncLevelTutorialAfterRouteNode(routeLabel) {
     const step = getActiveLevelTutorialStep();
 
-    if (!isLevelTutorialActive() || step?.advanceOn !== "route-node") {
+    if (!isLevelTutorialActive()) {
       return;
     }
 
-    if (!doesLevelTutorialRouteNodeMatch(step, routeLabel)) {
+    if (step?.advanceOn === "blue-reachable") {
+      if (hasReachableFoundryDemandNode()) {
+        advanceLevelTutorial();
+      }
+
       return;
     }
 
-    advanceLevelTutorial();
+    if (step?.advanceOn === "all-draft-demand-served") {
+      if (getFoundryDraftRemainingDemandCount() === 0) {
+        advanceLevelTutorial();
+      }
+
+      return;
+    }
+
+    if (step?.advanceOn === "route-node" && doesLevelTutorialRouteNodeMatch(step, routeLabel)) {
+      advanceLevelTutorial();
+    }
   }
 
   function syncLevelTutorialAfterRouteCompletion() {
@@ -3905,11 +4143,7 @@ const LMSAApp = (() => {
       });
     }
 
-    if (screenId === "howto") {
-      window.requestAnimationFrame(() => initializeGuideReplayDemo({ autoplay: true }));
-    } else {
-      stopGuideReplayDemo({ reset: true });
-    }
+    stopGuideReplayDemo({ reset: true });
 
     state.currentScreen = screenId;
     document.title = `${GAME_NAME} | ${screenTitle}`;
@@ -8350,6 +8584,20 @@ const LMSAApp = (() => {
       if (event.key === "Escape") {
         event.preventDefault();
         stopLevelTutorial();
+        return;
+      }
+
+      if (event.key === "ArrowLeft" || event.key === "ArrowRight") {
+        event.preventDefault();
+        event.stopPropagation();
+        setLevelTutorialStep(
+          state.levelTutorialStepIndex + (event.key === "ArrowRight" ? 1 : -1),
+          {
+            animateCutout: false,
+            clampToRange: true,
+            forceImmediate: true,
+          },
+        );
       }
     });
   }
@@ -8386,7 +8634,7 @@ const LMSAApp = (() => {
     bindPlaceholderButtons();
     bindLevelTutorialControls();
     bindSettings();
-    initializeGuideReplayDemo();
+    // initializeGuideReplayDemo();
     initializeFoundryNodes();
     initializeFoundryCampus();
     showScreen(state.currentScreen, { suppressScroll: true });
