@@ -969,17 +969,14 @@
                     <circle class="or-diagram__node or-diagram__node--vrp-3" cx="40" cy="64" r="3.2"></circle>
                     <circle class="or-diagram__node or-diagram__node--vrp-3" cx="82" cy="66" r="3.2"></circle>
                     <rect class="or-diagram__facility or-diagram__facility--chosen" x="52" y="30" width="16" height="16" rx="3"></rect>
-                    <circle class="or-diagram__truck or-diagram__truck--vrp-1" cx="22" cy="35" r="2"></circle>
-                    <circle class="or-diagram__truck or-diagram__truck--vrp-2" cx="98" cy="35" r="2"></circle>
-                    <circle class="or-diagram__truck or-diagram__truck--vrp-3" cx="60" cy="60" r="2"></circle>
                   </svg>
                   <figcaption>VRP</figcaption>
                 </figure>
 
                 <figure class="or-mini-card or-mini-card--mespprc" aria-label="MESPPRC: multi-trip elementary shortest paths with per-trip resource constraints">
                   <svg class="or-mini-card__diagram" viewBox="0 0 120 76" role="img" aria-hidden="true" preserveAspectRatio="xMidYMid meet">
-                    <path class="or-diagram__path or-diagram__path--main or-diagram__path--mespprc-1" d="M14 40 L34 22 L58 28 L50 50 Z"></path>
-                    <path class="or-diagram__path or-diagram__path--main or-diagram__path--mespprc-2" d="M14 40 L62 62 L96 54 L80 30 Z"></path>
+                    <path class="or-diagram__path or-diagram__path--main or-diagram__path--mespprc-1" d="M14 40 L34 22 L58 28 L50 50 Z" pathLength="100"></path>
+                    <path class="or-diagram__path or-diagram__path--main or-diagram__path--mespprc-2" d="M14 40 L62 62 L96 54 L80 30 Z" pathLength="100"></path>
                     <circle class="or-diagram__depot" cx="14" cy="40" r="6"></circle>
                     <circle class="or-diagram__node" cx="34" cy="22" r="3"></circle>
                     <circle class="or-diagram__node" cx="58" cy="28" r="3"></circle>
@@ -987,27 +984,27 @@
                     <circle class="or-diagram__node" cx="62" cy="62" r="3"></circle>
                     <circle class="or-diagram__node" cx="96" cy="54" r="3"></circle>
                     <circle class="or-diagram__node" cx="80" cy="30" r="3"></circle>
+                    <text class="or-diagram__resource-label" x="68" y="4.5">L</text>
                     <rect class="or-diagram__resource" x="74" y="3" width="38" height="3" rx="1.5"></rect>
-                    <rect class="or-diagram__resource-fill" x="74" y="3" width="26" height="3" rx="1.5"></rect>
+                    <rect class="or-diagram__resource-fill or-diagram__resource-fill--mespprc-local" x="74" y="3" width="38" height="3" rx="1.5"></rect>
+                    <text class="or-diagram__resource-label" x="68" y="10.5">G</text>
                     <rect class="or-diagram__resource" x="74" y="9" width="38" height="3" rx="1.5"></rect>
-                    <rect class="or-diagram__resource-fill or-diagram__resource-fill--soft" x="74" y="9" width="16" height="3" rx="1.5"></rect>
-                    <text class="or-diagram__trip-label" x="38" y="20" font-size="6">1</text>
-                    <text class="or-diagram__trip-label" x="76" y="42" font-size="6">2</text>
+                    <rect class="or-diagram__resource-fill or-diagram__resource-fill--soft or-diagram__resource-fill--mespprc-global" x="74" y="9" width="38" height="3" rx="1.5"></rect>
                   </svg>
                   <figcaption>MESPPRC</figcaption>
                 </figure>
-              </div>
-            </article>
 
-            <article class="panel info-card about-card about-card--visual" id="creditsCard">
-              <h3>Easter Eggs</h3>
-              <div class="easter-logo" aria-label="LMSA reverses into an ASML-inspired mark">
-                <div class="easter-logo__stage" aria-hidden="true">
-                  <span class="easter-logo__letter easter-logo__letter--l">L</span>
-                  <span class="easter-logo__letter easter-logo__letter--m">M</span>
-                  <span class="easter-logo__letter easter-logo__letter--s">S</span>
-                  <span class="easter-logo__letter easter-logo__letter--a">A</span>
-                </div>
+                <figure class="or-mini-card or-mini-card--easter" id="creditsCard" aria-label="LMSA reverses into an ASML-inspired mark">
+                  <div class="easter-logo">
+                    <div class="easter-logo__stage" aria-hidden="true">
+                      <span class="easter-logo__letter easter-logo__letter--l">L</span>
+                      <span class="easter-logo__letter easter-logo__letter--m">M</span>
+                      <span class="easter-logo__letter easter-logo__letter--s">S</span>
+                      <span class="easter-logo__letter easter-logo__letter--a">A</span>
+                    </div>
+                  </div>
+                  <figcaption>LMSA&lt;-&gt;ASML</figcaption>
+                </figure>
               </div>
             </article>
 
