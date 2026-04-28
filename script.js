@@ -47,7 +47,7 @@ const LEVELS = [
     edgePickups: "9 road pickups",
     progressStars: 2,
     description:
-      "You're building the bus schedule for Logistical Models for Scheduling Architects (LMSA), a manufacturing firm that needs employees collected from roads around the district and brought back to the LMSA manufacturing plant. Be precise! The fate of their mornings are in your hands.",
+      "You've been hired by LMSA (Logistical Models for Schedule Architects), a manufacturing company whose plant runs 24/7. Workers are scattered across the district's road network each morning, and your job is to build the bus schedule that brings them back to the LMSA manufacturing plant. Every minute a worker spends away from the plant adds opportunity cost, so the best schedule balances bus rental cost against routes that return employees quickly. Buy the right buses, route them through connected roads, pick up employees at bus stops, and beat the budget. Be precise! The fate of their mornings are in your hands.",
     levelSelectDescription:
       "LMSA is launching its first bus service, and the morning rush is counting on you. Can you build a pickup plan that proves the system works?",
     featuredRules: [
