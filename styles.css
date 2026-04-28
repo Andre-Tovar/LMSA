@@ -4894,6 +4894,11 @@ body.foundry-edit-mode .foundry-edit-sandlot {
 
 .easter-logo {
   position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: clamp(0.55rem, 1.6dvh, 1.25rem);
   width: 100%;
   height: 100%;
   min-height: 0;
@@ -4909,12 +4914,9 @@ body.foundry-edit-mode .foundry-edit-sandlot {
     0 14px 24px rgba(78, 43, 24, 0.08);
 }
 
-.easter-logo::before {
+.easter-logo::after {
   content: "reverses into";
-  position: absolute;
-  left: 50%;
-  bottom: clamp(0.85rem, 2.4dvh, 1.45rem);
-  transform: translateX(-50%);
+  order: 2;
   color: rgba(107, 35, 29, 0.52);
   font-size: clamp(0.6rem, 1.25dvh, 0.78rem);
   font-weight: 800;
@@ -4923,11 +4925,18 @@ body.foundry-edit-mode .foundry-edit-sandlot {
   animation: easter-logo-caption 5.4s cubic-bezier(0.22, 1, 0.36, 1) infinite alternate;
 }
 
+.easter-logo__stage {
+  position: relative;
+  width: 100%;
+  height: clamp(2.4rem, 8.2dvh, 4.6rem);
+  flex-shrink: 0;
+}
+
 .easter-logo__letter {
   --start-x: 0rem;
   --end-x: 0rem;
   position: absolute;
-  top: 46%;
+  top: 50%;
   left: 50%;
   z-index: 2;
   min-width: 1.45em;
@@ -6952,7 +6961,7 @@ body.foundry-edit-mode .foundry-edit-sandlot {
 
   .easter-logo__letter,
   .easter-logo__stripe,
-  .easter-logo::before {
+  .easter-logo::after {
     animation: none;
   }
 
