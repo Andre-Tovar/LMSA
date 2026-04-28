@@ -150,7 +150,7 @@ const LEVELS = [
     },
   },
   {
-    name: "Level 3 - North Corridor",
+    name: "Level 3 - No-Fun Zone",
     difficulty: "Hard",
     benchmark: "$750",
     demand: "58 riders",
@@ -161,7 +161,7 @@ const LEVELS = [
     progressStars: 1,
     description: "Longer roads and separated demand clusters make bus reuse more valuable than simple shortest paths",
     levelSelectDescription:
-      "Workers are spreading farther north, and the longer roads are starting to punish sloppy planning. Can you keep the corridor under control?",
+      "Worker pickups are clustering due to new zoning laws. Can you come up with a schedule that works with the new highways?",
     featuredRules: [
       "Cover the long northern roads without sending half-empty buses back to LMSA",
       "Preserve duty time so your strongest vehicle can handle more than one useful trip",
@@ -170,7 +170,7 @@ const LEVELS = [
     gameDescription:
       "North Corridor expands the graph and asks you to think about loaded miles versus deadheading back toward LMSA",
     pressureLabel: "Long Corridor Demand",
-    mapTitle: "North Corridor Network",
+    mapTitle: "No-Fun Network",
     mapBadge: "Duty Time Matters",
     planningInfo:
       "This is the first scenario where duty time is a real strategic resource because long routes can be feasible but still reduce how much reuse you get later",
@@ -732,9 +732,9 @@ const FOUNDRY_OPTIMAL_SCHEDULE_REPLAY_SNAPSHOTS = {
       },
     ],
   },
-  "Level 3 - North Corridor": {
+  "Level 3 - No-Fun Zone": {
     version: 1,
-    levelName: "Level 3 - North Corridor",
+    levelName: "Level 3 - No-Fun Zone",
     capturedAt: 1776633328823,
     buses: [
       {
@@ -953,9 +953,9 @@ const FOUNDRY_SAVED_EDIT_LAYOUT_FALLBACKS = {
     legacyNodeOverrides: [],
     legacyAssetOverrides: [],
   },
-  "Level 3 - North Corridor": {
+  "Level 3 - No-Fun Zone": {
     version: 1,
-    levelName: "Level 3 - North Corridor",
+    levelName: "Level 3 - No-Fun Zone",
     capturedAt: 1776570811766,
     nodes: [
       { label: "41", variant: "brown", left: 58.9, top: 51.2, demand: 0 },
