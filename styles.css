@@ -4816,6 +4816,150 @@ body.foundry-edit-mode .foundry-edit-sandlot {
   fill: #b75139;
 }
 
+/* CSP card: Three-Stage Approach (TSA) cycling visualization */
+.csp-tsa-stage {
+  opacity: 0;
+  animation: csp-tsa-cycle 9s ease-in-out infinite;
+}
+
+.csp-tsa-stage--1 { animation-delay: 0s; }
+.csp-tsa-stage--2 { animation-delay: 3s; }
+.csp-tsa-stage--3 { animation-delay: 6s; }
+
+@keyframes csp-tsa-cycle {
+  0%, 30% { opacity: 1; }
+  33%, 100% { opacity: 0; }
+}
+
+.csp-tsa-edge {
+  fill: none;
+  stroke: #6b231d;
+  stroke-width: 1.7;
+  stroke-linecap: round;
+}
+
+.csp-tsa-edge--thin {
+  stroke: rgba(107, 35, 29, 0.55);
+  stroke-width: 1.1;
+}
+
+.csp-tsa-edge--cut {
+  stroke: rgba(107, 35, 29, 0.28);
+  stroke-width: 1.5;
+  stroke-dasharray: 2 2;
+}
+
+.csp-tsa-edge--ghost {
+  stroke: rgba(107, 35, 29, 0.18);
+  stroke-width: 1;
+}
+
+.csp-tsa-node {
+  fill: #7d5a24;
+  stroke: rgba(255, 250, 242, 0.94);
+  stroke-width: 1;
+}
+
+.csp-tsa-node--cut {
+  fill: rgba(125, 90, 36, 0.22);
+  stroke: rgba(107, 35, 29, 0.35);
+}
+
+.csp-tsa-node--expanded {
+  fill: #c59a2c;
+  stroke-width: 0.8;
+}
+
+.csp-tsa-node--on-path {
+  fill: #6b231d;
+  stroke-width: 1.1;
+}
+
+.csp-tsa-node--ghost {
+  fill: rgba(125, 90, 36, 0.32);
+  stroke: none;
+}
+
+.csp-tsa-depot {
+  fill: #d07c26;
+  stroke: rgba(255, 250, 242, 0.94);
+  stroke-width: 1.3;
+}
+
+.csp-tsa-depot--goal {
+  fill: #b75139;
+}
+
+.csp-tsa-mark-x {
+  stroke: #b75139;
+  stroke-width: 1.6;
+  stroke-linecap: round;
+}
+
+.csp-tsa-bracket {
+  fill: none;
+  stroke: rgba(107, 35, 29, 0.5);
+  stroke-width: 0.9;
+  stroke-linecap: round;
+}
+
+.csp-tsa-window-bg {
+  fill: rgba(107, 35, 29, 0.14);
+}
+
+.csp-tsa-window-fill {
+  fill: #d07c26;
+}
+
+.csp-tsa-window-tick {
+  stroke: rgba(107, 35, 29, 0.78);
+  stroke-width: 0.55;
+  stroke-linecap: round;
+}
+
+.csp-tsa-tiny-label {
+  fill: rgba(78, 43, 24, 0.66);
+  font-family: "Trebuchet MS", "Segoe UI", sans-serif;
+  font-size: 4.4px;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+}
+
+.csp-tsa-shortest {
+  fill: none;
+  stroke: #6b231d;
+  stroke-width: 2.6;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-dasharray: 200;
+  stroke-dashoffset: 200;
+  animation: csp-tsa-draw 9s ease-in-out 6s infinite;
+}
+
+@keyframes csp-tsa-draw {
+  0% { stroke-dashoffset: 200; }
+  10%, 33% { stroke-dashoffset: 0; }
+  35%, 100% { stroke-dashoffset: 200; }
+}
+
+.csp-tsa-badge rect {
+  fill: rgba(78, 43, 24, 0.9);
+}
+
+.csp-tsa-badge-text {
+  fill: #fff8ef;
+  font-family: "Trebuchet MS", "Segoe UI", sans-serif;
+  font-size: 5.8px;
+  font-weight: 900;
+  letter-spacing: 0.06em;
+  opacity: 0;
+  animation: csp-tsa-cycle 9s ease-in-out infinite;
+}
+
+.csp-tsa-badge-text--1 { animation-delay: 0s; }
+.csp-tsa-badge-text--2 { animation-delay: 3s; }
+.csp-tsa-badge-text--3 { animation-delay: 6s; }
+
 .or-diagram__path--csp-main {
   stroke: #6b231d;
   stroke-width: 4.6;
@@ -7252,13 +7396,17 @@ body.foundry-edit-mode .foundry-edit-sandlot {
   .or-diagram__path--mespprc-1,
   .or-diagram__path--mespprc-2,
   .or-diagram__resource-fill--mespprc-local,
-  .or-diagram__resource-fill--mespprc-global {
+  .or-diagram__resource-fill--mespprc-global,
+  .csp-tsa-stage,
+  .csp-tsa-badge-text,
+  .csp-tsa-shortest {
     animation: none;
   }
 
   .or-diagram__path--csp-main,
   .or-diagram__path--mespprc-1,
-  .or-diagram__path--mespprc-2 {
+  .or-diagram__path--mespprc-2,
+  .csp-tsa-shortest {
     stroke-dashoffset: 0;
   }
 
@@ -7272,6 +7420,11 @@ body.foundry-edit-mode .foundry-edit-sandlot {
 
   .or-diagram__resource-fill--mespprc-global {
     transform: scaleX(0.75);
+  }
+
+  .csp-tsa-stage--3,
+  .csp-tsa-badge-text--3 {
+    opacity: 1;
   }
 }
 
