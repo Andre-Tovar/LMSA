@@ -1363,6 +1363,7 @@ const LMSAApp = (() => {
     dom.foundryMapNodes = Array.from(document.querySelectorAll(".map-stage--foundry .map-node"));
     dom.foundryCampusAssets = Array.from(document.querySelectorAll(".lmsa-campus-asset"));
     dom.undoRouteButton = document.getElementById("undoRouteButton");
+    dom.clearLastRouteButton = document.getElementById("clearLastRouteButton");
     dom.clearBusScheduleButton = document.getElementById("clearBusScheduleButton");
     dom.restartLevelButton = document.getElementById("restartLevelButton");
     dom.submitSolutionButton = document.getElementById("submitSolutionButton");
@@ -2840,6 +2841,19 @@ const LMSAApp = (() => {
     const minuteRate = FOUNDRY_OPPORTUNITY_COST_PER_HOUR / 60;
 
     return roundCurrencyAmount(completedCommittedDutyTimeMinutes * routeLoad * minuteRate);
+  }
+
+  function calculateCompletedRouteRecordOpportunityCost(routeRecord) {
+    const completedDutyTimeMinutes =
+      Math.max(Number(routeRecord?.startMinute) || 0, 0) +
+      Math.max(Number(routeRecord?.durationMinutes) || 0, 0);
+    const routeLoad = Object.values(routeRecord?.stopCounts || {}).reduce(
+      (sum, count) => sum + Math.max(Number(count) || 0, 0),
+      0,
+    );
+    const minuteRate = FOUNDRY_OPPORTUNITY_COST_PER_HOUR / 60;
+
+    return roundCurrencyAmount(completedDutyTimeMinutes * routeLoad * minuteRate);
   }
 
   function getLevelBudgetAmount(level = getLevelData(state.currentLevel)) {
@@ -7479,6 +7493,80 @@ const LMSAApp = (() => {
     updateSelectedBusStat();
   }
 
+  function subtractFoundryStopCounts(targetCounts, sourceCounts) {
+    const nextCounts = { ...(targetCounts || {}) };
+
+    Object.entries(sourceCounts || {}).forEach(([assetKey, count]) => {
+      const nextCount = Math.max((Number(nextCounts[assetKey]) || 0) - (Number(count) || 0), 0);
+
+      if (nextCount > 0) {
+        nextCounts[assetKey] = nextCount;
+      } else {
+        delete nextCounts[assetKey];
+      }
+    });
+
+    return nextCounts;
+  }
+
+  function clearSelectedBusLastRoute() {
+    const selectedBus = getSelectedFleetBus();
+
+    if (!selectedBus || isFoundryRouteAnimationActive()) {
+      return;
+    }
+
+    const routeNodeLabels = getFleetBusRouteNodeLabels(selectedBus);
+    const currentRouteEndsAtDepot =
+      !routeNodeLabels.length ||
+      isFactoryFoundryRouteLabel(routeNodeLabels[routeNodeLabels.length - 1]);
+
+    if (!currentRouteEndsAtDepot) {
+      selectedBus.routeNodeLabels = [];
+      selectedBus.draftStopCounts = {};
+      selectedBus.draftPickupPlan = {};
+      refreshFleetBusTiming(selectedBus);
+      syncSelectedFoundryNodeLabel();
+      renderFoundryRoads();
+      updateSelectedBusStat();
+      updateFoundryDeleteCanState();
+      return;
+    }
+
+    const completedRouteHistory = getFleetBusCompletedRouteHistory(selectedBus);
+    const removedRoute = completedRouteHistory[completedRouteHistory.length - 1];
+
+    if (!removedRoute) {
+      selectedBus.routeNodeLabels = [];
+      refreshFleetBusTiming(selectedBus);
+      syncSelectedFoundryNodeLabel();
+      renderFoundryRoads();
+      updateSelectedBusStat();
+      updateFoundryDeleteCanState();
+      return;
+    }
+
+    selectedBus.routeNodeLabels = [];
+    selectedBus.completedRouteHistory = completedRouteHistory.slice(0, -1);
+    selectedBus.servedStopCounts = subtractFoundryStopCounts(selectedBus.servedStopCounts, removedRoute.stopCounts);
+    selectedBus.draftStopCounts = {};
+    selectedBus.draftPickupPlan = {};
+    selectedBus.committedDutyTimeMinutes = Math.max(Number(removedRoute.startMinute) || 0, 0);
+    selectedBus.totalCost = roundCurrencyAmount(
+      Math.max(
+        (Number(selectedBus.totalCost) || Number(selectedBus.purchaseCost) || 0) -
+          calculateCompletedRouteRecordOpportunityCost(removedRoute),
+        Number(selectedBus.purchaseCost) || 0,
+      ),
+    );
+    refreshFleetBusTiming(selectedBus);
+    syncSelectedFoundryNodeLabel();
+    renderFoundryRoads();
+    updateSelectedBusStat();
+    updateFoundryDeleteCanState();
+    saveFoundryScheduleReplaySnapshot();
+  }
+
   function clearSelectedBusRoute() {
     const selectedBus = getSelectedFleetBus();
 
@@ -7487,10 +7575,18 @@ const LMSAApp = (() => {
     }
 
     selectedBus.routeNodeLabels = [];
+    selectedBus.servedStopCounts = {};
+    selectedBus.draftStopCounts = {};
+    selectedBus.draftPickupPlan = {};
+    selectedBus.completedRouteHistory = [];
+    selectedBus.committedDutyTimeMinutes = 0;
+    selectedBus.totalCost = Number(selectedBus.purchaseCost) || 0;
     refreshFleetBusTiming(selectedBus);
     syncSelectedFoundryNodeLabel();
     renderFoundryRoads();
     updateSelectedBusStat();
+    updateFoundryDeleteCanState();
+    saveFoundryScheduleReplaySnapshot();
   }
 
   function saveFoundryRoads() {
@@ -8315,6 +8411,7 @@ const LMSAApp = (() => {
 
   function bindFoundryRouteControls() {
     dom.undoRouteButton?.addEventListener("click", undoSelectedBusRouteNode);
+    dom.clearLastRouteButton?.addEventListener("click", clearSelectedBusLastRoute);
     dom.clearBusScheduleButton?.addEventListener("click", clearSelectedBusRoute);
     dom.restartLevelButton?.addEventListener("click", restartCurrentLevel);
   }

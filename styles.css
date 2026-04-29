@@ -735,6 +735,21 @@ body.viewing-game .map-panel {
   border-radius: 16px;
 }
 
+@media (min-width: 721px) {
+  body.viewing-game #game .game-layout {
+    grid-template-rows: minmax(0, 1fr);
+    height: 100%;
+  }
+
+  body.viewing-game .map-column,
+  body.viewing-game .shop-panel,
+  body.viewing-game .control-panel,
+  body.viewing-game .map-panel {
+    height: 100%;
+    min-height: 0;
+  }
+}
+
 .shop-panel .button {
   padding: 0.6rem 0.75rem;
   font-size: 0.85rem;
@@ -5660,16 +5675,114 @@ body.foundry-edit-mode .foundry-edit-sandlot {
   }
 
   body.viewing-game .shop-card {
-    gap: clamp(0.34rem, 0.9dvh, 0.6rem);
-    padding: clamp(0.52rem, 1.25dvh, 0.82rem);
+    gap: clamp(0.42rem, 0.95dvh, 0.66rem);
+    padding: clamp(0.56rem, 1.25dvh, 0.86rem);
+  }
+
+  body.viewing-game .shop-panel > .panel-section > .section-heading h3,
+  body.viewing-game .control-panel > .section-heading h3 {
+    font-size: clamp(1.08rem, 2.45dvh, 1.36rem);
+    line-height: 1.05;
+  }
+
+  body.viewing-game .map-panel__header h3 {
+    font-size: clamp(1.12rem, 2.55dvh, 1.42rem);
+    line-height: 1.05;
   }
 
   body.viewing-game .shop-card__visual,
   body.viewing-game .shop-card--lift .shop-card__visual,
   body.viewing-game .shop-card--shuttle .shop-card__visual,
   body.viewing-game .shop-card--coach .shop-card__visual {
-    min-height: clamp(54px, 8dvh, 82px);
-    padding-top: clamp(0.78rem, 1.7dvh, 1.2rem);
+    min-height: clamp(70px, 9.6dvh, 98px);
+    padding-top: clamp(1.5rem, 2.7dvh, 2rem);
+    padding-bottom: clamp(0.12rem, 0.34dvh, 0.24rem);
+    margin-bottom: clamp(0.18rem, 0.55dvh, 0.4rem);
+  }
+
+  body.viewing-game .shop-card--shuttle .shop-card__visual {
+    min-height: clamp(82px, 11dvh, 116px);
+    margin-bottom: clamp(0.76rem, 1.48dvh, 1.08rem);
+  }
+
+  body.viewing-game .shop-card--coach .shop-card__visual {
+    min-height: clamp(92px, 12.3dvh, 130px);
+    padding-top: clamp(1.32rem, 2.38dvh, 1.78rem);
+    margin-bottom: clamp(0.86rem, 1.68dvh, 1.22rem);
+  }
+
+  body.viewing-game .shop-card--shuttle .shop-vehicle--shuttle {
+    width: 128px;
+    height: 42px;
+    border-radius: 14px 18px 12px 12px;
+  }
+
+  body.viewing-game .shop-card--shuttle .shop-vehicle--shuttle::before,
+  body.viewing-game .shop-card--shuttle .shop-vehicle--shuttle::after,
+  body.viewing-game .shop-card--coach .shop-vehicle--coach::before,
+  body.viewing-game .shop-card--coach .shop-vehicle--coach::after {
+    bottom: -8px;
+    width: 14px;
+    height: 14px;
+  }
+
+  body.viewing-game .shop-card--shuttle .shop-vehicle--shuttle::before {
+    left: 14px;
+  }
+
+  body.viewing-game .shop-card--shuttle .shop-vehicle--shuttle::after {
+    right: 14px;
+  }
+
+  body.viewing-game .shop-card--shuttle .shop-vehicle--shuttle .shop-vehicle__window {
+    top: 8px;
+    right: 14px;
+    width: 28px;
+    height: 15px;
+  }
+
+  body.viewing-game .shop-card--shuttle .shop-vehicle--shuttle .shop-vehicle__mark {
+    top: 9px;
+    left: 14px;
+    width: 63px;
+    height: 12px;
+  }
+
+  body.viewing-game .shop-card--coach .shop-vehicle--coach {
+    width: 188px;
+    height: 48px;
+    border-radius: 15px 22px 13px 13px;
+  }
+
+  body.viewing-game .shop-card--coach .shop-vehicle--coach::before {
+    left: 12px;
+  }
+
+  body.viewing-game .shop-card--coach .shop-vehicle--coach::after {
+    right: 12px;
+  }
+
+  body.viewing-game .shop-card--coach .shop-vehicle--coach .shop-vehicle__window {
+    top: 10px;
+    right: 16px;
+    width: 27px;
+    height: 16px;
+  }
+
+  body.viewing-game .shop-card--coach .shop-vehicle--coach .shop-vehicle__mark {
+    top: 8px;
+    left: 17px;
+    width: 104px;
+    height: 24px;
+    border-radius: 8px;
+  }
+
+  body.viewing-game .shop-card--coach .shop-vehicle--coach .shop-vehicle__mark::after {
+    content: "PACKARD\A EXPRESS";
+    white-space: pre-line;
+    font-size: 0.53rem;
+    line-height: 0.84;
+    letter-spacing: 0.04em;
   }
 
   body.viewing-game .shop-card__title strong {
@@ -5681,8 +5794,8 @@ body.foundry-edit-mode .foundry-edit-sandlot {
   }
 
   body.viewing-game .shop-card__pill {
-    padding: clamp(0.12rem, 0.38dvh, 0.2rem) clamp(0.32rem, 0.75dvh, 0.52rem);
-    font-size: clamp(0.56rem, 1.15dvh, 0.7rem);
+    padding: clamp(0.2rem, 0.5dvh, 0.3rem) clamp(0.52rem, 0.98dvh, 0.72rem);
+    font-size: clamp(0.72rem, 1.36dvh, 0.84rem);
   }
 
   body.viewing-game .shop-panel .button {
@@ -5718,7 +5831,7 @@ body.foundry-edit-mode .foundry-edit-sandlot {
     align-content: start;
     height: auto;
     min-height: 0;
-    gap: clamp(0.28rem, 1dvh, 0.6rem);
+    gap: clamp(0.08rem, 0.25dvh, 0.2rem);
     padding: clamp(0.65rem, 1.65dvh, 1.1rem);
   }
 
@@ -5726,6 +5839,7 @@ body.foundry-edit-mode .foundry-edit-sandlot {
     flex: 0 1 auto;
     grid-template-rows: repeat(3, auto);
     align-content: start;
+    gap: clamp(0.58rem, 1.18dvh, 0.82rem);
   }
 
   body.viewing-game .shop-list--fleet .shop-card {
@@ -5735,7 +5849,8 @@ body.foundry-edit-mode .foundry-edit-sandlot {
 
   body.viewing-game .worker-icon {
     width: clamp(110px, 18dvh, 176px);
-    height: clamp(86px, 17dvh, 150px);
+    height: clamp(76px, 14.5dvh, 128px);
+    margin-bottom: clamp(-0.7rem, -1.1dvh, -0.25rem);
   }
 
   body.viewing-game .worker-icon__image {
@@ -5751,6 +5866,7 @@ body.foundry-edit-mode .foundry-edit-sandlot {
   }
 
   body.viewing-game .opportunity-card__note {
+    margin-top: clamp(0.18rem, 0.62dvh, 0.42rem);
     font-size: clamp(0.68rem, 1.55dvh, 0.88rem);
     line-height: 1.35;
     white-space: normal;
