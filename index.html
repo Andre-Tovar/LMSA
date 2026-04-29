@@ -943,112 +943,133 @@
               <div class="inspiration-visuals" aria-label="Operations research inspirations for RouteCraft">
                 <figure class="or-mini-card or-mini-card--csp" aria-label="CSP solved by the Three-Stage Approach: preprocess, expand the graph, then solve">
                   <svg class="or-mini-card__diagram or-mini-card__diagram--csp-tsa" viewBox="0 0 120 76" role="img" aria-hidden="true" preserveAspectRatio="xMidYMid meet">
-                    <g class="csp-tsa-badge">
-                      <rect x="2" y="2" width="40" height="10" rx="3"></rect>
-                      <text class="csp-tsa-badge-text csp-tsa-badge-text--1" x="22" y="9.4" text-anchor="middle">1. PRUNE</text>
-                      <text class="csp-tsa-badge-text csp-tsa-badge-text--2" x="22" y="9.4" text-anchor="middle">2. EXPAND</text>
-                      <text class="csp-tsa-badge-text csp-tsa-badge-text--3" x="22" y="9.4" text-anchor="middle">3. SOLVE</text>
-                    </g>
-
                     <g class="csp-tsa-stage csp-tsa-stage--1">
-                      <line x1="16" y1="40" x2="40" y2="22" class="csp-tsa-edge"></line>
-                      <line x1="16" y1="40" x2="40" y2="58" class="csp-tsa-edge"></line>
-                      <line x1="40" y1="22" x2="40" y2="58" class="csp-tsa-edge"></line>
-                      <line x1="40" y1="22" x2="72" y2="22" class="csp-tsa-edge"></line>
-                      <line x1="40" y1="58" x2="72" y2="58" class="csp-tsa-edge"></line>
-                      <line x1="40" y1="22" x2="72" y2="58" class="csp-tsa-edge"></line>
-                      <line x1="40" y1="58" x2="72" y2="22" class="csp-tsa-edge csp-tsa-edge--cut"></line>
-                      <line x1="72" y1="22" x2="98" y2="40" class="csp-tsa-edge csp-tsa-edge--cut"></line>
-                      <line x1="72" y1="58" x2="98" y2="40" class="csp-tsa-edge"></line>
-                      <circle cx="16" cy="40" r="3.6" class="csp-tsa-depot"></circle>
-                      <circle cx="40" cy="22" r="2.6" class="csp-tsa-node"></circle>
-                      <circle cx="40" cy="58" r="2.6" class="csp-tsa-node"></circle>
-                      <circle cx="72" cy="22" r="2.6" class="csp-tsa-node csp-tsa-node--cut"></circle>
-                      <circle cx="72" cy="58" r="2.6" class="csp-tsa-node"></circle>
-                      <circle cx="98" cy="40" r="3.6" class="csp-tsa-depot csp-tsa-depot--goal"></circle>
-                      <line x1="69" y1="19" x2="75" y2="25" class="csp-tsa-mark-x"></line>
-                      <line x1="75" y1="19" x2="69" y2="25" class="csp-tsa-mark-x"></line>
+                      <g class="csp-tsa-flatten-wrap">
+                        <line x1="16" y1="40" x2="40" y2="22" class="csp-tsa-edge"></line>
+                        <line x1="16" y1="40" x2="40" y2="58" class="csp-tsa-edge"></line>
+                        <line x1="40" y1="22" x2="40" y2="58" class="csp-tsa-edge"></line>
+                        <line x1="40" y1="22" x2="72" y2="22" class="csp-tsa-edge csp-tsa-edge--cut"></line>
+                        <line x1="40" y1="58" x2="72" y2="58" class="csp-tsa-edge"></line>
+                        <line x1="40" y1="22" x2="72" y2="58" class="csp-tsa-edge"></line>
+                        <line x1="40" y1="58" x2="72" y2="22" class="csp-tsa-edge csp-tsa-edge--cut"></line>
+                        <line x1="72" y1="22" x2="98" y2="40" class="csp-tsa-edge csp-tsa-edge--cut"></line>
+                        <line x1="72" y1="58" x2="98" y2="40" class="csp-tsa-edge"></line>
+                        <circle cx="16" cy="40" r="3.6" class="csp-tsa-depot"></circle>
+                        <circle cx="40" cy="22" r="2.6" class="csp-tsa-node"></circle>
+                        <circle cx="40" cy="58" r="2.6" class="csp-tsa-node"></circle>
+                        <circle cx="72" cy="22" r="2.6" class="csp-tsa-node csp-tsa-node--cut"></circle>
+                        <circle cx="72" cy="58" r="2.6" class="csp-tsa-node"></circle>
+                        <circle cx="98" cy="40" r="3.6" class="csp-tsa-depot csp-tsa-depot--goal"></circle>
+                        <line x1="69" y1="19" x2="75" y2="25" class="csp-tsa-mark-x"></line>
+                        <line x1="75" y1="19" x2="69" y2="25" class="csp-tsa-mark-x"></line>
 
-                      <g class="csp-tsa-window" transform="translate(34, 28)">
-                        <rect class="csp-tsa-window-bg" width="12" height="1.7" rx="0.6"></rect>
-                        <rect class="csp-tsa-window-fill" x="2" width="5" height="1.7" rx="0.6"></rect>
-                        <line x1="2" y1="-0.6" x2="2" y2="2.3" class="csp-tsa-window-tick"></line>
-                        <line x1="7" y1="-0.6" x2="7" y2="2.3" class="csp-tsa-window-tick"></line>
+                        <g class="csp-tsa-window" transform="translate(34, 12)">
+                          <rect class="csp-tsa-window-bg" width="12" height="1.7" rx="0.6"></rect>
+                          <rect class="csp-tsa-window-fill" x="3.5" width="5" height="1.7" rx="0.6"></rect>
+                          <line x1="3.5" y1="-0.6" x2="3.5" y2="2.3" class="csp-tsa-window-tick csp-tsa-window-tick--start"></line>
+                          <line x1="8.5" y1="-0.6" x2="8.5" y2="2.3" class="csp-tsa-window-tick csp-tsa-window-tick--end"></line>
+                        </g>
+                        <g class="csp-tsa-window" transform="translate(66, 12)">
+                          <rect class="csp-tsa-window-bg" width="12" height="1.7" rx="0.6"></rect>
+                          <line x1="2.5" y1="-0.6" x2="2.5" y2="2.3" class="csp-tsa-window-tick csp-tsa-window-tick--end"></line>
+                          <line x1="9.5" y1="-0.6" x2="9.5" y2="2.3" class="csp-tsa-window-tick csp-tsa-window-tick--start"></line>
+                        </g>
+                        <g class="csp-tsa-window" transform="translate(34, 64)">
+                          <rect class="csp-tsa-window-bg" width="12" height="1.7" rx="0.6"></rect>
+                          <rect class="csp-tsa-window-fill" x="3" width="6" height="1.7" rx="0.6"></rect>
+                          <line x1="3" y1="-0.6" x2="3" y2="2.3" class="csp-tsa-window-tick csp-tsa-window-tick--start"></line>
+                          <line x1="9" y1="-0.6" x2="9" y2="2.3" class="csp-tsa-window-tick csp-tsa-window-tick--end"></line>
+                        </g>
+                        <g class="csp-tsa-window" transform="translate(66, 64)">
+                          <rect class="csp-tsa-window-bg" width="12" height="1.7" rx="0.6"></rect>
+                          <rect class="csp-tsa-window-fill" x="3" width="6" height="1.7" rx="0.6"></rect>
+                          <line x1="3" y1="-0.6" x2="3" y2="2.3" class="csp-tsa-window-tick csp-tsa-window-tick--start"></line>
+                          <line x1="9" y1="-0.6" x2="9" y2="2.3" class="csp-tsa-window-tick csp-tsa-window-tick--end"></line>
+                        </g>
                       </g>
-                      <g class="csp-tsa-window" transform="translate(34, 64)">
-                        <rect class="csp-tsa-window-bg" width="12" height="1.7" rx="0.6"></rect>
-                        <rect class="csp-tsa-window-fill" x="2" width="6" height="1.7" rx="0.6"></rect>
-                        <line x1="2" y1="-0.6" x2="2" y2="2.3" class="csp-tsa-window-tick"></line>
-                        <line x1="8" y1="-0.6" x2="8" y2="2.3" class="csp-tsa-window-tick"></line>
-                      </g>
-                      <g class="csp-tsa-window" transform="translate(66, 64)">
-                        <rect class="csp-tsa-window-bg" width="12" height="1.7" rx="0.6"></rect>
-                        <rect class="csp-tsa-window-fill" x="5" width="5" height="1.7" rx="0.6"></rect>
-                        <line x1="5" y1="-0.6" x2="5" y2="2.3" class="csp-tsa-window-tick"></line>
-                        <line x1="10" y1="-0.6" x2="10" y2="2.3" class="csp-tsa-window-tick"></line>
-                      </g>
-
-                      <text x="60" y="73" class="csp-tsa-tiny-label" text-anchor="middle">G(V,A) &#8594; G&#8341; &#8226; resource windows [t&#8338;, T&#8338;]</text>
                     </g>
 
                     <g class="csp-tsa-stage csp-tsa-stage--2">
+                      <line x1="16" y1="40" x2="32" y2="42" class="csp-tsa-edge csp-tsa-edge--ghost"></line>
+                      <line x1="16" y1="40" x2="50" y2="42" class="csp-tsa-edge csp-tsa-edge--ghost"></line>
+                      <line x1="32" y1="42" x2="50" y2="42" class="csp-tsa-edge csp-tsa-edge--ghost"></line>
+                      <line x1="32" y1="42" x2="72" y2="42" class="csp-tsa-edge csp-tsa-edge--ghost"></line>
+                      <line x1="50" y1="42" x2="72" y2="42" class="csp-tsa-edge csp-tsa-edge--ghost"></line>
+                      <line x1="72" y1="42" x2="98" y2="40" class="csp-tsa-edge csp-tsa-edge--ghost"></line>
+
+                      <line x1="16" y1="40" x2="32" y2="34" class="csp-tsa-edge csp-tsa-edge--thin"></line>
+                      <line x1="16" y1="40" x2="50" y2="34" class="csp-tsa-edge csp-tsa-edge--thin"></line>
+                      <line x1="32" y1="18" x2="50" y2="18" class="csp-tsa-edge csp-tsa-edge--thin"></line>
+                      <line x1="32" y1="26" x2="50" y2="26" class="csp-tsa-edge csp-tsa-edge--thin"></line>
+                      <line x1="32" y1="34" x2="50" y2="34" class="csp-tsa-edge csp-tsa-edge--thin"></line>
+                      <line x1="32" y1="34" x2="50" y2="26" class="csp-tsa-edge csp-tsa-edge--thin"></line>
+                      <line x1="32" y1="18" x2="72" y2="18" class="csp-tsa-edge csp-tsa-edge--thin"></line>
+                      <line x1="32" y1="26" x2="72" y2="26" class="csp-tsa-edge csp-tsa-edge--thin"></line>
+                      <line x1="32" y1="34" x2="72" y2="34" class="csp-tsa-edge csp-tsa-edge--thin"></line>
+                      <line x1="50" y1="18" x2="72" y2="18" class="csp-tsa-edge csp-tsa-edge--thin"></line>
+                      <line x1="50" y1="26" x2="72" y2="26" class="csp-tsa-edge csp-tsa-edge--thin"></line>
+                      <line x1="50" y1="34" x2="72" y2="34" class="csp-tsa-edge csp-tsa-edge--thin"></line>
+                      <line x1="72" y1="18" x2="98" y2="40" class="csp-tsa-edge csp-tsa-edge--thin"></line>
+                      <line x1="72" y1="26" x2="98" y2="40" class="csp-tsa-edge csp-tsa-edge--thin"></line>
+                      <line x1="72" y1="34" x2="98" y2="40" class="csp-tsa-edge csp-tsa-edge--thin"></line>
+
                       <circle cx="16" cy="40" r="3.6" class="csp-tsa-depot"></circle>
-                      <line x1="16" y1="40" x2="36" y2="20" class="csp-tsa-edge csp-tsa-edge--thin"></line>
-                      <line x1="16" y1="40" x2="36" y2="28" class="csp-tsa-edge csp-tsa-edge--thin"></line>
-                      <circle cx="36" cy="18" r="1.7" class="csp-tsa-node csp-tsa-node--expanded"></circle>
-                      <circle cx="36" cy="22" r="1.7" class="csp-tsa-node csp-tsa-node--expanded"></circle>
-                      <circle cx="36" cy="26" r="1.7" class="csp-tsa-node csp-tsa-node--expanded"></circle>
-                      <line x1="16" y1="40" x2="36" y2="52" class="csp-tsa-edge csp-tsa-edge--thin"></line>
-                      <line x1="16" y1="40" x2="36" y2="60" class="csp-tsa-edge csp-tsa-edge--thin"></line>
-                      <circle cx="36" cy="50" r="1.7" class="csp-tsa-node csp-tsa-node--expanded"></circle>
-                      <circle cx="36" cy="54" r="1.7" class="csp-tsa-node csp-tsa-node--expanded"></circle>
-                      <circle cx="36" cy="58" r="1.7" class="csp-tsa-node csp-tsa-node--expanded"></circle>
-                      <line x1="36" y1="22" x2="76" y2="22" class="csp-tsa-edge csp-tsa-edge--thin"></line>
-                      <line x1="36" y1="26" x2="76" y2="26" class="csp-tsa-edge csp-tsa-edge--thin"></line>
-                      <line x1="36" y1="22" x2="76" y2="26" class="csp-tsa-edge csp-tsa-edge--thin"></line>
-                      <circle cx="76" cy="22" r="1.7" class="csp-tsa-node csp-tsa-node--expanded"></circle>
-                      <circle cx="76" cy="26" r="1.7" class="csp-tsa-node csp-tsa-node--expanded"></circle>
-                      <line x1="36" y1="50" x2="76" y2="50" class="csp-tsa-edge csp-tsa-edge--thin"></line>
-                      <line x1="36" y1="54" x2="76" y2="54" class="csp-tsa-edge csp-tsa-edge--thin"></line>
-                      <line x1="36" y1="58" x2="76" y2="54" class="csp-tsa-edge csp-tsa-edge--thin"></line>
-                      <circle cx="76" cy="50" r="1.7" class="csp-tsa-node csp-tsa-node--expanded"></circle>
-                      <circle cx="76" cy="54" r="1.7" class="csp-tsa-node csp-tsa-node--expanded"></circle>
-                      <line x1="76" y1="22" x2="98" y2="40" class="csp-tsa-edge csp-tsa-edge--thin"></line>
-                      <line x1="76" y1="26" x2="98" y2="40" class="csp-tsa-edge csp-tsa-edge--thin"></line>
-                      <line x1="76" y1="50" x2="98" y2="40" class="csp-tsa-edge csp-tsa-edge--thin"></line>
-                      <line x1="76" y1="54" x2="98" y2="40" class="csp-tsa-edge csp-tsa-edge--thin"></line>
                       <circle cx="98" cy="40" r="3.6" class="csp-tsa-depot csp-tsa-depot--goal"></circle>
-                      <path d="M 32 16 Q 29 22 32 28" class="csp-tsa-bracket"></path>
-                      <path d="M 32 48 Q 29 54 32 60" class="csp-tsa-bracket"></path>
-                      <text x="60" y="73" class="csp-tsa-tiny-label" text-anchor="middle">G&#8341; &#8594; G&#8337;  (resource states)</text>
+
+                      <circle cx="32" cy="42" r="1.6" class="csp-tsa-node csp-tsa-node--ghost"></circle>
+                      <circle cx="50" cy="42" r="1.6" class="csp-tsa-node csp-tsa-node--ghost"></circle>
+                      <circle cx="72" cy="42" r="1.6" class="csp-tsa-node csp-tsa-node--ghost"></circle>
+
+                      <circle cx="32" cy="18" r="1.5" class="csp-tsa-node csp-tsa-node--expanded"></circle>
+                      <circle cx="32" cy="26" r="1.5" class="csp-tsa-node csp-tsa-node--expanded"></circle>
+                      <circle cx="32" cy="34" r="1.5" class="csp-tsa-node csp-tsa-node--expanded"></circle>
+                      <circle cx="50" cy="18" r="1.5" class="csp-tsa-node csp-tsa-node--expanded"></circle>
+                      <circle cx="50" cy="26" r="1.5" class="csp-tsa-node csp-tsa-node--expanded"></circle>
+                      <circle cx="50" cy="34" r="1.5" class="csp-tsa-node csp-tsa-node--expanded"></circle>
+                      <circle cx="72" cy="18" r="1.5" class="csp-tsa-node csp-tsa-node--expanded"></circle>
+                      <circle cx="72" cy="26" r="1.5" class="csp-tsa-node csp-tsa-node--expanded"></circle>
+                      <circle cx="72" cy="34" r="1.5" class="csp-tsa-node csp-tsa-node--expanded"></circle>
                     </g>
 
                     <g class="csp-tsa-stage csp-tsa-stage--3">
-                      <line x1="16" y1="40" x2="36" y2="18" class="csp-tsa-edge csp-tsa-edge--ghost"></line>
-                      <line x1="16" y1="40" x2="36" y2="22" class="csp-tsa-edge csp-tsa-edge--ghost"></line>
-                      <line x1="16" y1="40" x2="36" y2="26" class="csp-tsa-edge csp-tsa-edge--ghost"></line>
-                      <line x1="16" y1="40" x2="36" y2="50" class="csp-tsa-edge csp-tsa-edge--ghost"></line>
-                      <line x1="36" y1="22" x2="76" y2="22" class="csp-tsa-edge csp-tsa-edge--ghost"></line>
-                      <line x1="36" y1="50" x2="76" y2="50" class="csp-tsa-edge csp-tsa-edge--ghost"></line>
-                      <line x1="76" y1="22" x2="98" y2="40" class="csp-tsa-edge csp-tsa-edge--ghost"></line>
-                      <line x1="76" y1="50" x2="98" y2="40" class="csp-tsa-edge csp-tsa-edge--ghost"></line>
-                      <path d="M 16 40 L 36 54 L 76 54 L 98 40" class="csp-tsa-shortest"></path>
+                      <line x1="16" y1="40" x2="32" y2="34" class="csp-tsa-edge csp-tsa-edge--ghost"></line>
+                      <line x1="16" y1="40" x2="50" y2="34" class="csp-tsa-edge csp-tsa-edge--ghost"></line>
+                      <line x1="32" y1="18" x2="50" y2="18" class="csp-tsa-edge csp-tsa-edge--ghost"></line>
+                      <line x1="32" y1="26" x2="50" y2="26" class="csp-tsa-edge csp-tsa-edge--ghost"></line>
+                      <line x1="32" y1="34" x2="50" y2="34" class="csp-tsa-edge csp-tsa-edge--ghost"></line>
+                      <line x1="32" y1="34" x2="50" y2="26" class="csp-tsa-edge csp-tsa-edge--ghost"></line>
+                      <line x1="32" y1="18" x2="72" y2="18" class="csp-tsa-edge csp-tsa-edge--ghost"></line>
+                      <line x1="32" y1="26" x2="72" y2="26" class="csp-tsa-edge csp-tsa-edge--ghost"></line>
+                      <line x1="32" y1="34" x2="72" y2="34" class="csp-tsa-edge csp-tsa-edge--ghost"></line>
+                      <line x1="50" y1="18" x2="72" y2="18" class="csp-tsa-edge csp-tsa-edge--ghost"></line>
+                      <line x1="50" y1="26" x2="72" y2="26" class="csp-tsa-edge csp-tsa-edge--ghost"></line>
+                      <line x1="50" y1="34" x2="72" y2="34" class="csp-tsa-edge csp-tsa-edge--ghost"></line>
+                      <line x1="72" y1="18" x2="98" y2="40" class="csp-tsa-edge csp-tsa-edge--ghost"></line>
+                      <line x1="72" y1="26" x2="98" y2="40" class="csp-tsa-edge csp-tsa-edge--ghost"></line>
+                      <line x1="72" y1="34" x2="98" y2="40" class="csp-tsa-edge csp-tsa-edge--ghost"></line>
+
+                      <path d="M 16 40 L 32 34 L 50 34 L 72 34 L 98 40" class="csp-tsa-shortest"></path>
+
                       <circle cx="16" cy="40" r="3.6" class="csp-tsa-depot"></circle>
-                      <circle cx="36" cy="18" r="1.4" class="csp-tsa-node csp-tsa-node--ghost"></circle>
-                      <circle cx="36" cy="22" r="1.4" class="csp-tsa-node csp-tsa-node--ghost"></circle>
-                      <circle cx="36" cy="26" r="1.4" class="csp-tsa-node csp-tsa-node--ghost"></circle>
-                      <circle cx="36" cy="50" r="1.4" class="csp-tsa-node csp-tsa-node--ghost"></circle>
-                      <circle cx="36" cy="54" r="2.4" class="csp-tsa-node csp-tsa-node--on-path"></circle>
-                      <circle cx="36" cy="58" r="1.4" class="csp-tsa-node csp-tsa-node--ghost"></circle>
-                      <circle cx="76" cy="22" r="1.4" class="csp-tsa-node csp-tsa-node--ghost"></circle>
-                      <circle cx="76" cy="26" r="1.4" class="csp-tsa-node csp-tsa-node--ghost"></circle>
-                      <circle cx="76" cy="50" r="1.4" class="csp-tsa-node csp-tsa-node--ghost"></circle>
-                      <circle cx="76" cy="54" r="2.4" class="csp-tsa-node csp-tsa-node--on-path"></circle>
                       <circle cx="98" cy="40" r="3.6" class="csp-tsa-depot csp-tsa-depot--goal"></circle>
-                      <text x="60" y="73" class="csp-tsa-tiny-label" text-anchor="middle">shortest path on G&#8337;</text>
+
+                      <circle cx="32" cy="18" r="1.4" class="csp-tsa-node csp-tsa-node--ghost"></circle>
+                      <circle cx="32" cy="26" r="1.4" class="csp-tsa-node csp-tsa-node--ghost"></circle>
+                      <circle cx="32" cy="34" r="2.0" class="csp-tsa-node csp-tsa-node--on-path"></circle>
+                      <circle cx="50" cy="18" r="1.4" class="csp-tsa-node csp-tsa-node--ghost"></circle>
+                      <circle cx="50" cy="26" r="1.4" class="csp-tsa-node csp-tsa-node--ghost"></circle>
+                      <circle cx="50" cy="34" r="2.0" class="csp-tsa-node csp-tsa-node--on-path"></circle>
+                      <circle cx="72" cy="18" r="1.4" class="csp-tsa-node csp-tsa-node--ghost"></circle>
+                      <circle cx="72" cy="26" r="1.4" class="csp-tsa-node csp-tsa-node--ghost"></circle>
+                      <circle cx="72" cy="34" r="2.0" class="csp-tsa-node csp-tsa-node--on-path"></circle>
                     </g>
+
+                    <text class="csp-tsa-phase-prefix" x="56" y="73" text-anchor="end">TSA:</text>
+                    <text class="csp-tsa-phase-word csp-tsa-phase-word--1" x="58" y="73" text-anchor="start">Prune</text>
+                    <text class="csp-tsa-phase-word csp-tsa-phase-word--2" x="58" y="73" text-anchor="start">Expand</text>
+                    <text class="csp-tsa-phase-word csp-tsa-phase-word--3" x="58" y="73" text-anchor="start">Solve</text>
                   </svg>
-                  <figcaption>CSP &#8212; TSA</figcaption>
+                  <figcaption>CSP</figcaption>
                 </figure>
 
                 <figure class="or-mini-card or-mini-card--vrp" aria-label="VRP: a central depot dispatches multiple vehicles along separate routes">

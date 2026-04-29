@@ -4827,7 +4827,8 @@ body.foundry-edit-mode .foundry-edit-sandlot {
 .csp-tsa-stage--3 { animation-delay: 6s; }
 
 @keyframes csp-tsa-cycle {
-  0%, 30% { opacity: 1; }
+  0% { opacity: 0; }
+  4%, 30% { opacity: 1; }
   33%, 100% { opacity: 0; }
 }
 
@@ -4896,13 +4897,6 @@ body.foundry-edit-mode .foundry-edit-sandlot {
   stroke-linecap: round;
 }
 
-.csp-tsa-bracket {
-  fill: none;
-  stroke: rgba(107, 35, 29, 0.5);
-  stroke-width: 0.9;
-  stroke-linecap: round;
-}
-
 .csp-tsa-window-bg {
   fill: rgba(107, 35, 29, 0.14);
 }
@@ -4913,52 +4907,70 @@ body.foundry-edit-mode .foundry-edit-sandlot {
 
 .csp-tsa-window-tick {
   stroke: rgba(107, 35, 29, 0.78);
-  stroke-width: 0.55;
+  stroke-width: 0.7;
   stroke-linecap: round;
 }
 
-.csp-tsa-tiny-label {
-  fill: rgba(78, 43, 24, 0.66);
-  font-family: "Trebuchet MS", "Segoe UI", sans-serif;
-  font-size: 4.4px;
-  font-weight: 800;
-  letter-spacing: 0.04em;
+.csp-tsa-window-tick--start {
+  stroke: #2c8a3a;
+  stroke-width: 0.85;
+}
+
+.csp-tsa-window-tick--end {
+  stroke: #b75139;
+  stroke-width: 0.85;
 }
 
 .csp-tsa-shortest {
   fill: none;
-  stroke: #6b231d;
-  stroke-width: 2.6;
+  stroke: #c59a2c;
+  stroke-width: 2.4;
   stroke-linecap: round;
   stroke-linejoin: round;
-  stroke-dasharray: 200;
-  stroke-dashoffset: 200;
+  stroke-dasharray: 110;
+  stroke-dashoffset: 110;
   animation: csp-tsa-draw 9s ease-in-out 6s infinite;
 }
 
 @keyframes csp-tsa-draw {
-  0% { stroke-dashoffset: 200; }
+  0% { stroke-dashoffset: 110; }
   10%, 33% { stroke-dashoffset: 0; }
-  35%, 100% { stroke-dashoffset: 200; }
+  35%, 100% { stroke-dashoffset: 110; }
 }
 
-.csp-tsa-badge rect {
-  fill: rgba(78, 43, 24, 0.9);
-}
-
-.csp-tsa-badge-text {
-  fill: #fff8ef;
+.csp-tsa-phase-prefix {
+  fill: rgba(78, 43, 24, 0.72);
   font-family: "Trebuchet MS", "Segoe UI", sans-serif;
-  font-size: 5.8px;
+  font-size: 5px;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+}
+
+.csp-tsa-phase-word {
+  fill: rgba(78, 43, 24, 0.92);
+  font-family: "Trebuchet MS", "Segoe UI", sans-serif;
+  font-size: 5px;
   font-weight: 900;
-  letter-spacing: 0.06em;
+  letter-spacing: 0.05em;
   opacity: 0;
   animation: csp-tsa-cycle 9s ease-in-out infinite;
 }
 
-.csp-tsa-badge-text--1 { animation-delay: 0s; }
-.csp-tsa-badge-text--2 { animation-delay: 3s; }
-.csp-tsa-badge-text--3 { animation-delay: 6s; }
+.csp-tsa-phase-word--1 { animation-delay: 0s; }
+.csp-tsa-phase-word--2 { animation-delay: 3s; }
+.csp-tsa-phase-word--3 { animation-delay: 6s; }
+
+.csp-tsa-flatten-wrap {
+  transform-origin: 60px 40px;
+  transform-box: view-box;
+  animation: csp-tsa-flatten 9s ease-in-out infinite;
+}
+
+@keyframes csp-tsa-flatten {
+  0%, 18% { transform: scaleY(1); }
+  29%, 33% { transform: scaleY(0.22); }
+  34%, 100% { transform: scaleY(1); }
+}
 
 .or-diagram__path--csp-main {
   stroke: #6b231d;
@@ -7398,9 +7410,14 @@ body.foundry-edit-mode .foundry-edit-sandlot {
   .or-diagram__resource-fill--mespprc-local,
   .or-diagram__resource-fill--mespprc-global,
   .csp-tsa-stage,
-  .csp-tsa-badge-text,
+  .csp-tsa-phase-word,
+  .csp-tsa-flatten-wrap,
   .csp-tsa-shortest {
     animation: none;
+  }
+
+  .csp-tsa-flatten-wrap {
+    transform: scaleY(1);
   }
 
   .or-diagram__path--csp-main,
@@ -7423,7 +7440,7 @@ body.foundry-edit-mode .foundry-edit-sandlot {
   }
 
   .csp-tsa-stage--3,
-  .csp-tsa-badge-text--3 {
+  .csp-tsa-phase-word--3 {
     opacity: 1;
   }
 }
