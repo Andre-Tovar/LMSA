@@ -1177,18 +1177,27 @@
                     <circle class="or-diagram__node" cx="62" cy="62" r="3"></circle>
                     <circle class="or-diagram__node" cx="96" cy="54" r="3"></circle>
                     <circle class="or-diagram__node" cx="80" cy="30" r="3"></circle>
-                    <text class="or-diagram__resource-label" x="68" y="4.5">L</text>
-                    <rect class="or-diagram__resource" x="74" y="3" width="38" height="3" rx="1.5"></rect>
-                    <rect class="or-diagram__resource-fill or-diagram__resource-fill--mespprc-local" x="74" y="3" width="38" height="3" rx="1.5"></rect>
-                    <text class="or-diagram__resource-label" x="68" y="10.5">G</text>
-                    <rect class="or-diagram__resource" x="74" y="9" width="38" height="3" rx="1.5"></rect>
-                    <rect class="or-diagram__resource-fill or-diagram__resource-fill--soft or-diagram__resource-fill--mespprc-global" x="74" y="9" width="38" height="3" rx="1.5"></rect>
+                    <text class="or-diagram__resource-label" x="34" y="3">Local</text>
+                    <rect class="or-diagram__resource" x="56" y="0.6" width="32" height="4.8" rx="2.4"></rect>
+                    <rect class="or-diagram__resource-fill or-diagram__resource-fill--mespprc-local" x="56" y="0.6" width="32" height="4.8" rx="2.4"></rect>
+                    <text class="or-diagram__resource-label" x="34" y="10.3">Global</text>
+                    <rect class="or-diagram__resource" x="56" y="7.9" width="32" height="4.8" rx="2.4"></rect>
+                    <rect class="or-diagram__resource-fill or-diagram__resource-fill--soft or-diagram__resource-fill--mespprc-global" x="56" y="7.9" width="32" height="4.8" rx="2.4"></rect>
                   </svg>
                   <figcaption>MESPPRC</figcaption>
                 </figure>
 
                 <figure class="or-mini-card or-mini-card--vrp" aria-label="VRP: the Clarke-Wright Savings Heuristic merges single-customer tours into efficient vehicle routes">
                   <svg class="or-mini-card__diagram or-mini-card__diagram--vrp-savings" viewBox="0 0 120 76" role="img" aria-hidden="true" preserveAspectRatio="xMidYMid meet">
+                    <defs>
+                      <g id="or-vrp-mini-bus-shape">
+                        <rect class="or-vrp-bus__body" x="-4.5" y="-2.15" width="9" height="4.3" rx="0.9"></rect>
+                        <rect class="or-vrp-bus__window" x="0.45" y="-1.42" width="2.35" height="1.65" rx="0.3"></rect>
+                        <rect class="or-vrp-bus__mark" x="-3.35" y="-0.95" width="3" height="0.55" rx="0.22"></rect>
+                        <circle class="or-vrp-bus__wheel" cx="-2.8" cy="2.08" r="0.55"></circle>
+                        <circle class="or-vrp-bus__wheel" cx="2.8" cy="2.08" r="0.55"></circle>
+                      </g>
+                    </defs>
                     <g class="or-vrp-layer or-vrp-layer--initial">
                       <path class="or-vrp-edge or-vrp-spoke or-vrp-spoke--1" d="M60 38 L26 16" pathLength="100"></path>
                       <path class="or-vrp-edge or-vrp-spoke or-vrp-spoke--2" d="M60 38 L8 32" pathLength="100"></path>
@@ -1224,6 +1233,50 @@
                       <circle class="or-vrp-node or-vrp-node--8" cx="96" cy="14" r="3.2"></circle>
                     </g>
                     <rect class="or-diagram__facility or-diagram__facility--chosen" x="52" y="30" width="16" height="16" rx="3"></rect>
+                    <g class="or-vrp-layer or-vrp-layer--buses">
+                      <g class="or-vrp-bus or-vrp-bus--left">
+                        <animateTransform attributeName="transform" type="translate" dur="20s" repeatCount="indefinite" calcMode="linear" keyTimes="0;0.75;0.76;0.77;0.81;0.82;0.86;0.87;0.91;0.92;0.96;0.98;1" values="60 38;60 38;60 38;60 38;30 54;30 54;8 32;8 32;26 16;26 16;60 38;60 38;60 38"></animateTransform>
+                        <g class="or-vrp-bus__rotor">
+                          <animateTransform attributeName="transform" type="rotate" dur="20s" repeatCount="indefinite" calcMode="linear" keyTimes="0;0.75;0.76;0.77;0.81;0.82;0.86;0.87;0.91;0.92;0.96;0.98;1" values="-28;-28;-28;-28;-28;45;45;-42;-42;33;33;33;-28"></animateTransform>
+                          <g class="or-vrp-bus__face or-vrp-bus__face--right">
+                            <animate attributeName="opacity" dur="20s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.75;0.76;0.77;0.81;0.82;0.86;0.87;0.91;0.92;0.96;0.98;1" values="0;0;0;0;0;0;0;1;1;1;1;1;0"></animate>
+                            <use href="#or-vrp-mini-bus-shape"></use>
+                          </g>
+                          <g class="or-vrp-bus__face or-vrp-bus__face--left" transform="scale(-1 1)">
+                            <animate attributeName="opacity" dur="20s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.75;0.76;0.77;0.81;0.82;0.86;0.87;0.91;0.92;0.96;0.98;1" values="1;1;1;1;1;1;1;0;0;0;0;0;1"></animate>
+                            <use href="#or-vrp-mini-bus-shape"></use>
+                          </g>
+                        </g>
+                      </g>
+                      <g class="or-vrp-bus or-vrp-bus--bottom">
+                        <animateTransform attributeName="transform" type="translate" dur="20s" repeatCount="indefinite" calcMode="linear" keyTimes="0;0.75;0.76;0.77;0.83;0.84;0.9;0.91;0.96;0.98;1" values="60 38;60 38;60 38;60 38;82 66;82 66;40 64;40 64;60 38;60 38;60 38"></animateTransform>
+                        <g class="or-vrp-bus__rotor">
+                          <animateTransform attributeName="transform" type="rotate" dur="20s" repeatCount="indefinite" calcMode="linear" keyTimes="0;0.75;0.76;0.77;0.83;0.84;0.9;0.91;0.96;0.98;1" values="52;52;52;52;52;3;3;-52;-52;-52;52"></animateTransform>
+                          <g class="or-vrp-bus__face or-vrp-bus__face--right">
+                            <animate attributeName="opacity" dur="20s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.75;0.76;0.77;0.83;0.84;0.9;0.91;0.96;0.98;1" values="1;1;1;1;1;0;0;1;1;1;1"></animate>
+                            <use href="#or-vrp-mini-bus-shape"></use>
+                          </g>
+                          <g class="or-vrp-bus__face or-vrp-bus__face--left" transform="scale(-1 1)">
+                            <animate attributeName="opacity" dur="20s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.75;0.76;0.77;0.83;0.84;0.9;0.91;0.96;0.98;1" values="0;0;0;0;0;1;1;0;0;0;0"></animate>
+                            <use href="#or-vrp-mini-bus-shape"></use>
+                          </g>
+                        </g>
+                      </g>
+                      <g class="or-vrp-bus or-vrp-bus--right">
+                        <animateTransform attributeName="transform" type="translate" dur="20s" repeatCount="indefinite" calcMode="linear" keyTimes="0;0.75;0.76;0.77;0.81;0.82;0.86;0.87;0.9;0.91;0.96;0.98;1" values="60 38;60 38;60 38;60 38;96 14;96 14;114 32;114 32;94 56;94 56;60 38;60 38;60 38"></animateTransform>
+                        <g class="or-vrp-bus__rotor">
+                          <animateTransform attributeName="transform" type="rotate" dur="20s" repeatCount="indefinite" calcMode="linear" keyTimes="0;0.75;0.76;0.77;0.81;0.82;0.86;0.87;0.9;0.91;0.96;0.98;1" values="-34;-34;-34;-34;-34;45;45;-50;-50;28;28;28;-34"></animateTransform>
+                          <g class="or-vrp-bus__face or-vrp-bus__face--right">
+                            <animate attributeName="opacity" dur="20s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.75;0.76;0.77;0.81;0.82;0.86;0.87;0.9;0.91;0.96;0.98;1" values="1;1;1;1;1;1;1;0;0;0;0;0;1"></animate>
+                            <use href="#or-vrp-mini-bus-shape"></use>
+                          </g>
+                          <g class="or-vrp-bus__face or-vrp-bus__face--left" transform="scale(-1 1)">
+                            <animate attributeName="opacity" dur="20s" repeatCount="indefinite" calcMode="discrete" keyTimes="0;0.75;0.76;0.77;0.81;0.82;0.86;0.87;0.9;0.91;0.96;0.98;1" values="0;0;0;0;0;0;0;1;1;1;1;1;0"></animate>
+                            <use href="#or-vrp-mini-bus-shape"></use>
+                          </g>
+                        </g>
+                      </g>
+                    </g>
                   </svg>
                   <figcaption>VRP</figcaption>
                 </figure>
@@ -1237,7 +1290,13 @@
                       <span class="easter-logo__letter easter-logo__letter--a">A</span>
                     </div>
                   </div>
-                  <figcaption>LMSA <span class="or-mini-card__caption-arrow">&harr;</span> ASML</figcaption>
+                  <figcaption>
+                    LMSA
+                    <span class="or-mini-card__caption-arrow" aria-label="reverses with">
+                      <span class="or-mini-card__caption-arrow-half" aria-hidden="true">&larr;</span><span class="or-mini-card__caption-arrow-half or-mini-card__caption-arrow-half--asml" aria-hidden="true">&rarr;</span>
+                    </span>
+                    <span class="or-mini-card__caption-asml">ASML</span>
+                  </figcaption>
                 </figure>
               </div>
             </article>

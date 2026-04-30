@@ -4748,6 +4748,15 @@ body.foundry-edit-mode .foundry-edit-sandlot {
   transform: translateY(0.02em);
 }
 
+.or-mini-card__caption-arrow-half {
+  display: inline-block;
+}
+
+.or-mini-card__caption-arrow-half--asml,
+.or-mini-card__caption-asml {
+  color: #0878c9;
+}
+
 .or-diagram__path {
   fill: none;
   stroke: rgba(107, 35, 29, 0.72);
@@ -5695,6 +5704,32 @@ body.foundry-edit-mode .foundry-edit-sandlot {
   fill: var(--vrp-yellow);
 }
 
+.or-vrp-bus {
+  opacity: 0;
+  filter: drop-shadow(0 1.2px 1.8px rgba(37, 20, 12, 0.32));
+  animation: or-vrp-bus-visibility var(--vrp-duration) linear infinite;
+}
+
+.or-vrp-bus__body {
+  fill: #161311;
+  stroke: rgba(255, 250, 242, 0.96);
+  stroke-width: 0.65;
+}
+
+.or-vrp-bus__window {
+  fill: rgba(192, 210, 223, 0.96);
+}
+
+.or-vrp-bus__mark {
+  fill: rgba(255, 255, 255, 0.13);
+}
+
+.or-vrp-bus__wheel {
+  fill: #0b0908;
+  stroke: rgba(255, 250, 242, 0.72);
+  stroke-width: 0.28;
+}
+
 @keyframes or-vrp-spoke-fade-7 {
   0%, 12% { opacity: 1; }
   18%, 94% { opacity: 0; }
@@ -5820,6 +5855,12 @@ body.foundry-edit-mode .foundry-edit-sandlot {
   98%, 100% { fill: var(--vrp-blue); }
 }
 
+@keyframes or-vrp-bus-visibility {
+  0%, 75% { opacity: 0; }
+  76%, 96% { opacity: 1; }
+  98%, 100% { opacity: 0; }
+}
+
 .or-diagram__truck {
   stroke: rgba(255, 250, 242, 0.96);
   stroke-width: 1.6;
@@ -5883,10 +5924,10 @@ body.foundry-edit-mode .foundry-edit-sandlot {
 .or-diagram__resource-label {
   fill: rgba(78, 43, 24, 0.72);
   font-family: "Trebuchet MS", "Segoe UI", sans-serif;
-  font-size: 5.4px;
+  font-size: 6px;
   font-weight: 900;
   dominant-baseline: middle;
-  text-anchor: middle;
+  text-anchor: start;
 }
 
 @keyframes or-mespprc-trip-one {
@@ -8214,6 +8255,7 @@ body.foundry-edit-mode .foundry-edit-sandlot {
   .or-vrp-merged-spoke,
   .or-vrp-saving,
   .or-vrp-node,
+  .or-vrp-bus,
   .or-diagram__path--mespprc-1,
   .or-diagram__path--mespprc-2,
   .or-diagram__resource-fill--mespprc-local,
@@ -8294,6 +8336,10 @@ body.foundry-edit-mode .foundry-edit-sandlot {
   .or-vrp-node--6,
   .or-vrp-node--7 {
     fill: var(--vrp-yellow);
+  }
+
+  .or-vrp-bus {
+    display: none;
   }
 
   .csp-tsa-stage--3,
