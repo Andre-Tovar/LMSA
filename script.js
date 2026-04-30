@@ -1321,6 +1321,8 @@ const LMSAApp = (() => {
     dom.featuredBudget = document.getElementById("featuredBudget");
     dom.featuredDifficulty = document.getElementById("featuredDifficulty");
     dom.featuredRuleList = document.getElementById("featuredRuleList");
+    dom.homeInspirationVisuals = document.getElementById("homeInspirationVisuals");
+    dom.sourceInspirationVisuals = document.querySelector("#howItWorksCard .inspiration-visuals");
     dom.guideReplayStage = document.getElementById("guideReplayStage");
     dom.guideReplayRoadLayer = document.getElementById("guideReplayRoadLayer");
     dom.guideReplayNodeLayer = document.getElementById("guideReplayNodeLayer");
@@ -1435,6 +1437,151 @@ const LMSAApp = (() => {
     }
 
     listElement.innerHTML = items.map((item) => `<li>${escapeHtml(item)}</li>`).join("");
+  }
+
+  function uniquifyClonedIds(root, prefix) {
+    const elementsWithIds = [root, ...Array.from(root.querySelectorAll("[id]"))].filter((element) => element.id);
+    const idMap = new Map();
+
+    elementsWithIds.forEach((element, index) => {
+      const nextId = `${prefix}-${element.id}-${index}`;
+      idMap.set(element.id, nextId);
+      element.id = nextId;
+    });
+
+    if (!idMap.size) {
+      return;
+    }
+
+    root.querySelectorAll("*").forEach((element) => {
+      Array.from(element.attributes).forEach((attribute) => {
+        if (!attribute.value.includes("#")) {
+          return;
+        }
+
+        const nextValue = attribute.value.replace(/#([A-Za-z][\w:-]*)/g, (match, id) => {
+          const nextId = idMap.get(id);
+          return nextId ? `#${nextId}` : match;
+        });
+
+        if (nextValue !== attribute.value) {
+          element.setAttribute(attribute.name, nextValue);
+        }
+      });
+    });
+  }
+
+  function createTspInspirationCard() {
+    const nodes = [
+      { id: "a", x: 12, y: 42, depot: true },
+      { id: "b", x: 23, y: 50 },
+      { id: "c", x: 34, y: 36 },
+      { id: "d", x: 43, y: 20 },
+      { id: "e", x: 55, y: 34 },
+      { id: "f", x: 61, y: 58 },
+      { id: "g", x: 73, y: 48 },
+      { id: "h", x: 83, y: 63 },
+      { id: "i", x: 94, y: 55 },
+      { id: "j", x: 103, y: 44 },
+      { id: "k", x: 112, y: 36 },
+      { id: "l", x: 118, y: 28 },
+      { id: "m", x: 125, y: 22 },
+      { id: "n", x: 131, y: 30 },
+      { id: "o", x: 124, y: 40 },
+      { id: "p", x: 113, y: 51 },
+      { id: "q", x: 96, y: 28 },
+      { id: "r", x: 80, y: 24 },
+    ];
+    const tourOrder = ["a", "b", "c", "d", "e", "g", "f", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "a"];
+    const nodesById = new Map(nodes.map((node) => [node.id, node]));
+    const tourPath = tourOrder.map((id, index) => {
+      const node = nodesById.get(id);
+      return `${index ? "L" : "M"}${node.x} ${node.y}`;
+    }).join(" ");
+    const edgeMarkup = tourOrder.slice(0, -1).map((id, index) => {
+      const from = nodesById.get(id);
+      const to = nodesById.get(tourOrder[index + 1]);
+      return `
+        <path
+          class="tsp-nn__probe"
+          d="M${from.x} ${from.y} L${to.x} ${to.y}"
+          pathLength="1"
+          style="--probe-delay: ${(1.05 + index * 0.43).toFixed(2)}s"
+        ></path>
+      `;
+    }).join("");
+    const nodeMarkup = nodes.map((node) => {
+      const visitIndex = tourOrder.indexOf(node.id);
+      const classes = ["tsp-nn__node"];
+
+      if (node.depot) {
+        classes.push("tsp-nn__node--depot");
+      }
+
+      return `
+        <circle
+          class="${classes.join(" ")}"
+          cx="${node.x}"
+          cy="${node.y}"
+          r="${node.depot ? 5.2 : 3.9}"
+          style="--visit-delay: ${(1.05 + visitIndex * 0.43).toFixed(2)}s"
+        ></circle>
+      `;
+    }).join("");
+
+    const card = document.createElement("figure");
+    card.className = "or-mini-card or-mini-card--tsp";
+    card.setAttribute("aria-label", "TSP: nearest neighbor heuristic builds a tour by choosing the closest unvisited stop");
+    card.innerHTML = `
+      <svg class="or-mini-card__diagram" viewBox="0 0 140 82" role="img" aria-hidden="true" preserveAspectRatio="xMidYMid meet">
+        <text class="or-card-method-label" x="70" y="5.2">Nearest Neighbor</text>
+        <path class="tsp-nn__tour-guide" d="${tourPath}"></path>
+        <path class="tsp-nn__tour-path" d="${tourPath}" pathLength="100"></path>
+        <g class="tsp-nn__probes">${edgeMarkup}</g>
+        <g class="tsp-nn__nodes">${nodeMarkup}</g>
+      </svg>
+      <figcaption>TSP</figcaption>
+    `;
+    return card;
+  }
+
+  function getSourceInspirationCard(label) {
+    if (!dom.sourceInspirationVisuals) {
+      return null;
+    }
+
+    return Array.from(dom.sourceInspirationVisuals.querySelectorAll(".or-mini-card")).find((card) => {
+      const caption = card.querySelector("figcaption")?.textContent.trim();
+      return caption === label;
+    }) || null;
+  }
+
+  function cloneInspirationCard(label) {
+    const sourceCard = getSourceInspirationCard(label);
+
+    if (!sourceCard) {
+      return null;
+    }
+
+    const card = sourceCard.cloneNode(true);
+    uniquifyClonedIds(card, `home-${label.toLowerCase()}`);
+    return card;
+  }
+
+  function renderHomeInspirationVisuals() {
+    if (!dom.homeInspirationVisuals) {
+      return;
+    }
+
+    dom.homeInspirationVisuals.replaceChildren();
+    [
+      cloneInspirationCard("CSP"),
+      createTspInspirationCard(),
+      cloneInspirationCard("MESPPRC"),
+      cloneInspirationCard("VRP"),
+    ].filter(Boolean).forEach((card) => {
+      dom.homeInspirationVisuals.append(card);
+    });
   }
 
   function getLevelTutorialSteps(levelName = state.levelTutorialName || state.currentLevel) {
@@ -4132,6 +4279,7 @@ const LMSAApp = (() => {
     });
 
     document.body.classList.toggle("viewing-game", screenId === "game");
+    document.body.classList.toggle("viewing-landing", screenId === "landing");
 
     const activeScreen = document.getElementById(screenId);
     let screenTitle = activeScreen?.dataset.screenTitle || GAME_NAME;
@@ -8715,6 +8863,7 @@ const LMSAApp = (() => {
     document.body.dataset.theme = "lehigh-university";
     cacheDom();
     renderFeaturedLevel();
+    renderHomeInspirationVisuals();
     renderLevelGrid();
     setCurrentLevel(state.currentLevel);
     applyGameConsoleReferences();
