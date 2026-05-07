@@ -31,8 +31,6 @@ const GAME_CONSOLE_REF_SELECTORS = [
   "#game .shop-card__visual",
   "#game .shop-card__title",
   "#game .shop-card > button",
-  "#game .button-column",
-  "#game .button-column > *",
 ].join(", ");
 
 const LEVELS = [
@@ -47,7 +45,9 @@ const LEVELS = [
     edgePickups: "9 road pickups",
     progressStars: 2,
     description:
-      "You've been hired by LMSA (Logistical Models for Schedule Architects), a manufacturing company whose plant runs 24/7. Workers are scattered across the district's road network each morning, and your job is to build the bus schedule that brings them back to the LMSA manufacturing plant. Every minute a worker spends away from the plant adds opportunity cost, so the best schedule balances bus rental cost against routes that return employees quickly. Buy the right buses, route them through connected roads, pick up employees at bus stops, and beat the budget. Be precise! The fate of their mornings are in your hands.",
+      "You've been hired by LMSA (Logistical Models for Schedule Architects), a manufacturing company whose plant runs 24/7. Workers are scattered across the district's road network each morning, and your job is to build the bus schedule that brings them back to the LMSA manufacturing plant. Every minute a worker spends away from the plant adds opportunity cost, so the best schedule balances bus rental cost against routes that return employees quickly.",
+    missionCriticalSteps:
+      "Buy the right buses, route them through connected roads, pick up employees at bus stops, and beat the budget. Be precise! The fate of their mornings are in your hands.",
     levelSelectDescription:
       "LMSA is launching its first bus service, and the morning rush is counting on you. Can you build a pickup plan that proves the system works?",
     featuredRules: [
@@ -1303,6 +1303,93 @@ const LMSAApp = (() => {
   };
 
   const dom = {};
+  const TSP_ANIMATION_PHASES = [
+    { label: "Depot start", time: 0 },
+    ...Array.from({ length: 18 }, (_, index) => ({
+      label: `Nearest neighbor pick ${index + 1}`,
+      time: Number((2.45 + index * 0.43).toFixed(2)),
+    })),
+    { label: "Tour complete", time: 10.64 },
+  ];
+  const ANIMATION_STEPPER_CONFIGS = [
+    {
+      key: "csp",
+      selector: ".or-mini-card--csp",
+      duration: 60,
+      phases: [
+        { label: "Original graph", time: 0 },
+        { label: "Resource windows", time: 6 },
+        { label: "Pruning bottlenecks", time: 10.8 },
+        { label: "Reduced graph", time: 16.8 },
+        { label: "Label extension 1", time: 22.8 },
+        { label: "Label domination 1", time: 28.2 },
+        { label: "Label extension 2", time: 33.6 },
+        { label: "Label domination 2", time: 39 },
+        { label: "Label extension 3", time: 44.4 },
+        { label: "Label domination 3", time: 50.4 },
+        { label: "Extended graph", time: 52.5 },
+        { label: "Dijkstra solve", time: 54.6 },
+        { label: "Solution", time: 57.3 },
+      ],
+    },
+    {
+      key: "tsp",
+      selector: ".or-mini-card--tsp",
+      duration: 14,
+      phases: TSP_ANIMATION_PHASES,
+    },
+    {
+      key: "mespprc",
+      selector: ".or-mini-card--mespprc",
+      duration: 28,
+      phases: [
+        { label: "Trip one starts", time: 0 },
+        { label: "Trip one resource 1", time: 3.02 },
+        { label: "Trip one resource 2", time: 5.8 },
+        { label: "Trip one resource 3", time: 8.43 },
+        { label: "Trip one complete", time: 12.6 },
+        { label: "Trip two starts", time: 14 },
+        { label: "Trip two resource 1", time: 17.61 },
+        { label: "Trip two resource 2", time: 20.02 },
+        { label: "Trip two resource 3", time: 22.01 },
+        { label: "Schedule complete", time: 26.6 },
+      ],
+    },
+    {
+      key: "vrp",
+      selector: ".or-mini-card--vrp",
+      duration: 20,
+      phases: [
+        { label: "Single-customer tours", time: 0 },
+        { label: "Saving 8-7 starts", time: 2.6 },
+        { label: "Saving 8-7 complete", time: 4 },
+        { label: "Saving 1-2 starts", time: 5.4 },
+        { label: "Saving 1-2 complete", time: 6.8 },
+        { label: "Saving 2-3 starts", time: 8.2 },
+        { label: "Saving 2-3 complete", time: 9.6 },
+        { label: "Saving 7-6 starts", time: 11 },
+        { label: "Saving 7-6 complete", time: 12.4 },
+        { label: "Saving 4-5 starts", time: 13.8 },
+        { label: "Merged route complete", time: 15.2 },
+        { label: "Buses leave depot", time: 16.2 },
+        { label: "Buses turn", time: 17.2 },
+        { label: "Buses finish routes", time: 18.2 },
+        { label: "Buses return", time: 19.2 },
+      ],
+    },
+    {
+      key: "easter",
+      selector: ".or-mini-card--easter",
+      duration: 5.4,
+      phases: [
+        { label: "LMSA mark", time: 0 },
+        { label: "Letters begin reversing", time: 1.51 },
+        { label: "Stripe begins", time: 2.27 },
+        { label: "ASML mark", time: 3.89 },
+        { label: "ASML hold", time: 5.39 },
+      ],
+    },
+  ];
 
   function starBand(filledCount) {
     return `${STAR_FULL.repeat(filledCount)}${STAR_EMPTY.repeat(3 - filledCount)}`;
@@ -1318,6 +1405,7 @@ const LMSAApp = (() => {
     dom.levelGrid = document.getElementById("levelGrid");
     dom.featuredLevelTitle = document.getElementById("featuredLevelTitle");
     dom.featuredLevelDescription = document.getElementById("featuredLevelDescription");
+    dom.featuredMissionCriticalSteps = document.getElementById("featuredMissionCriticalSteps");
     dom.featuredBudget = document.getElementById("featuredBudget");
     dom.featuredDifficulty = document.getElementById("featuredDifficulty");
     dom.featuredRuleList = document.getElementById("featuredRuleList");
@@ -1581,6 +1669,221 @@ const LMSAApp = (() => {
       cloneInspirationCard("VRP"),
     ].filter(Boolean).forEach((card) => {
       dom.homeInspirationVisuals.append(card);
+    });
+  }
+
+  function wrapAnimationPhaseIndex(index, phaseCount) {
+    if (!phaseCount) {
+      return 0;
+    }
+
+    return (index + phaseCount) % phaseCount;
+  }
+
+  function getNormalizedAnimationTime(target, config) {
+    const durationMs = config.duration * 1000;
+    const animations = typeof target.getAnimations === "function"
+      ? target.getAnimations({ subtree: true })
+      : [];
+    const primaryAnimation = animations.find((animation) => {
+      const timing = animation.effect?.getTiming?.();
+      return typeof timing?.duration === "number" && Math.abs(timing.duration - durationMs) < 100;
+    }) || animations[0];
+    const currentTime = Number(primaryAnimation?.currentTime);
+
+    if (Number.isFinite(currentTime) && durationMs > 0) {
+      return ((currentTime % durationMs) + durationMs) % durationMs / 1000;
+    }
+
+    const svg = target.querySelector("svg");
+
+    if (typeof svg?.getCurrentTime === "function" && config.duration > 0) {
+      const svgTime = Number(svg.getCurrentTime());
+
+      if (Number.isFinite(svgTime)) {
+        return ((svgTime % config.duration) + config.duration) % config.duration;
+      }
+    }
+
+    return 0;
+  }
+
+  function getNearestAnimationPhaseIndex(target, config) {
+    const currentTime = getNormalizedAnimationTime(target, config);
+
+    return config.phases.reduce((nearestIndex, phase, index) => {
+      const nearestDistance = Math.abs(config.phases[nearestIndex].time - currentTime);
+      const distance = Math.abs(phase.time - currentTime);
+      return distance < nearestDistance ? index : nearestIndex;
+    }, 0);
+  }
+
+  function pauseCssAnimationsAtPhase(target, phaseTime) {
+    if (typeof target.getAnimations !== "function") {
+      return;
+    }
+
+    target.getAnimations({ subtree: true }).forEach((animation) => {
+      try {
+        animation.pause();
+        animation.currentTime = phaseTime * 1000;
+      } catch (error) {
+        // Some browser-managed animations can reject timing changes; the rest still step cleanly.
+      }
+    });
+  }
+
+  function pauseSvgAnimationsAtPhase(target, phaseTime, duration) {
+    target.querySelectorAll("svg").forEach((svg) => {
+      if (typeof svg.pauseAnimations !== "function" || typeof svg.setCurrentTime !== "function") {
+        return;
+      }
+
+      try {
+        svg.pauseAnimations();
+        svg.setCurrentTime(Math.min(phaseTime, Math.max(duration - 0.01, 0)));
+      } catch (error) {
+        // SVG SMIL controls are best-effort; CSS animations are still handled above.
+      }
+    });
+  }
+
+  function updateAnimationStepButtonLabels(target, config, phaseIndex) {
+    const phase = config.phases[phaseIndex];
+    const previousIndex = wrapAnimationPhaseIndex(phaseIndex - 1, config.phases.length);
+    const nextIndex = wrapAnimationPhaseIndex(phaseIndex + 1, config.phases.length);
+    const previousButton = target.querySelector("[data-animation-step-dir='-1']");
+    const nextButton = target.querySelector("[data-animation-step-dir='1']");
+
+    target.dataset.animationStep = String(phaseIndex);
+    target.dataset.animationPhase = phase?.label || "";
+
+    if (previousButton) {
+      previousButton.setAttribute(
+        "aria-label",
+        `Previous animation phase: ${config.phases[previousIndex]?.label || "previous"}`,
+      );
+      previousButton.title = config.phases[previousIndex]?.label || "Previous animation phase";
+    }
+
+    if (nextButton) {
+      nextButton.setAttribute(
+        "aria-label",
+        `Next animation phase: ${config.phases[nextIndex]?.label || "next"}`,
+      );
+      nextButton.title = config.phases[nextIndex]?.label || "Next animation phase";
+    }
+  }
+
+  function setAnimationStepperPhase(target, config, phaseIndex) {
+    const normalizedIndex = wrapAnimationPhaseIndex(phaseIndex, config.phases.length);
+    const phase = config.phases[normalizedIndex];
+
+    if (!phase) {
+      return;
+    }
+
+    pauseCssAnimationsAtPhase(target, phase.time);
+    pauseSvgAnimationsAtPhase(target, phase.time, config.duration);
+    updateAnimationStepButtonLabels(target, config, normalizedIndex);
+  }
+
+  function enterAnimationStepMode(target, config) {
+    const pauseButton = target.querySelector("[data-animation-pause]");
+    const stepButtons = Array.from(target.querySelectorAll("[data-animation-step-dir]"));
+    const phaseIndex = getNearestAnimationPhaseIndex(target, config);
+
+    target.classList.add("is-stepping");
+    pauseButton?.setAttribute("hidden", "");
+    stepButtons.forEach((button) => {
+      button.removeAttribute("hidden");
+    });
+    setAnimationStepperPhase(target, config, phaseIndex);
+  }
+
+  function createAnimationStepperButton(className, label, title, dataAttributes = {}) {
+    const button = document.createElement("button");
+    button.className = `animation-step-control ${className}`;
+    button.type = "button";
+    button.setAttribute("aria-label", label);
+    button.title = title;
+    button.append(document.createElement("span"));
+
+    Object.entries(dataAttributes).forEach(([name, value]) => {
+      button.dataset[name] = value;
+    });
+
+    return button;
+  }
+
+  function setupAnimationStepper(target, config) {
+    if (target.querySelector(".animation-step-controls")) {
+      return;
+    }
+
+    target.classList.add("animation-stepper");
+    target.dataset.animationKey = config.key;
+
+    const controls = document.createElement("div");
+    controls.className = "animation-step-controls";
+    controls.setAttribute("aria-label", "Animation controls");
+
+    const pauseButton = createAnimationStepperButton(
+      "animation-step-control--pause",
+      "Pause animation and show step controls",
+      "Pause animation",
+      { animationPause: "true" },
+    );
+    const previousButton = createAnimationStepperButton(
+      "animation-step-control--previous",
+      "Previous animation phase",
+      "Previous animation phase",
+      { animationStepDir: "-1" },
+    );
+    const nextButton = createAnimationStepperButton(
+      "animation-step-control--next",
+      "Next animation phase",
+      "Next animation phase",
+      { animationStepDir: "1" },
+    );
+
+    previousButton.hidden = true;
+    nextButton.hidden = true;
+
+    pauseButton.addEventListener("click", () => {
+      enterAnimationStepMode(target, config);
+    });
+
+    controls.addEventListener("click", (event) => {
+      const stepButton = event.target instanceof Element
+        ? event.target.closest("[data-animation-step-dir]")
+        : null;
+
+      if (!(stepButton instanceof HTMLElement) || !controls.contains(stepButton)) {
+        return;
+      }
+
+      const direction = Number(stepButton.dataset.animationStepDir) || 1;
+      const currentIndex = Number(target.dataset.animationStep) || 0;
+      setAnimationStepperPhase(target, config, currentIndex + direction);
+    });
+
+    controls.append(pauseButton, previousButton, nextButton);
+    target.append(controls);
+  }
+
+  function initializeAnimationSteppers() {
+    const initializedTargets = new Set();
+
+    ANIMATION_STEPPER_CONFIGS.forEach((config) => {
+      document.querySelectorAll(config.selector).forEach((target) => {
+        if (initializedTargets.has(target)) {
+          return;
+        }
+
+        initializedTargets.add(target);
+        setupAnimationStepper(target, config);
+      });
     });
   }
 
@@ -2364,6 +2667,10 @@ const LMSAApp = (() => {
 
     if (dom.featuredLevelDescription) {
       dom.featuredLevelDescription.textContent = level.description;
+    }
+
+    if (dom.featuredMissionCriticalSteps) {
+      dom.featuredMissionCriticalSteps.textContent = level.missionCriticalSteps || "";
     }
 
     if (dom.featuredBudget) {
@@ -8864,6 +9171,7 @@ const LMSAApp = (() => {
     cacheDom();
     renderFeaturedLevel();
     renderHomeInspirationVisuals();
+    initializeAnimationSteppers();
     renderLevelGrid();
     setCurrentLevel(state.currentLevel);
     applyGameConsoleReferences();

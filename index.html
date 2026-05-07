@@ -135,47 +135,54 @@
 
           <aside class="hero__visual panel panel--dark">
             <div class="hero__visual-top">
-              <p class="eyebrow eyebrow--accent">Try It Out!</p>
               <h3 id="featuredLevelTitle">Level 1 - Foundry Morning</h3>
               <p class="hero__visual-copy" id="featuredLevelDescription">
                 You've been hired by LMSA (Logistical Models for Schedule Architects), a manufacturing company whose
                 plant runs 24/7. Workers are scattered across the district's road network each morning, and your job
                 is to build the bus schedule that brings them back to the LMSA manufacturing plant. Every minute a
                 worker spends away from the plant adds opportunity cost, so the best schedule balances bus rental cost
-                against routes that return employees quickly. Buy the right buses, route them through connected roads,
-                pick up employees at bus stops, and beat the budget. Be precise! The fate of their mornings are in
-                your hands.
+                against routes that return employees quickly.
               </p>
             </div>
 
-            <div class="hero-metrics">
-              <article class="metric-block">
-                <span>Difficulty</span>
-                <strong id="featuredDifficulty">Easy</strong>
-              </article>
-              <article class="metric-block">
-                <span>Budget</span>
-                <strong id="featuredBudget">$100</strong>
-              </article>
-            </div>
+            <div class="hero__visual-lower">
+              <div class="hero-metrics">
+                <article class="metric-block">
+                  <span>Difficulty</span>
+                  <strong id="featuredDifficulty">Easy</strong>
+                </article>
+                <article class="metric-block">
+                  <span>Budget</span>
+                  <strong id="featuredBudget">$100</strong>
+                </article>
+              </div>
 
-            <div class="hero__visual-actions">
-              <button
-                class="button button--primary"
-                id="launchLevelOneButton"
-                type="button"
-                data-launch-level="Level 1 - Foundry Morning"
-              >
-                Launch Level 1
-              </button>
-              <button
-                class="button button--ghost"
-                type="button"
-                data-screen-target="levels"
-                data-toast="Opening level select."
-              >
-                Browse All Levels
-              </button>
+              <section class="hero-mission" aria-labelledby="featuredMissionTitle">
+                <h4 id="featuredMissionTitle">Mission Critical Steps</h4>
+                <p id="featuredMissionCriticalSteps">
+                  Buy the right buses, route them through connected roads, pick up employees at bus stops, and beat the
+                  budget. Be precise! The fate of their mornings are in your hands.
+                </p>
+              </section>
+
+              <div class="hero__visual-actions">
+                <button
+                  class="button button--primary"
+                  id="launchLevelOneButton"
+                  type="button"
+                  data-launch-level="Level 1 - Foundry Morning"
+                >
+                  Launch Level 1
+                </button>
+                <button
+                  class="button button--ghost"
+                  type="button"
+                  data-screen-target="levels"
+                  data-toast="Opening level select."
+                >
+                  Browse All Levels
+                </button>
+              </div>
             </div>
           </aside>
         </div>
@@ -733,11 +740,6 @@
                 <button class="button button--ghost console-ref" data-ref="16" id="restartLevelButton" type="button">
                   Restart Level
                 </button>
-              </div>
-            </section>
-
-            <section class="panel-section control-panel__section control-panel__section--submit">
-              <div class="button-column">
                 <button class="button button--primary button--wide console-ref" data-ref="43" id="submitSolutionButton" type="button">Submit Solution</button>
               </div>
             </section>
