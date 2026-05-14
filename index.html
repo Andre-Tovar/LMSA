@@ -239,7 +239,7 @@
                 <h3>Select a bus and build a route one node at a time</h3>
                 <p>
                   Pick a bus from the lot, then click connected intersections to create a route. Routes must start
-                  at LMSA and return to LMSA. You cannot instantly reverse over the same road.
+                  at an orange depot and end at any orange depot. You cannot instantly reverse over the same road.
                 </p>
               </div>
             </article>
@@ -258,9 +258,9 @@
             <article class="guide-step">
               <span class="guide-step__number">5</span>
               <div>
-                <h3>Return to LMSA and send the bus again if needed</h3>
+                <h3>Return to a depot and send the bus again if needed</h3>
                 <p>
-                  Returning to LMSA unloads passengers and completes the route. The same bus can then be used on
+                  Reaching any orange depot unloads passengers and completes the route. The same bus can then be used on
                   another route as long as it still fits inside the level's per-bus duty allotment.
                 </p>
               </div>
@@ -483,6 +483,10 @@
                 <div class="map-zone-layer" id="foundryZoneLayer" aria-hidden="true"></div>
                 <div class="map-road-layer" id="foundryRoadLayer" aria-hidden="true"></div>
                 <div class="map-animation-layer" id="foundryAnimationLayer" aria-hidden="true"></div>
+                <button class="map-route-skip" id="foundryRouteSkipButton" type="button" aria-label="Skip route animation" hidden>
+                  <span class="map-route-skip__icon" aria-hidden="true"></span>
+                  <span class="map-route-skip__label">Skip</span>
+                </button>
                 <div class="map-legend map-legend--travel-time" aria-label="Travel time key">
                   <span class="map-legend__item">
                     <span class="map-legend__node map-legend__node--brown" aria-hidden="true"></span>
@@ -493,6 +497,11 @@
                     <span class="map-legend__node map-legend__node--pickup" aria-hidden="true"></span>
                     <span class="map-legend__equals" aria-hidden="true">=</span>
                     <span class="map-legend__label">1 min</span>
+                  </span>
+                  <span class="map-legend__item" id="mapLegendDepotCost" hidden>
+                    <span class="map-legend__node map-legend__node--depot" aria-hidden="true"></span>
+                    <span class="map-legend__equals" aria-hidden="true">=</span>
+                    <span class="map-legend__label" id="mapLegendDepotCostLabel">1 min</span>
                   </span>
                 </div>
                 <div class="map-roundabout map-roundabout--factory" id="foundryFactoryRoundabout" aria-hidden="true" hidden>
@@ -532,6 +541,10 @@
                     <button class="foundry-edit-sandlot__item" type="button" data-sandlot-spawn="blue-node" aria-label="Add a blue demand node">
                       <span class="foundry-edit-sandlot__token foundry-edit-sandlot__token--blue-node" aria-hidden="true"></span>
                       <span class="foundry-edit-sandlot__label">Blue Node</span>
+                    </button>
+                    <button class="foundry-edit-sandlot__item" type="button" data-sandlot-spawn="depot-node" aria-label="Add an orange depot node">
+                      <span class="foundry-edit-sandlot__token foundry-edit-sandlot__token--depot-node" aria-hidden="true"></span>
+                      <span class="foundry-edit-sandlot__label">Depot Node</span>
                     </button>
                   </div>
                 </section>
@@ -672,6 +685,19 @@
                       <button class="button button--ghost" id="gameVictoryLevelSelectButton" type="button">Level Select</button>
                     </div>
                   </section>
+                </div>
+                <div class="foundry-demand-prompt" id="foundryDemandPrompt" hidden>
+                  <form class="foundry-demand-prompt__card" id="foundryDemandPromptForm" role="dialog" aria-modal="true" aria-labelledby="foundryDemandPromptTitle">
+                    <h2 id="foundryDemandPromptTitle">Blue Node Demand</h2>
+                    <label class="foundry-demand-prompt__field">
+                      <span>Workers waiting</span>
+                      <input id="foundryDemandPromptInput" type="text" inputmode="numeric" pattern="[0-9]*" value="0">
+                    </label>
+                    <div class="foundry-demand-prompt__actions">
+                      <button class="button button--ghost" id="foundryDemandPromptCancel" type="button">Cancel</button>
+                      <button class="button button--primary" type="submit">Save</button>
+                    </div>
+                  </form>
                 </div>
                 <div class="map-celebration-layer" id="foundryCelebrationLayer" aria-label="Confetti emitter tuning layer">
                   <div class="map-celebration-burst-host" id="foundryCelebrationBurstHost" aria-hidden="true"></div>
@@ -915,7 +941,6 @@
       <section class="screen" id="about" data-screen-title="About" data-top-section="About">
         <div class="about-layout">
           <section class="panel info-card about-main" id="aboutCard">
-            <p class="eyebrow">Project Overview</p>
             <h2>About RouteCraft</h2>
             <p class="about-main__lede">
               RouteCraft turns classic routing and scheduling ideas into a small planning game: buy buses, build
@@ -955,10 +980,39 @@
           </section>
 
           <aside class="about-side">
-            <article class="panel info-card about-card about-card--visual" id="howItWorksCard">
-              <h3>Inspiration</h3>
-              <div class="inspiration-visuals" aria-label="Operations research inspirations for RouteCraft">
-                <figure class="or-mini-card or-mini-card--csp" aria-label="CSP solved by the Three-Stage Approach: preprocess, expand the graph, then solve">
+            <article class="panel info-card about-card about-card--thanks about-panel-thanks" id="creditsCardSecondary">
+              <h3>Thank You</h3>
+              <p>
+                Thank you to Professor Ralphs and Lehigh University for the guidance and encouragement. I loved
+                working on all of the operations research problems that inspired this project, and am extremely
+                happy to have been able to bring this idea to life. I hope future students in or considering ISE may
+                enjoy :)
+              </p>
+            </article>
+
+            <figure class="or-mini-card or-mini-card--easter about-easter-card" id="creditsCard" aria-label="LMSA reverses into an ASML-inspired mark">
+              <div class="easter-logo">
+                <div class="easter-logo__stage" aria-hidden="true">
+                  <span class="easter-logo__letter easter-logo__letter--l">L</span>
+                  <span class="easter-logo__letter easter-logo__letter--m">M</span>
+                  <span class="easter-logo__letter easter-logo__letter--s">S</span>
+                  <span class="easter-logo__letter easter-logo__letter--a">A</span>
+                </div>
+              </div>
+              <figcaption>
+                LMSA
+                <span class="or-mini-card__caption-arrow" aria-label="reverses with">
+                  <span class="or-mini-card__caption-arrow-half" aria-hidden="true">&larr;</span><span class="or-mini-card__caption-arrow-half or-mini-card__caption-arrow-half--asml" aria-hidden="true">&rarr;</span>
+                </span>
+                <span class="or-mini-card__caption-asml">ASML</span>
+              </figcaption>
+            </figure>
+          </aside>
+
+          <article class="panel info-card about-card about-card--visual about-panel-inspiration" id="howItWorksCard">
+            <h3>Inspiration</h3>
+            <div class="inspiration-visuals inspiration-visuals--about" aria-label="Operations research inspirations for RouteCraft">
+              <figure class="or-mini-card or-mini-card--csp" aria-label="CSP solved by the Three-Stage Approach: preprocess, expand the graph, then solve">
                   <svg class="or-mini-card__diagram or-mini-card__diagram--csp-tsa" viewBox="0 0 120 76" role="img" aria-hidden="true" preserveAspectRatio="xMidYMid meet">
                     <g class="csp-tsa-stage csp-tsa-stage--1">
                       <g class="csp-tsa-flatten-wrap">
@@ -1181,9 +1235,9 @@
                     </g>
                   </svg>
                   <figcaption>CSP</figcaption>
-                </figure>
+              </figure>
 
-                <figure class="or-mini-card or-mini-card--mespprc" aria-label="MESPPRC: multi-trip elementary shortest paths with per-trip resource constraints">
+              <figure class="or-mini-card or-mini-card--mespprc" aria-label="MESPPRC: multi-trip elementary shortest paths with per-trip resource constraints">
                   <svg class="or-mini-card__diagram" viewBox="0 0 120 76" role="img" aria-hidden="true" preserveAspectRatio="xMidYMid meet">
                     <path class="or-diagram__path or-diagram__path--main or-diagram__path--mespprc-1" d="M14 40 L34 22 L58 28 L50 50 Z" pathLength="100"></path>
                     <path class="or-diagram__path or-diagram__path--main or-diagram__path--mespprc-2" d="M14 40 L62 62 L96 54 L80 30 Z" pathLength="100"></path>
@@ -1202,9 +1256,9 @@
                     <rect class="or-diagram__resource-fill or-diagram__resource-fill--soft or-diagram__resource-fill--mespprc-global" x="56" y="7.9" width="32" height="4.8" rx="2.4"></rect>
                   </svg>
                   <figcaption>MESPPRC</figcaption>
-                </figure>
+              </figure>
 
-                <figure class="or-mini-card or-mini-card--vrp" aria-label="VRP: the Clarke-Wright Savings Heuristic merges single-customer tours into efficient vehicle routes">
+              <figure class="or-mini-card or-mini-card--vrp" aria-label="VRP: the Clarke-Wright Savings Heuristic merges single-customer tours into efficient vehicle routes">
                   <svg class="or-mini-card__diagram or-mini-card__diagram--vrp-savings" viewBox="0 0 120 76" role="img" aria-hidden="true" preserveAspectRatio="xMidYMid meet">
                     <defs>
                       <g id="or-vrp-mini-bus-shape">
@@ -1297,38 +1351,9 @@
                     </g>
                   </svg>
                   <figcaption>VRP</figcaption>
-                </figure>
-
-                <figure class="or-mini-card or-mini-card--easter" id="creditsCard" aria-label="LMSA reverses into an ASML-inspired mark">
-                  <div class="easter-logo">
-                    <div class="easter-logo__stage" aria-hidden="true">
-                      <span class="easter-logo__letter easter-logo__letter--l">L</span>
-                      <span class="easter-logo__letter easter-logo__letter--m">M</span>
-                      <span class="easter-logo__letter easter-logo__letter--s">S</span>
-                      <span class="easter-logo__letter easter-logo__letter--a">A</span>
-                    </div>
-                  </div>
-                  <figcaption>
-                    LMSA
-                    <span class="or-mini-card__caption-arrow" aria-label="reverses with">
-                      <span class="or-mini-card__caption-arrow-half" aria-hidden="true">&larr;</span><span class="or-mini-card__caption-arrow-half or-mini-card__caption-arrow-half--asml" aria-hidden="true">&rarr;</span>
-                    </span>
-                    <span class="or-mini-card__caption-asml">ASML</span>
-                  </figcaption>
-                </figure>
-              </div>
-            </article>
-
-            <article class="panel info-card about-card about-card--thanks" id="creditsCardSecondary">
-              <h3>Thank You</h3>
-              <p>
-                Thank you to Professor Ralphs and Lehigh University for the guidance and encouragement. I loved
-                working on all of the operations research problems that inspired this project, and am extremely
-                happy to have been able to bring this idea to life. I hope future students in or considering ISE may
-                enjoy :)
-              </p>
-            </article>
-          </aside>
+              </figure>
+            </div>
+          </article>
         </div>
       </section>
     </main>

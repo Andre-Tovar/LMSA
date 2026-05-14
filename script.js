@@ -190,17 +190,17 @@ const LEVELS = [
     results: {
       subtitle: "Long-corridor fleet performance",
       playerCost: "$629",
-      optimalCost: "$629",
-      gap: "0.0%",
+      optimalCost: "$618",
+      gap: "1.8%",
       budget: "$750",
       fleet: "2 buses",
-      starsEarned: 3,
+      starsEarned: 2,
       summary:
-        "This two-coach corridor plan clears North Corridor under budget and now defines the current optimal replay target",
+        "This two-coach corridor plan clears North Corridor under budget, but the best-known cost is now lower at $618",
       highlights: [
         "Both coach routes stay inside the hard constraints",
-        "Total cost lands at the $629 optimal target",
-        "The built-in optimal replay now mirrors your latest submitted Level 3 solution",
+        "Total cost is $11 above the $618 optimal target",
+        "The current optimal benchmark for Level 3 is now $618",
       ],
     },
   },
@@ -260,60 +260,60 @@ const LEVELS = [
     },
   },
   {
-    name: "Level 5 - Storm Delay",
-    levelSelectTitle: "Coming Soon",
-    difficulty: "Hard",
-    benchmark: "$7,300",
+    name: "Level 5 - Corporate Expansion",
+    levelSelectTitle: "Level 5 - Corporate Expansion",
+    usesOriginalDepot: false,
+    customDepotRouteMinutes: 1,
+    difficulty: "Easy",
+    benchmark: "$230",
     demand: "69 riders",
     routeLimit: "58 min",
     dutyLimit: "3.9 hrs",
     intersections: "10 intersections",
     edgePickups: "14 road pickups",
     progressStars: 1,
-    description: "Compressed time limits and wider demand spacing force hard choices between adding fleet and overworking key buses",
+    description: "Recent bus schedule optimizations have allowed LMSA to open up a second location. Try building a schedule that incorporates both efficiently!",
     levelSelectDescription:
-      "A fresh dispatch challenge is still getting its final tune-up. Hang tight. It will roll into LMSA soon enough.",
-    isComingSoon: true,
-    lockedToastMessage: "This level is still getting its finishing touches at LMSA. It will be ready soon enough.",
+      "Recent bus schedule optimizations have allowed LMSA to open up a second location. Try building a schedule that incorporates both efficiently!",
     featuredRules: [
-      "Hold the system together under storm pressure by making every route leg count",
-      "Use fleet capacity carefully because a bad purchase or a weak cleanup trip gets expensive fast",
-      "Finish the morning surge with a schedule that stays legal even when both route and duty limits are tight",
+      "Use both factories as active depots so buses can start and finish where the network makes the most sense",
+      "Keep routes compact because every extra transfer between factory zones adds cost quickly",
+      "Finish the expansion plan with a schedule that stays legal while serving both plants efficiently",
     ],
     gameDescription:
-      "Storm Delay squeezes both route and duty windows, so every extra leg and every redundant purchase is amplified in the cost function",
-    pressureLabel: "Compressed Duty Window",
-    mapTitle: "Storm Delay Response Map",
-    mapBadge: "Tight Route + Duty Caps",
+      "Corporate Expansion turns the puzzle into a two-factory dispatch problem where the best routes use each depot deliberately instead of forcing every bus back through one hub",
+    pressureLabel: "Two-Factory Coordination",
+    mapTitle: "Corporate Expansion Network",
+    mapBadge: "Two Active Factories",
     planningInfo:
-      "The hard part here is not finding a feasible plan, it is finding one that does not spiral into expensive cleanup work late in the level",
+      "The key decision is how to split work between the two factories so buses finish close to where the next useful trip begins",
     objectives: [
-      "Respect the shortened route and duty limits",
-      "Avoid panic purchases by batching demand intelligently",
-      "Finish near the $7,300 benchmark under compressed timing",
+      "Use both factories to reduce wasted deadheading",
+      "Batch demand so one bus can cover the network cleanly",
+      "Finish near the $230 benchmark with disciplined depot usage",
     ],
     stats: {
-      selectedBus: "Coach H02",
-      routeTime: "46 / 58 min",
-      dutyTime: "3.1 / 4.0 hrs",
-      load: "18 / 20",
-      totalCost: "$6,840 / $7,300",
-      remainingDemand: "23 riders",
+      selectedBus: "Shuttle M01",
+      routeTime: "19 / 40 min",
+      dutyTime: "45 / 60 min",
+      load: "2 / 6",
+      totalCost: "$196 / $230",
+      remainingDemand: "0 riders",
     },
     results: {
-      subtitle: "High-pressure scenario benchmark review",
-      playerCost: "$7,610",
-      optimalCost: "$7,040",
-      gap: "8.1%",
-      budget: "$7,300",
-      fleet: "3 buses",
-      starsEarned: 2,
+      subtitle: "Two-factory benchmark review",
+      playerCost: "$196",
+      optimalCost: "$196",
+      gap: "0.0%",
+      budget: "$230",
+      fleet: "1 bus",
+      starsEarned: 3,
       summary:
-        "You handled the hard timing constraints well, but two short cleanup routes increased duty cost enough to miss the best-known solution",
+        "This one-shuttle schedule clears Corporate Expansion under budget and now defines the current optimal replay target",
       highlights: [
-        "No route or duty violations under the compressed limits",
-        "Three buses were enough, but one was underused",
-        "The benchmark uses fuller early trips to avoid late cleanup",
+        "The full map clears with a single shuttle using both factory depots",
+        "Total cost lands at the $196 optimal target",
+        "The built-in optimal replay now mirrors your latest submitted Level 5 solution",
       ],
     },
   },
@@ -469,6 +469,7 @@ const FOUNDRY_FACTORY_ROUNDABOUT_LAYOUT = {
 };
 const FOUNDRY_ROUTE_MINUTES_PER_EDGE = 3;
 const FOUNDRY_PICKUP_NODE_MINUTES = 1;
+const FOUNDRY_DEPOT_NODE_MINUTES = 1;
 const FOUNDRY_OPPORTUNITY_COST_PER_HOUR = 30;
 const FOUNDRY_REPLAY_MS_PER_MINUTE = 1000;
 const FOUNDRY_ROUTE_ANIMATION_PIXELS_PER_SECOND = 170;
@@ -537,7 +538,7 @@ const LEVEL_TUTORIALS = {
       id: "start-route",
       title: "Begin At LMSA",
       body:
-        "Your new bus is now parked at LMSA and selected automatically. Every route starts at the depot node, so click the glowing depot node at LMSA to place the first stop.",
+        "Your new bus is now parked at LMSA and selected automatically. Every route starts at an orange depot node. This level starts at the LMSA depot, so click the glowing depot node to place the first stop.",
       hint: "Click the glowing depot node to continue.",
       cta: "Click the glowing depot node",
       advanceOn: "route-node",
@@ -583,11 +584,11 @@ const LEVEL_TUTORIALS = {
     },
     {
       id: "dropoff-employees",
-      title: "Dropoff Employees at the Plant",
+      title: "Dropoff Employees at a Depot",
       body:
-        "Great, everyone for this route is on the bus. Now the route needs to end back at the LMSA plant. Keep following glowing connected nodes until the depot node at the plant is selectable, then click it to close the route and send the bus home.",
-      hint: "Return to the depot node at the plant to finish the route.",
-      cta: "Bring the bus back to LMSA",
+        "Great, everyone for this route is on the bus. Now the route needs to end at an orange depot. This level uses the LMSA plant as its depot, so keep following glowing connected nodes until the plant depot is selectable, then click it to close the route.",
+      hint: "Return to an orange depot to finish the route.",
+      cta: "Bring the bus to a depot",
       advanceOn: "route-node",
       expectedRouteLabel: "factory",
       expectedMinimumRouteNodeCount: 2,
@@ -896,6 +897,62 @@ const FOUNDRY_OPTIMAL_SCHEDULE_REPLAY_SNAPSHOTS = {
       },
     ],
   },
+  "Level 5 - Corporate Expansion": {
+    version: 1,
+    levelName: "Level 5 - Corporate Expansion",
+    capturedAt: 1778773814066,
+    buses: [
+      {
+        id: "shuttle-01",
+        sequence: 1,
+        type: "shuttle",
+        purchaseCost: 60,
+        capacity: 6,
+        totalCost: 196,
+        completedRouteHistory: [
+          {
+            routeNodeLabels: ["61", "2", "59", "51", "54", "1", "61"],
+            startMinute: 0,
+            durationMinutes: 13,
+            pickupPlan: {
+              2: 3,
+              4: 3,
+            },
+            stopCounts: {
+              54: 3,
+              59: 3,
+            },
+          },
+          {
+            routeNodeLabels: ["61", "2", "56", "41", "9", "62", "60"],
+            startMinute: 13,
+            durationMinutes: 13,
+            pickupPlan: {
+              2: 2,
+              5: 2,
+            },
+            stopCounts: {
+              56: 2,
+              62: 2,
+            },
+          },
+          {
+            routeNodeLabels: ["60", "9", "58", "10", "4", "57", "47", "2", "61"],
+            startMinute: 26,
+            durationMinutes: 19,
+            pickupPlan: {
+              2: 1,
+              5: 1,
+            },
+            stopCounts: {
+              57: 1,
+              58: 1,
+            },
+          },
+        ],
+      },
+    ],
+  },
 };
 const FOUNDRY_SAVED_EDIT_LAYOUT_FALLBACKS = {
   "Level 2 - Swing Shift": {
@@ -1145,10 +1202,10 @@ const FOUNDRY_SAVED_EDIT_LAYOUT_FALLBACKS = {
     ],
     legacyAssetOverrides: [],
   },
-  "Level 5 - Storm Delay": {
+  "Level 5 - Corporate Expansion": {
     version: 1,
-    levelName: "Level 5 - Storm Delay",
-    capturedAt: 1776567750085,
+    levelName: "Level 5 - Corporate Expansion",
+    capturedAt: 1778772850466,
     nodes: [
       { label: "41", variant: "brown", left: 57.1, top: 54.1, demand: 0 },
       { label: "42", variant: "brown", left: 9.2, top: 91, demand: 0 },
@@ -1156,17 +1213,17 @@ const FOUNDRY_SAVED_EDIT_LAYOUT_FALLBACKS = {
       { label: "46", variant: "brown", left: 9.8, top: 88.8, demand: 0 },
       { label: "47", variant: "brown", left: 62.7, top: 12.7, demand: 0 },
       { label: "51", variant: "brown", left: 32.2, top: 48, demand: 0 },
-      { label: "53", variant: "blue", left: 34.6, top: 59.7, demand: 2 },
       { label: "54", variant: "blue", left: 24.4, top: 47.3, demand: 3 },
-      { label: "55", variant: "blue", left: 64, top: 44.3, demand: 1 },
       { label: "56", variant: "blue", left: 51.5, top: 40.5, demand: 2 },
       { label: "57", variant: "blue", left: 71.8, top: 15.1, demand: 1 },
       { label: "58", variant: "blue", left: 79.4, top: 48.6, demand: 1 },
       { label: "59", variant: "blue", left: 38.6, top: 37.5, demand: 3 },
+      { label: "60", variant: "depot", left: 67.9, top: 64.5, demand: 0 },
+      { label: "61", variant: "depot", left: 32, top: 31.1, demand: 0 },
+      { label: "62", variant: "blue", left: 71.2, top: 56.3, demand: 2 },
     ],
     assets: [],
     roads: [
-      { from: "1", to: "2" },
       { from: "4", to: "24" },
       { from: "10", to: "27" },
       { from: "1", to: "38" },
@@ -1182,12 +1239,8 @@ const FOUNDRY_SAVED_EDIT_LAYOUT_FALLBACKS = {
       { from: "5", to: "7" },
       { from: "41", to: "51" },
       { from: "1", to: "5" },
-      { from: "51", to: "53" },
-      { from: "7", to: "53" },
       { from: "1", to: "54" },
       { from: "51", to: "54" },
-      { from: "43", to: "55" },
-      { from: "41", to: "55" },
       { from: "2", to: "56" },
       { from: "41", to: "56" },
       { from: "47", to: "57" },
@@ -1196,6 +1249,13 @@ const FOUNDRY_SAVED_EDIT_LAYOUT_FALLBACKS = {
       { from: "10", to: "58" },
       { from: "51", to: "59" },
       { from: "2", to: "59" },
+      { from: "7", to: "60" },
+      { from: "41", to: "60" },
+      { from: "1", to: "61" },
+      { from: "2", to: "61" },
+      { from: "7", to: "51" },
+      { from: "60", to: "62" },
+      { from: "9", to: "62" },
     ],
     legacyNodeOverrides: [],
     legacyAssetOverrides: [],
@@ -1284,6 +1344,7 @@ const LMSAApp = (() => {
     foundryLegacyNodeOverrides: [],
     foundryLegacyAssetOverrides: [],
     selectedFoundryBuilderAssetId: "",
+    foundryDemandPromptNodeLabel: "",
     debugForceSubmitReady: false,
     victoryOverlayTimeoutId: 0,
     victoryScoreAnimationFrame: 0,
@@ -1438,14 +1499,21 @@ const LMSAApp = (() => {
     dom.resultsHighlights = document.getElementById("resultsHighlights");
     dom.foundryMapStage = document.querySelector(".map-stage--foundry");
     dom.foundryZoneLayer = document.getElementById("foundryZoneLayer");
+    dom.mapLegendDepotCost = document.getElementById("mapLegendDepotCost");
+    dom.mapLegendDepotCostLabel = document.getElementById("mapLegendDepotCostLabel");
     dom.foundryRoadLayer = document.getElementById("foundryRoadLayer");
     dom.foundryAnimationLayer = document.getElementById("foundryAnimationLayer");
+    dom.foundryRouteSkipButton = document.getElementById("foundryRouteSkipButton");
     dom.foundryCelebrationLayer = document.getElementById("foundryCelebrationLayer");
     dom.foundryCelebrationBurstHost = document.getElementById("foundryCelebrationBurstHost");
     dom.globalConfettiHost = document.getElementById("globalConfettiHost");
     dom.foundryConfettiEmitterHandles = Array.from(document.querySelectorAll(".confetti-emitter-handle"));
     dom.foundryFactoryRoundabout = document.getElementById("foundryFactoryRoundabout");
     dom.foundryFactoryStartNode = document.getElementById("foundryFactoryStartNode");
+    dom.foundryDemandPrompt = document.getElementById("foundryDemandPrompt");
+    dom.foundryDemandPromptForm = document.getElementById("foundryDemandPromptForm");
+    dom.foundryDemandPromptInput = document.getElementById("foundryDemandPromptInput");
+    dom.foundryDemandPromptCancel = document.getElementById("foundryDemandPromptCancel");
     dom.foundryPickupNodes = Array.from(document.querySelectorAll(".map-pickup-node"));
     dom.foundryFleetYard = document.getElementById("foundryFleetYard");
     dom.foundryDeleteCan = document.getElementById("foundryDeleteCan");
@@ -1498,6 +1566,19 @@ const LMSAApp = (() => {
 
   function getLevelData(levelName) {
     return LEVELS.find((level) => level.name === levelName) || LEVELS[0];
+  }
+
+  function isOriginalFoundryDepotEnabled(levelName = state.currentLevel) {
+    return getLevelData(levelName)?.usesOriginalDepot !== false;
+  }
+
+  function getCustomFoundryDepotRouteMinutes(levelName = state.currentLevel) {
+    const depotMinutes = Number(getLevelData(levelName)?.customDepotRouteMinutes);
+    return Number.isFinite(depotMinutes) && depotMinutes > 0 ? depotMinutes : 0;
+  }
+
+  function levelUsesCustomFoundryDepotRouteMinutes(levelName = state.currentLevel) {
+    return getCustomFoundryDepotRouteMinutes(levelName) > 0;
   }
 
   function isLevelComingSoon(levelOrName) {
@@ -1631,6 +1712,16 @@ const LMSAApp = (() => {
       <figcaption>TSP</figcaption>
     `;
     return card;
+  }
+
+  function renderAboutInspirationVisuals() {
+    if (!dom.sourceInspirationVisuals || getSourceInspirationCard("TSP")) {
+      return;
+    }
+
+    const tspCard = createTspInspirationCard();
+    const mespprcCard = getSourceInspirationCard("MESPPRC");
+    dom.sourceInspirationVisuals.insertBefore(tspCard, mespprcCard || null);
   }
 
   function getSourceInspirationCard(label) {
@@ -3151,12 +3242,20 @@ const LMSAApp = (() => {
   }
 
   function getFoundryRouteSelectionCost(label) {
+    if (isFoundryCustomDepotRouteLabel(label) && levelUsesCustomFoundryDepotRouteMinutes()) {
+      return getCustomFoundryDepotRouteMinutes() || FOUNDRY_DEPOT_NODE_MINUTES;
+    }
+
     return isFoundryDemandRouteLabel(label) ? FOUNDRY_PICKUP_NODE_MINUTES : FOUNDRY_ROUTE_MINUTES_PER_EDGE;
+  }
+
+  function shouldCountInitialFoundryRouteLabel(label) {
+    return isFoundryCustomDepotRouteLabel(label) && levelUsesCustomFoundryDepotRouteMinutes();
   }
 
   function calculateFoundryRouteMinutes(routeNodeLabels) {
     return (Array.isArray(routeNodeLabels) ? routeNodeLabels : []).reduce((totalMinutes, label, index) => {
-      if (index === 0) {
+      if (index === 0 && !shouldCountInitialFoundryRouteLabel(label)) {
         return totalMinutes;
       }
 
@@ -3229,6 +3328,26 @@ const LMSAApp = (() => {
 
   function getFleetBusCompletedRouteHistory(bus) {
     return Array.isArray(bus?.completedRouteHistory) ? bus.completedRouteHistory : [];
+  }
+
+  function getCompletedRouteEndDepotLabel(routeRecord) {
+    const routeNodeLabels = Array.isArray(routeRecord?.routeNodeLabels) ? routeRecord.routeNodeLabels : [];
+    const endLabel = String(routeNodeLabels[routeNodeLabels.length - 1] || "");
+    return endLabel && isFoundryDepotRouteLabel(endLabel) ? endLabel : "";
+  }
+
+  function getFleetBusCurrentDepotLabel(bus) {
+    const completedRouteHistory = getFleetBusCompletedRouteHistory(bus);
+
+    for (let index = completedRouteHistory.length - 1; index >= 0; index -= 1) {
+      const endDepotLabel = getCompletedRouteEndDepotLabel(completedRouteHistory[index]);
+
+      if (endDepotLabel) {
+        return endDepotLabel;
+      }
+    }
+
+    return "";
   }
 
   function cloneFoundryReplayRouteRecord(routeRecord) {
@@ -4587,6 +4706,7 @@ const LMSAApp = (() => {
 
     document.body.classList.toggle("viewing-game", screenId === "game");
     document.body.classList.toggle("viewing-landing", screenId === "landing");
+    document.body.classList.toggle("viewing-about", screenId === "about");
 
     const activeScreen = document.getElementById(screenId);
     let screenTitle = activeScreen?.dataset.screenTitle || GAME_NAME;
@@ -4597,6 +4717,7 @@ const LMSAApp = (() => {
 
     if (screenId !== "game") {
       hideVictoryOverlay();
+      hideFoundryBuilderNodeDemandPrompt();
       stopLevelTutorial();
     }
 
@@ -4623,10 +4744,23 @@ const LMSAApp = (() => {
     }
   }
 
+  function syncFoundryTravelTimeLegend(levelName = state.currentLevel) {
+    const showDepotCost = levelUsesCustomFoundryDepotRouteMinutes(levelName);
+
+    if (dom.mapLegendDepotCost) {
+      dom.mapLegendDepotCost.hidden = !showDepotCost;
+    }
+
+    if (dom.mapLegendDepotCostLabel && showDepotCost) {
+      dom.mapLegendDepotCostLabel.textContent = `${formatMinuteLabel(getCustomFoundryDepotRouteMinutes(levelName) || FOUNDRY_DEPOT_NODE_MINUTES)}`;
+    }
+  }
+
   function setCurrentLevel(levelName) {
     const level = getLevelData(levelName);
     stopFoundrySolutionReplay();
     hideVictoryOverlay();
+    hideFoundryBuilderNodeDemandPrompt();
     stopLevelTutorial();
     state.currentLevel = level.name;
     state.purchasedFleet = [];
@@ -4641,6 +4775,7 @@ const LMSAApp = (() => {
     if (dom.mapPanelTitle) {
       dom.mapPanelTitle.textContent = level.mapTitle;
     }
+    syncFoundryTravelTimeLegend(level.name);
     renderTopBarStats(level);
 
     if (dom.statRemainingDemand) {
@@ -5063,7 +5198,7 @@ const LMSAApp = (() => {
       capturedAt: Date.now(),
       nodes: state.foundryCustomNodes.map((node) => ({
         label: String(node.label),
-        variant: node.variant === "blue" ? "blue" : "brown",
+        variant: node.variant === "blue" || node.variant === "depot" ? node.variant : "brown",
         left: roundPercent(Number(node.left) || 0),
         top: roundPercent(Number(node.top) || 0),
         demand: node.variant === "blue" ? Math.max(Math.round(Number(node.demand) || 0), 0) : 0,
@@ -5094,6 +5229,8 @@ const LMSAApp = (() => {
 
   function sanitizeFoundryBuilderNodeRecord(record) {
     const numericLabel = Math.max(Math.round(Number(record?.label) || 0), FOUNDRY_CUSTOM_NODE_FIRST_LABEL);
+    const requestedVariant = String(record?.variant || "");
+    const variant = requestedVariant === "blue" || requestedVariant === "depot" ? requestedVariant : "brown";
 
     if (!Number.isFinite(numericLabel)) {
       return null;
@@ -5101,10 +5238,10 @@ const LMSAApp = (() => {
 
     return {
       label: String(numericLabel),
-      variant: record?.variant === "blue" ? "blue" : "brown",
+      variant,
       left: roundPercent(clamp(Number(record?.left) || 0, 0, 100)),
       top: roundPercent(clamp(Number(record?.top) || 0, 0, 100)),
-      demand: record?.variant === "blue"
+      demand: variant === "blue"
         ? Math.max(Math.round(Number(record?.demand) || 1), 0)
         : 0,
     };
@@ -5194,11 +5331,16 @@ const LMSAApp = (() => {
 
   function createFoundryBuilderNodeElement(record) {
     const node = document.createElement("span");
-    node.className = `map-node map-node--builder${record.variant === "blue" ? " map-node--blue" : ""}`;
+    node.className = [
+      "map-node",
+      "map-node--builder",
+      record.variant === "blue" ? "map-node--blue" : "",
+      record.variant === "depot" ? "map-node--depot" : "",
+    ].filter(Boolean).join(" ");
     node.dataset.label = String(record.label);
     node.dataset.nodeRole = "interior";
     node.dataset.builderNode = "true";
-    node.dataset.builderNodeVariant = record.variant === "blue" ? "blue" : "brown";
+    node.dataset.builderNodeVariant = record.variant === "blue" || record.variant === "depot" ? record.variant : "brown";
     node.dataset.builderNodeDemand = String(Math.max(Math.round(Number(record.demand) || 0), 0));
     node.style.left = `${record.left}%`;
     node.style.top = `${record.top}%`;
@@ -5213,6 +5355,8 @@ const LMSAApp = (() => {
         </span>
       `;
       node.setAttribute("aria-label", "Blue demand node");
+    } else if (record.variant === "depot") {
+      node.setAttribute("aria-label", "Orange depot node");
     }
 
     return node;
@@ -5997,6 +6141,14 @@ const LMSAApp = (() => {
     return true;
   }
 
+  function hideFoundryBuilderNodeDemandPrompt() {
+    state.foundryDemandPromptNodeLabel = "";
+
+    if (dom.foundryDemandPrompt) {
+      dom.foundryDemandPrompt.hidden = true;
+    }
+  }
+
   function promptForFoundryBuilderNodeDemand(nodeLabel) {
     const nodeRecord = getFoundryBuilderNodeRecord(nodeLabel);
 
@@ -6004,25 +6156,18 @@ const LMSAApp = (() => {
       return;
     }
 
-    const promptResult = window.prompt(
-      "Enter the worker demand for this blue node:",
-      String(Math.max(Math.round(Number(nodeRecord.demand) || 0), 0)),
-    );
+    state.foundryDemandPromptNodeLabel = nodeRecord.label;
 
-    if (promptResult == null) {
+    if (!dom.foundryDemandPrompt || !dom.foundryDemandPromptInput) {
       return;
     }
 
-    const normalizedPrompt = String(promptResult).trim();
-
-    if (!/^\d+$/.test(normalizedPrompt)) {
-      showToast("Demand must be a whole number 0 or greater.", {
-        title: "Invalid Demand",
-      });
-      return;
-    }
-
-    setFoundryBuilderNodeDemand(nodeRecord.label, Number(normalizedPrompt));
+    dom.foundryDemandPromptInput.value = String(Math.max(Math.round(Number(nodeRecord.demand) || 0), 0));
+    dom.foundryDemandPrompt.hidden = false;
+    window.requestAnimationFrame(() => {
+      dom.foundryDemandPromptInput?.focus();
+      dom.foundryDemandPromptInput?.select();
+    });
   }
 
   function getFoundryPickupNodeElement(label) {
@@ -6031,6 +6176,14 @@ const LMSAApp = (() => {
 
   function isFactoryFoundryRouteLabel(label) {
     return String(label) === FOUNDRY_FACTORY_START_LABEL;
+  }
+
+  function isFoundryCustomDepotRouteLabel(label) {
+    return getFoundryBuilderNodeRecord(label)?.variant === "depot";
+  }
+
+  function isFoundryDepotRouteLabel(label) {
+    return isFactoryFoundryRouteLabel(label) || isFoundryCustomDepotRouteLabel(label);
   }
 
   function getFoundryRouteNodeElement(label) {
@@ -6051,7 +6204,8 @@ const LMSAApp = (() => {
 
   function isSelectableFoundryRouteLabel(label) {
     if (isFactoryFoundryRouteLabel(label)) {
-      return Boolean(dom.foundryFactoryStartNode && !dom.foundryFactoryRoundabout?.hidden);
+      return isOriginalFoundryDepotEnabled()
+        && Boolean(dom.foundryFactoryStartNode && !dom.foundryFactoryRoundabout?.hidden);
     }
 
     if (isFoundryPickupRouteLabel(label)) {
@@ -6063,12 +6217,30 @@ const LMSAApp = (() => {
     return Boolean(node && !isPerimeterFoundryNode(node));
   }
 
+  function getSelectableFoundryDepotRouteLabels() {
+    const depotLabels = [];
+
+    if (isSelectableFoundryRouteLabel(FOUNDRY_FACTORY_START_LABEL)) {
+      depotLabels.push(FOUNDRY_FACTORY_START_LABEL);
+    }
+
+    state.foundryCustomNodes.forEach((nodeRecord) => {
+      const depotLabel = String(nodeRecord?.label || "");
+
+      if (nodeRecord?.variant === "depot" && isSelectableFoundryRouteLabel(depotLabel)) {
+        depotLabels.push(depotLabel);
+      }
+    });
+
+    return depotLabels;
+  }
+
   function isFoundryBrownRouteLabel(label) {
-    return isSelectableFoundryRouteLabel(label) && !isFactoryFoundryRouteLabel(label) && !isFoundryDemandRouteLabel(label);
+    return isSelectableFoundryRouteLabel(label) && !isFoundryDepotRouteLabel(label) && !isFoundryDemandRouteLabel(label);
   }
 
   function isFoundryIntersectionRouteLabel(label) {
-    return !isFactoryFoundryRouteLabel(label) && !isFoundryPickupRouteLabel(label) && isSelectableFoundryRouteLabel(label);
+    return !isFoundryDepotRouteLabel(label) && !isFoundryPickupRouteLabel(label) && isSelectableFoundryRouteLabel(label);
   }
 
   function getMostRecentFoundryBrownLabel(routeNodeLabels) {
@@ -6122,7 +6294,9 @@ const LMSAApp = (() => {
       adjacency.get(to).add(from);
     });
 
-    const factoryConnections = FOUNDRY_FACTORY_START_CONNECTIONS.filter((label) => isSelectableFoundryRouteLabel(label));
+    const factoryConnections = isOriginalFoundryDepotEnabled()
+      ? FOUNDRY_FACTORY_START_CONNECTIONS.filter((label) => isSelectableFoundryRouteLabel(label))
+      : [];
 
     if (factoryConnections.length) {
       adjacency.set(FOUNDRY_FACTORY_START_LABEL, new Set(factoryConnections));
@@ -6280,7 +6454,13 @@ const LMSAApp = (() => {
     const routeNodeLabels = getFleetBusRouteNodeLabels(bus);
 
     if (!routeNodeLabels.length) {
-      return isSelectableFoundryRouteLabel(FOUNDRY_FACTORY_START_LABEL) ? [FOUNDRY_FACTORY_START_LABEL] : [];
+      const currentDepotLabel = getFleetBusCurrentDepotLabel(bus);
+
+      if (currentDepotLabel) {
+        return isSelectableFoundryRouteLabel(currentDepotLabel) ? [currentDepotLabel] : [];
+      }
+
+      return getSelectableFoundryDepotRouteLabels();
     }
 
     const currentLabel = routeNodeLabels[routeNodeLabels.length - 1];
@@ -6345,7 +6525,17 @@ const LMSAApp = (() => {
   }
 
   function isFoundryBrownBuilderNodeLabel(label) {
-    return Boolean(getFoundryNodeByLabel(label)) && !isFoundryBuilderBlueNodeLabel(label);
+    const builderRecord = getFoundryBuilderNodeRecord(label);
+
+    if (builderRecord) {
+      return builderRecord.variant === "brown";
+    }
+
+    return Boolean(getFoundryNodeByLabel(label));
+  }
+
+  function isFoundryRoadStructureNodeLabel(label) {
+    return isSelectableFoundryRouteLabel(label) && !isFoundryDemandRouteLabel(label);
   }
 
   function findFoundryInlineBlueSplitNodeLabel(firstLabel, secondLabel, roads = state.foundryRoads) {
@@ -6374,13 +6564,13 @@ const LMSAApp = (() => {
     }
 
     const neighborLabels = getFoundryRoadNeighbors(blueLabel);
-    const brownNeighbors = neighborLabels.filter((label) => isFoundryBrownBuilderNodeLabel(label));
+    const structureNeighbors = neighborLabels.filter((label) => isFoundryRoadStructureNodeLabel(label));
 
-    if (neighborLabels.length !== 2 || brownNeighbors.length !== 2) {
+    if (neighborLabels.length !== 2 || structureNeighbors.length !== 2) {
       return false;
     }
 
-    const directRoadKey = getFoundryRoadKey(brownNeighbors[0], brownNeighbors[1]);
+    const directRoadKey = getFoundryRoadKey(structureNeighbors[0], structureNeighbors[1]);
     const hasDirectRoad = state.foundryRoads.some((road) => getFoundryRoadKey(road.from, road.to) === directRoadKey);
 
     if (!hasDirectRoad) {
@@ -6415,8 +6605,8 @@ const LMSAApp = (() => {
     }
 
     if (
-      isFoundryBrownBuilderNodeLabel(fromLabel)
-      && isFoundryBrownBuilderNodeLabel(toLabel)
+      isFoundryRoadStructureNodeLabel(fromLabel)
+      && isFoundryRoadStructureNodeLabel(toLabel)
       && findFoundryInlineBlueSplitNodeLabel(fromLabel, toLabel)
     ) {
       return {
@@ -6747,6 +6937,14 @@ const LMSAApp = (() => {
 
   function renderFoundryFactoryRoundabout() {
     const roundabout = dom.foundryFactoryRoundabout;
+
+    if (!isOriginalFoundryDepotEnabled()) {
+      if (roundabout) {
+        roundabout.hidden = true;
+      }
+      return;
+    }
+
     const geometry = getFoundryFactoryRoundaboutGeometry();
 
     if (!roundabout || !geometry) {
@@ -6971,7 +7169,7 @@ const LMSAApp = (() => {
   }
 
   function getFoundryRoutePauseMs(label, bus, routeIndex, routeNodeLabels) {
-    if (isFactoryFoundryRouteLabel(label)) {
+    if (isFoundryDepotRouteLabel(label)) {
       return routeIndex === routeNodeLabels.length - 1 ? FOUNDRY_ROUTE_DEPOT_PAUSE_MS : 0;
     }
 
@@ -7204,6 +7402,14 @@ const LMSAApp = (() => {
     dom.foundryAnimationLayer?.replaceChildren();
   }
 
+  function syncFoundryRouteSkipControl() {
+    if (!dom.foundryRouteSkipButton) {
+      return;
+    }
+
+    dom.foundryRouteSkipButton.hidden = !isFoundryRouteAnimationActive();
+  }
+
   function renderFoundryAnimatingBus(position, busType, runnerId = FOUNDRY_LIVE_RUNNER_ID) {
     const animationLayer = dom.foundryAnimationLayer;
 
@@ -7241,6 +7447,7 @@ const LMSAApp = (() => {
 
     removeFoundryAnimationRunner(FOUNDRY_LIVE_RUNNER_ID);
     state.foundryAnimatingBusId = "";
+    syncFoundryRouteSkipControl();
   }
 
   function buildFoundryReplayPlanFromBuses(buses, runnerPrefix) {
@@ -7450,6 +7657,7 @@ const LMSAApp = (() => {
 
     clearFoundryAnimatingBus();
     state.foundryAnimatingBusId = bus.id;
+    syncFoundryRouteSkipControl();
     renderFoundryRoads();
     updateFoundryDeleteCanState();
     const animationStart = performance.now();
@@ -7482,8 +7690,8 @@ const LMSAApp = (() => {
 
     return (
       routeNodeLabels.length >= 3 &&
-      routeNodeLabels[0] === FOUNDRY_FACTORY_START_LABEL &&
-      routeNodeLabels[routeNodeLabels.length - 1] === FOUNDRY_FACTORY_START_LABEL
+      isFoundryDepotRouteLabel(routeNodeLabels[0]) &&
+      isFoundryDepotRouteLabel(routeNodeLabels[routeNodeLabels.length - 1])
     );
   }
 
@@ -7974,7 +8182,7 @@ const LMSAApp = (() => {
     const routeNodeLabels = getFleetBusRouteNodeLabels(selectedBus);
     const currentRouteEndsAtDepot =
       !routeNodeLabels.length ||
-      isFactoryFoundryRouteLabel(routeNodeLabels[routeNodeLabels.length - 1]);
+      isFoundryDepotRouteLabel(routeNodeLabels[routeNodeLabels.length - 1]);
 
     if (!currentRouteEndsAtDepot) {
       selectedBus.routeNodeLabels = [];
@@ -8447,13 +8655,15 @@ const LMSAApp = (() => {
       }
     }
 
-    function stopDragging(event) {
-      if (!dragState || event.pointerId !== dragState.pointerId) {
+    function stopDragging(event, options = {}) {
+      if (!dragState || (!options.force && event.pointerId !== dragState.pointerId)) {
         return;
       }
 
       const droppedOnDeleteCan = dragState.moved && isPointerOverFoundryDeleteCan(event.clientX, event.clientY);
-      dragState.element.releasePointerCapture?.(dragState.pointerId);
+      try {
+        dragState.element.releasePointerCapture?.(dragState.pointerId);
+      } catch (_) { /* pointer capture may already be gone */ }
       dragState.element.classList.remove("map-node--perimeter-dragging", "lmsa-campus-asset--dragging");
       setFoundryDeleteCanDragState(false);
 
@@ -8570,6 +8780,11 @@ const LMSAApp = (() => {
         return;
       }
 
+      if (event.buttons === 0) {
+        stopDragging(event, { force: true });
+        return;
+      }
+
       const traveled = Math.hypot(event.clientX - dragState.startX, event.clientY - dragState.startY);
 
       if (traveled > 4 && !dragState.moved) {
@@ -8586,8 +8801,26 @@ const LMSAApp = (() => {
       setFoundryDeleteCanDragState(isPointerOverFoundryDeleteCan(event.clientX, event.clientY));
     });
 
-    stage.addEventListener("pointerup", stopDragging);
-    stage.addEventListener("pointercancel", stopDragging);
+    window.addEventListener("pointermove", (event) => {
+      if (!dragState || event.pointerId !== dragState.pointerId || event.buttons !== 0) {
+        return;
+      }
+
+      stopDragging(event, { force: true });
+    });
+    window.addEventListener("pointerup", stopDragging);
+    window.addEventListener("pointercancel", stopDragging);
+    window.addEventListener("blur", () => {
+      if (!dragState) {
+        return;
+      }
+
+      stopDragging({
+        clientX: dragState.startX,
+        clientY: dragState.startY,
+        pointerId: dragState.pointerId,
+      }, { force: true });
+    });
   }
 
   function bindFoundryEditSandlot() {
@@ -8622,21 +8855,37 @@ const LMSAApp = (() => {
       saveFoundryEditLayoutSnapshot();
     }
 
-    function stopSpawning(event) {
-      if (!spawnState || event.pointerId !== spawnState.pointerId) {
+    function stopSpawning(event, options = {}) {
+      if (!spawnState || (!options.force && event.pointerId !== spawnState.pointerId)) {
         return;
       }
 
-      spawnState.item.releasePointerCapture?.(spawnState.pointerId);
-      spawnState.item.classList.remove("is-dragging");
+      const activeSpawn = spawnState;
+      const clientX = Number.isFinite(Number(event?.clientX)) ? event.clientX : activeSpawn.lastClientX;
+      const clientY = Number.isFinite(Number(event?.clientY)) ? event.clientY : activeSpawn.lastClientY;
+      const pointerPlacement = options.useLastPlacement
+        ? activeSpawn.lastPlacement
+        : getFoundryStagePointerPlacement(clientX, clientY);
+      const isInsideStage = options.useLastPlacement
+        ? activeSpawn.isInsideStage
+        : isPointerInsideFoundryStage(clientX, clientY);
 
-      if (!spawnState.isInsideStage) {
+      activeSpawn.isInsideStage = isInsideStage;
+      activeSpawn.lastPlacement = pointerPlacement;
+      applySpawnPlacement(pointerPlacement);
+
+      try {
+        activeSpawn.item.releasePointerCapture?.(activeSpawn.pointerId);
+      } catch (_) { /* pointer capture may already be gone */ }
+      activeSpawn.item.classList.remove("is-dragging");
+
+      if (!activeSpawn.isInsideStage) {
         cancelSpawn();
         spawnState = null;
         return;
       }
 
-      const updatedNodeRecord = updateFoundryBuilderNodePosition(spawnState.record.label, spawnState.lastPlacement);
+      const updatedNodeRecord = updateFoundryBuilderNodePosition(activeSpawn.record.label, activeSpawn.lastPlacement);
 
       if (updatedNodeRecord) {
         syncFoundryBuilderNodeElement(updatedNodeRecord);
@@ -8645,12 +8894,12 @@ const LMSAApp = (() => {
       renderFoundryRoads();
       saveFoundryEditLayoutSnapshot();
 
-      if (spawnState.record.variant === "blue") {
-        updateSelectedBusStat();
-        promptForFoundryBuilderNodeDemand(spawnState.record.label);
-      }
-
       spawnState = null;
+
+      if (activeSpawn.record.variant === "blue") {
+        updateSelectedBusStat();
+        promptForFoundryBuilderNodeDemand(activeSpawn.record.label);
+      }
     }
 
     sandlot.addEventListener("click", (event) => {
@@ -8677,7 +8926,10 @@ const LMSAApp = (() => {
 
       const placement = getFoundryStagePointerPlacement(event.clientX, event.clientY);
       const spawnType = sandlotItem.dataset.sandlotSpawn || "";
-      const createdItem = addFoundryBuilderNode(spawnType === "blue-node" ? "blue" : "brown", placement);
+      const createdItem = addFoundryBuilderNode(
+        spawnType === "blue-node" ? "blue" : spawnType === "depot-node" ? "depot" : "brown",
+        placement,
+      );
 
       if (!createdItem?.element || !createdItem?.record) {
         return;
@@ -8691,27 +8943,74 @@ const LMSAApp = (() => {
         pointerId: event.pointerId,
         isInsideStage: isPointerInsideFoundryStage(event.clientX, event.clientY),
         lastPlacement: placement,
+        lastClientX: event.clientX,
+        lastClientY: event.clientY,
       };
 
       sandlotItem.classList.add("is-dragging");
       sandlotItem.setPointerCapture?.(event.pointerId);
+      sandlotItem.addEventListener("lostpointercapture", handleSpawnLostPointerCapture, { once: true });
+      sandlotItem.addEventListener("pointerup", stopSpawning, { once: true });
+      sandlotItem.addEventListener("pointercancel", stopSpawning, { once: true });
       event.preventDefault();
       event.stopPropagation();
       renderFoundryRoads();
     });
 
-    sandlot.addEventListener("pointermove", (event) => {
+    function finishActiveSpawnAtLastPlacement() {
+      if (!spawnState) {
+        return;
+      }
+
+      stopSpawning({
+        clientX: spawnState.lastClientX,
+        clientY: spawnState.lastClientY,
+        pointerId: spawnState.pointerId,
+      }, { force: true, useLastPlacement: true });
+    }
+
+    function handleSpawnLostPointerCapture() {
+      finishActiveSpawnAtLastPlacement();
+    }
+
+    function handleSpawnPointerMove(event) {
       if (!spawnState || event.pointerId !== spawnState.pointerId) {
+        return;
+      }
+
+      spawnState.lastClientX = event.clientX;
+      spawnState.lastClientY = event.clientY;
+
+      if (event.buttons === 0) {
+        stopSpawning(event, { force: true, useLastPlacement: true });
         return;
       }
 
       spawnState.isInsideStage = isPointerInsideFoundryStage(event.clientX, event.clientY);
       applySpawnPlacement(getFoundryStagePointerPlacement(event.clientX, event.clientY));
       event.preventDefault();
-    });
+    }
 
-    sandlot.addEventListener("pointerup", stopSpawning);
-    sandlot.addEventListener("pointercancel", stopSpawning);
+    window.addEventListener("pointerdown", () => {
+      finishActiveSpawnAtLastPlacement();
+    }, true);
+    window.addEventListener("pointermove", handleSpawnPointerMove);
+    window.addEventListener("pointerup", stopSpawning, true);
+    window.addEventListener("pointercancel", stopSpawning, true);
+    window.addEventListener("mouseup", (event) => {
+      if (!spawnState) {
+        return;
+      }
+
+      stopSpawning({
+        clientX: event.clientX,
+        clientY: event.clientY,
+        pointerId: spawnState.pointerId,
+      }, { force: true });
+    });
+    window.addEventListener("blur", () => {
+      finishActiveSpawnAtLastPlacement();
+    });
   }
 
   function initializeFoundryNodes() {
@@ -8832,6 +9131,18 @@ const LMSAApp = (() => {
       }
 
       deleteSelectedFleetBus();
+    });
+  }
+
+  function bindFoundryRouteSkip() {
+    dom.foundryRouteSkipButton?.addEventListener("click", (event) => {
+      event.stopPropagation();
+
+      if (state.isEditMode || !isFoundryRouteAnimationActive()) {
+        return;
+      }
+
+      completeFoundryRouteAnimation(state.foundryAnimatingBusId);
     });
   }
 
@@ -8986,10 +9297,45 @@ const LMSAApp = (() => {
 
       showToast(
         state.isEditMode
-          ? "Drag any node to move or delete it. Click any two nodes to add a road. Dropping a blue node prompts for demand, and clicking it again lets you edit that demand."
+          ? "Drag any node to move or delete it. Click any two nodes to add a road. Blue nodes set demand, and orange depot nodes can start or finish routes."
           : "Edit mode disabled. Route building restored.",
         { title: state.isEditMode ? "Edit Mode On" : "Edit Mode Off" },
       );
+    });
+  }
+
+  function bindFoundryDemandPrompt() {
+    dom.foundryDemandPrompt?.addEventListener("click", (event) => {
+      if (event.target === dom.foundryDemandPrompt) {
+        hideFoundryBuilderNodeDemandPrompt();
+      }
+    });
+
+    dom.foundryDemandPrompt?.addEventListener("pointerdown", (event) => {
+      event.stopPropagation();
+    });
+
+    dom.foundryDemandPromptCancel?.addEventListener("click", () => {
+      hideFoundryBuilderNodeDemandPrompt();
+    });
+
+    dom.foundryDemandPromptForm?.addEventListener("submit", (event) => {
+      event.preventDefault();
+
+      const nodeLabel = state.foundryDemandPromptNodeLabel;
+      const normalizedPrompt = String(dom.foundryDemandPromptInput?.value || "").trim();
+
+      if (!/^\d+$/.test(normalizedPrompt)) {
+        showToast("Demand must be a whole number 0 or greater.", {
+          title: "Invalid Demand",
+        });
+        dom.foundryDemandPromptInput?.focus();
+        dom.foundryDemandPromptInput?.select();
+        return;
+      }
+
+      setFoundryBuilderNodeDemand(nodeLabel, Number(normalizedPrompt));
+      hideFoundryBuilderNodeDemandPrompt();
     });
   }
 
@@ -9170,6 +9516,7 @@ const LMSAApp = (() => {
     document.body.dataset.theme = "lehigh-university";
     cacheDom();
     renderFeaturedLevel();
+    renderAboutInspirationVisuals();
     renderHomeInspirationVisuals();
     initializeAnimationSteppers();
     renderLevelGrid();
@@ -9180,10 +9527,12 @@ const LMSAApp = (() => {
     bindFleetShop();
     bindFoundryFleetSelection();
     bindFoundryDeleteCan();
+    bindFoundryRouteSkip();
     bindFoundryRouteBuilder();
     bindFoundryRouteControls();
     // bindFoundryConfettiEmitterDragging();
     bindFoundryTestingShortcut();
+    bindFoundryDemandPrompt();
     bindGameActions();
     bindPlaceholderButtons();
     bindLevelTutorialControls();
